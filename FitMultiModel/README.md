@@ -1,8 +1,8 @@
 ## Fit Multiple Hit Models
 
 This analysis fits three codon models to a codon alignment and compares the fits of all three to determine if a model that allows multiple simultaneous nucleotide substitutions fits better. The models it compares are:
--   [Muse Gaut] (https://www.ncbi.nlm.nih.gov/pubmed/7968485) + REV which does NOT permit simultaneous substitutions.
--   [MG+REV+MH] (https://www.nature.com/articles/s41559-018-0584-5) which allows for two simultaneous nucleotide substitutions.
+-   [Muse Gaut](https://www.ncbi.nlm.nih.gov/pubmed/7968485) + REV which does NOT permit simultaneous substitutions.
+-   [MG+REV+MH](https://www.nature.com/articles/s41559-018-0584-5) which allows for two simultaneous nucleotide substitutions.
 -   MG+REV+TRIP which is introduced here and allows for three simultaneous nucleotide substitutions.
 
 ## Invokation
