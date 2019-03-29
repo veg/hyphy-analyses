@@ -47,6 +47,7 @@ HYPHYMP FitMultiModel.bf --alignment p51.nex
 ```
 
 The following data are output to the screen.
+
 Analysis Description
 --------------------
 Examine whether or not a codon alignment is better fit by models which
@@ -73,9 +74,6 @@ The number of omega rate classes to include in the model (permissible range = [2
 * Log(L) = -3320.50, AIC-c =  6683.09 (21 estimated parameters)
 
 >output –> /Users/Sadie/Dropbox/hyphy-analyses/FitMultiModel/p51.nex.FITTER.json
-
-### Branches to test for selection in the fitter analysis
-* Selected 13 branches to test in the fitter analysis: `D_CD_83_ELI, D_CD_83_NDK, Node3, D_UG_94_94UG114, Node2, D_CD_84_84ZR085, Node1, B_US_83_RF, B_FR_83_HXB2, B_US_86_JRFL, Node10, B_US_90_WEAU160, Node9`
 
 ### Obtaining the global omega estimate based on relative GTR branch lengths and nucleotide substitution biases
 * Log(L) = -3178.59, AIC-c =  6413.65 (28 estimated parameters)

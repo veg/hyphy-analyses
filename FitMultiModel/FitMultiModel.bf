@@ -1,4 +1,4 @@
-RequireVersion ("2.3.12");
+RequireVersion ("2.4.0");
 
 
 LoadFunctionLibrary("libv3/all-terms.bf"); // must be loaded before CF3x4
@@ -34,7 +34,7 @@ KeywordArgument ("alignment", "An in-frame codon alignment in one of the formats
     */
 
 KeywordArgument ("tree",      "A phylogenetic tree (optionally annotated with {})", null, "Please select a tree file for the data:");
-    /** the use of null as the default argument means that the default expectation is for the 
+    /** the use of null as the default argument means that the default expectation is for the
         argument to be missing, i.e. the tree is expected to be in the file
         the fourth, optional argument, can match this keyword with the dialog prompt / choice list title,
         meaning that it can only be consumed when this dialog prompt / choice list is invoked
@@ -99,20 +99,6 @@ KeywordArgument ("output", "Write the resulting JSON to this file (default is to
 fitter.codon_data_info [terms.json.json] = io.PromptUserForFilePath ("Save the resulting JSON file to");
 
 
-io.ReportProgressMessageMD('fitter',  'selector', 'Branches to test for selection in the fitter analysis');
-
-utility.ForEachPair (fitter.selected_branches, "_partition_", "_selection_",
-    "_selection_ = utility.Filter (_selection_, '_value_', '_value_ == terms.tree_attributes.test');
-     io.ReportProgressMessageMD('fitter',  'selector', '* Selected ' + Abs(_selection_) + ' branches to test in the fitter analysis: \\\`' + Join (', ',utility.Keys(_selection_)) + '\\\`')");
-
-// check to see if there are any background branches
-fitter.has_background = FALSE;
-
-utility.ForEachPair (fitter.selected_branches, "_partition_", "_selection_",
-    "_selection_ = utility.Filter (_selection_, '_value_', '_value_ != terms.tree_attributes.test');
-     if (utility.Array1D (_selection_)) { fitter.has_background = TRUE;} ");
-fitter.json[fitter.json.background] =  fitter.has_background;
-
 estimators.fixSubsetOfEstimates(fitter.gtr_results, fitter.gtr_results[terms.global]);
 
 namespace fitter {
@@ -157,7 +143,7 @@ function fitter.run_model_fit (model_name, model_generator, initial_values) {
         terms.rate_variation.distribution : fitter.cat_info,
         terms.parameters: utility.Map (fitter.results[terms.global], "_value_", '_value_ [terms.fit.MLE]')
     };
-     
+
     selection.io.json_store_lf (fitter.json,
                                 model_name,
                                 fitter.results[terms.fit.log_likelihood],
