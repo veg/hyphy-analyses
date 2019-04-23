@@ -1,0 +1,13 @@
+LoadFunctionLibrary("libv3/all-terms.bf"); 
+LoadFunctionLibrary("libv3/UtilityFunctions.bf");
+LoadFunctionLibrary("libv3/models/parameters.bf");
+
+lfunction simulator.set_site_omega (model, site_id, branch_info) {
+/**
+    no site-to-site rate variation
+*/
+    return {
+        ^"terms.parameters.synonymous_rate" : 1,
+        ^"terms.parameters.nonsynonymous_rate" : 1
+    };
+}
