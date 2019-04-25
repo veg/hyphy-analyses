@@ -1,0 +1,72 @@
+LoadFunctionLibrary("libv3/all-terms.bf"); 
+LoadFunctionLibrary("libv3/UtilityFunctions.bf");
+LoadFunctionLibrary("libv3/models/parameters.bf");
+LoadFunctionLibrary("libv3/tasks/trees.bf");
+
+simulator.dsdn = {};
+
+lfunction simulator.set_branch_rates (model, tree_id, branch_id, branch_info) {
+    rates = (model[^"terms.parameters"])[^"terms.local"];
+    
+    if (Type ( model[^"terms.parameters.synonymous_rate"]) != "String") {
+        expression = model[^"terms.model.branch_length_string"];
+        sub = {};
+        sub[rates[^'terms.parameters.nonsynonymous_rate']] = 0;
+        model[^"terms.parameters.synonymous_rate"] = Simplify(expression,sub);
+
+        sub = {};
+        sub[rates[^'terms.parameters.synonymous_rate']]    = 0;
+        model[^"terms.parameters.nonsynonymous_rate"] = Simplify(expression,sub);
+    }
+    
+    utility.ExecuteInGlobalNamespace("FindRoot (`tree_id`.`branch_id`.`rates[^'terms.parameters.synonymous_rate']`,(" + model[^"terms.parameters.synonymous_rate"] + ")-" + 3*((^"simulator.dsdn")[branch_id])[0] + "," + rates[^'terms.parameters.synonymous_rate'] + ",0,10000)");
+    utility.ExecuteInGlobalNamespace("FindRoot (`tree_id`.`branch_id`.`rates[^'terms.parameters.nonsynonymous_rate']`,(" + model[^"terms.parameters.nonsynonymous_rate"] + ")-" + 3*((^"simulator.dsdn")[branch_id])[1] + "," + rates[^'terms.parameters.nonsynonymous_rate'] + ",0,10000)");
+     
+}
+
+lfunction simulator.validate_tree (tree) {
+    meta = tree[^"terms.trees.meta"];
+    error = {};
+    utility.ForEachPair (tree[^"terms.trees.partitioned"], "_value_", "_class_",
+        '
+            s  = null;
+            ns = null;
+            if (utility.Has (`&meta`, _value_, "AssociativeList")) {
+                node_meta = `&meta`[_value_];
+                if (utility.Has (node_meta, terms.trees.comment, "String")) {
+                    ExecuteCommands (node_meta[terms.trees.comment]);
+                }
+            }
+            if (Type (s) == "Number" && Type (ns) == "Number") {
+                simulator.dsdn [_value_] = {{s__,ns__}};
+            } else {
+                `&error` + _value_;
+            }
+        '
+    );
+        
+    if (utility.Array1D (error)) {
+        return "Missing [s=value; ns=value] annotations for nodes " + Join (',', error);
+    }
+    return '';
+}
+
+/*
+    s  = trees.ExtractTreeInfo ("((((PIG:0.04985418650068867,COW:0.06406199560179504)Node3:0.02627939689415529,HORSE:0.05456488764629466,CAT:0.07073537879191431)Node2:0.01661794247298714,((RHMONKEY:0.0009611576376132653,BABOON:0.000458311829479748)Node9:0.006701899349497752,(HUMAN:0,CHIMP:0.000472628183402617)Node12:0.004622157272816774)Node8:0.02833997063469017)Node1:0.07342652312592632,RAT:0.01733242732352876,MOUSE:0.03105356542598649)");
+    ns = trees.ExtractTreeInfo ("((((PIG:0.1429621849403452,COW:0.1837045894379381)Node3:0.07535896707192417,HORSE:0.1564706217567303,CAT:0.2028412258724819)Node2:0.04765371841176047,((RHMONKEY:0.002756221805833594,BABOON:0.00131425794151764)Node9:0.01921840955606089,(HUMAN:0,CHIMP:0.001355311609842254)Node12:0.01325452783891411)Node8:0.08126788154540585)Node1:0.2105583686238711,RAT:0.04970257975139517,MOUSE:0.08904940337208533)");
+
+
+    tree_string = s["string_with_lengths"];
+
+    Tree T = tree_string;
+
+    function foo (n) {
+        return n + "[s=" + (s["branch length"])[n] + ";ns=" + (ns["branch length"])[n] + "]";
+    }
+
+    function bar (n) {
+        return "" + ((s["branch length"])[n["Name"]] + (ns["branch length"])[n["Name"]]);
+    }
+
+    console.log (tree.Annotate ("T", "foo","[]", "bar"));
+*/

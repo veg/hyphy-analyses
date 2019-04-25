@@ -166,10 +166,10 @@ for (simulation.i = 0; simulation.i < simulator.replicates; simulation.i += 1) {
 lfunction simulator.defineMG.frequencies (type,code) {
     model = Call ("models.codon.MG_REV.ModelDescription", type, code);
     if (^"simulator.frequency_type" == "F3x4") {
-        m[utility.getGlobalValue("terms.model.frequency_estimator")] = "frequencies.empirical.F3x4";
+        model[utility.getGlobalValue("terms.model.frequency_estimator")] = "frequencies.empirical.F3x4";
     } else {
         if (^"simulator.frequency_type" == "F1x4") {
-            m[utility.getGlobalValue("terms.model.frequency_estimator")] = "frequencies.empirical.F1x4";
+            model[utility.getGlobalValue("terms.model.frequency_estimator")] = "frequencies.empirical.F1x4";
         } 
     }
     model [^"terms.efv_estimate"] = ^"simulator.efv";
