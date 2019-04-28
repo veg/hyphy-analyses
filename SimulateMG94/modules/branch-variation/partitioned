@@ -16,7 +16,7 @@ lfunction simulator.set_branch_rates (model, tree_id, branch_id, branch_info) {
 
 lfunction simulator.validate_tree (tree) {
     if (trees.HasBranchLengths (tree)) {   
-        classes = utility.Values (tree[^"terms.trees.model_map"]);
+        classes = utility.UniqueValues (tree[^"terms.trees.model_map"]);
         utility.ForEach (classes, "_value_", 
             '
                 if (_value_ == "") {
