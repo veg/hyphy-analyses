@@ -92,7 +92,7 @@ if (simulator.efv  == "equal") {
 
 // TODO check that simulator.efv; no negative or 0 entries (for CF3x4)
 
-console.log (">Nucleotide frequencies used for simulation\n" + simulator.efv);
+console.log (">Nucleotide frequencies used for simulator\n" + simulator.efv);
 
 simulator.frequency_type = io.SelectAnOption ({"CF3x4" : terms.frequencies.CF3x4, 
                                                "F3x4" : terms.frequencies.F3x4,
@@ -136,6 +136,22 @@ simulator.module.site = io.PromptUserForString ('Site variation module');
 
 ExecuteAFile (PATH_TO_CURRENT_BF + "modules/site-variation/"   + simulator.module.site);
 
+
+simulator.site_profile = simulator.prepare_site_distribution (simulator.model, simulator.sites, "simulator.T", simulator.tree);
+
+console.log (simulator.site_profile);
+
+simulator.sites_by_profile = {
+};
+
+for (simulator.i = 0; simulator.i < simulator.sites; simulator.i += 1) {
+    simulator.site_profile_value = "" + simulator.set_site_omega (simulator.model, simulator.i, null);
+    if (utility.Has (simulator.sites_by_profile, simulator.site_profile_value, "AssociativeList") == FALSE) {
+        simulator.sites_by_profile [simulator.site_profile_value] = {};
+    }
+    simulator.sites_by_profile [simulator.site_profile_value] + simulator.i;
+}
+
 simulator.matrix = {2,4};
 simulator.matrix [0][0] = "A"; simulator.matrix [0][1] = "C"; simulator.matrix [0][2] = "G"; simulator.matrix [0][3] = "T"; 
 simulator.matrix [1][0] = "3"; simulator.matrix [1][1] = simulator.code[terms.code.stops];
@@ -143,11 +159,13 @@ simulator.matrix [1][0] = "3"; simulator.matrix [1][1] = simulator.code[terms.co
 simulator.root_freqs = simulator.model[terms.efv_estimate];
 
 KeywordArgument ("output",       "Write simulated alignments (as FASTA) to the following prefix path, using the syntax ${path}.replicate.index");
-simulator.path = io.PromptUserForFilePath ("Save simulation settings to this path, and replicates to ${path}.replicate.index");
+simulator.path = io.PromptUserForFilePath ("Save simulator settings to this path, and replicates to ${path}.replicate.index");
+
 
 fprintf (simulator.path, CLEAR_FILE, {
     terms.model : simulator.model,
-    terms.data.tree  : simulator.tree
+    terms.data.tree  : simulator.tree,
+    "simulator.site.profile" : simulator.site_profile
 });
 
 
@@ -155,12 +173,37 @@ utility.SetEnvVariable ("DATA_FILE_PRINT_FORMAT",9);
 utility.SetEnvVariable ("DATAFILE_TREE",simulator.tree[terms.trees.newick_annotated]);
 utility.SetEnvVariable ("IS_TREE_PRESENT_IN_DATA",TRUE);
 
-for (simulation.i = 0; simulation.i < simulator.replicates; simulation.i += 1) {
-    DataSet simulated_data = Simulate (simulator.T, simulator.root_freqs, simulator.matrix, simulator.sites);
-    DataSetFilter all = CreateFilter (simulated_data, 1);
-    fprintf (simulator.path + ".replicate." + (1+simulation.i) , CLEAR_FILE, all);
-}
+simulator.rate_type   = 0;
+simulator.inverse_map = {};
 
+utility.ForEachPair (simulator.sites_by_profile, "_rate_distribution_", "_site_counts_", '
+    simulator.apply_site_distribution (simulator.model, _rate_distribution_,  "simulator.T");
+    
+    utility.ForEach (_site_counts_, "_site_id_", "
+        simulator.inverse_map + (\\"\\" + 3*(_site_id_) + \\"-\\" + (3*_site_id_+2));
+    ");
+    
+    for (simulator.i = 0; simulator.i < simulator.replicates; simulator.i += 1) {
+        DataSet simulated_data = Simulate (simulator.T, simulator.root_freqs, simulator.matrix, utility.Array1D (_site_counts_));
+        if (simulator.rate_type == 0) {
+            DataSetFilter all      = CreateFilter (simulated_data, 1);
+        } else {
+            DataSet existing_data  = ReadDataFile (simulator.path + ".replicate." + (1+simulator.i));
+            DataSet combined_data  = Concatenate (existing_data, simulated_data);
+            DataSetFilter all      = CreateFilter (combined_data, 1);            
+        }
+        fprintf (simulator.path + ".replicate." + (1+simulator.i) , CLEAR_FILE, all);
+    }
+    simulator.rate_type += 1;
+');
+
+simulator.inverse_map = Join ("," ,simulator.inverse_map);
+
+for (simulator.i = 0; simulator.i < simulator.replicates; simulator.i += 1) {
+    DataSet existing_data  = ReadDataFile (simulator.path + ".replicate." + (1+simulator.i));
+    DataSetFilter all      = CreateFilter (existing_data, 1, simulator.inverse_map);   
+    fprintf (simulator.path + ".replicate." + (1+simulator.i) , CLEAR_FILE, all);
+}
 //----------------------------------------------------------------------------------------
   
 lfunction simulator.defineMG.frequencies (type,code) {

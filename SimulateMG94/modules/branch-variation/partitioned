@@ -31,6 +31,5 @@ lfunction simulator.validate_tree (tree) {
         return '';
     }
     
-    
     return 'The input tree must have input branch lengths';
 }

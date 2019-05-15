@@ -1,0 +1,52 @@
+LoadFunctionLibrary("libv3/all-terms.bf"); 
+LoadFunctionLibrary("libv3/UtilityFunctions.bf");
+LoadFunctionLibrary("libv3/models/parameters.bf");
+LoadFunctionLibrary("libv3/convenience/random.bf");
+
+global simulator.site.alpha = 1;
+global simulator.site.omega = 1;
+
+lfunction simulator.prepare_site_distribution (model, site_count, tree, tree_info) {
+ 
+    rates = (model[^"terms.parameters"])[^"terms.local"];
+    
+    utility.ForEach (^tree, "_node_", '
+         parameters.SetConstraint ("`tree`."+ _node_ + ".`rates[^'terms.parameters.nonsynonymous_rate']`",
+                                    "simulator.site.omega*`tree`."+ _node_ + ".`rates[^'terms.parameters.synonymous_rate']`", "");
+         parameters.SetConstraint ("`tree`."+ _node_ + ".`rates[^'terms.parameters.synonymous_rate']`",
+                                    "simulator.site.alpha*`tree`."+ _node_ + ".`rates[^'terms.parameters.synonymous_rate']`__", "");
+    ');
+    
+    
+    KeywordArgument   ("gamma-shape", "The shape of the gamma parameter", "1.");            
+    alpha = io.PromptUser ("The shape of the gamma parameter " + label, 1.0, 1e-6, 20, FALSE);
+
+    site_profile = {site_count, 2};
+    
+    for (i = 0; i < site_count; i+=1) {
+          site_profile[i][0] = 1;  
+          site_profile[i][1] = random.gamma_fast (alpha);  
+    }
+    
+ 
+    return site_profile;  
+    
+} 
+
+lfunction simulator.apply_site_distribution (model, site, tree) {
+    site = Eval (site);
+    ^"simulator.site.alpha" = site[0];
+    ^"simulator.site.omega" = site[1];
+    
+}
+
+lfunction simulator.set_site_omega (model, site_id, branch_info) {
+/**
+    no site-to-site rate variation
+*/
+
+    mx = {{1,1}};
+    mx [1] = (^"simulator.site_profile")[site_id][1];
+    return mx;
+    
+}
