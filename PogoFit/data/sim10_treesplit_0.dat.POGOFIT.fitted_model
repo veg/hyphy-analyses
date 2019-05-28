@@ -1,0 +1,1581 @@
+Rij = {
+ "A":{
+   "C":1.813713557645691,
+   "D":0.01242048756429274,
+   "E":0.3840475072809506,
+   "F":0.009532002084224663,
+   "G":2.221862794250647,
+   "H":0.01308115179643597,
+   "I":0.1975102412102266,
+   "K":0.007933085605580524,
+   "L":0.01336552466157589,
+   "M":1.586915630440937,
+   "N":0.01951790902960288,
+   "P":1.848290885305643,
+   "Q":0.01596919829694781,
+   "R":6.008052861713848,
+   "S":6.553409761060745,
+   "T":2.96135750086624,
+   "V":0.01351239855895584,
+   "W":0.003378156144718439,
+   "Y":0.01983271401395131
+  },
+ "C":{
+   "D":0.007590297955956676,
+   "E":0.004657682836609778,
+   "F":0.1404708096213899,
+   "G":0.6638572255523233,
+   "H":0.07345358876093629,
+   "I":0.9776617608285618,
+   "K":0.00564049664616964,
+   "L":0.007933085605580526,
+   "M":0.006646639291162063,
+   "N":0.00975895451480144,
+   "P":0.005346209864630354,
+   "Q":1.748553883090046,
+   "R":0.008598799082971897,
+   "S":0.6927957432268061,
+   "T":0.3744029665119544,
+   "V":2.665280862631719,
+   "W":0.01402801882643936,
+   "Y":0.009837026150919852
+  },
+ "D":{
+   "E":0.8901375072591552,
+   "F":0.2770209462484405,
+   "G":0.01808276865977914,
+   "H":2.336791316238491,
+   "I":0.007984599148473905,
+   "K":0.00917633036466404,
+   "L":0.01731870801218284,
+   "M":0.01217453731549487,
+   "N":0.02927686354440432,
+   "P":0.7623001439241955,
+   "Q":3.257159165259939,
+   "R":5.215872945761296,
+   "S":2.053567427985237,
+   "T":0.8639880107452098,
+   "V":0.01756611812664259,
+   "W":0.003819476384817823,
+   "Y":0.02999093338695076
+  },
+ "E":{
+   "F":0.005855372708880864,
+   "G":0.5344428226277397,
+   "H":0.007026447250657036,
+   "I":0.004803235425253834,
+   "K":1.726898296710566,
+   "L":0.007107677854710876,
+   "M":0.006057282112635376,
+   "N":1.669745799293481,
+   "P":0.1385353147247129,
+   "Q":0.007782457397879629,
+   "R":0.007637442663757649,
+   "S":0.4073171720216657,
+   "T":0.1045579020221131,
+   "V":0.259637174176113,
+   "W":0.004504328891052984,
+   "Y":0.008598799082971897
+  },
+ "F":{
+   "G":0.01254722723331614,
+   "H":0.01193813853266972,
+   "I":0.8621778439653975,
+   "K":0.1956441680549408,
+   "L":0.573370049631606,
+   "M":1.486704497597445,
+   "N":0.01707817040090252,
+   "P":0.006986524254914667,
+   "Q":0.01429800312633699,
+   "R":0.01381604796477507,
+   "S":0.007107677854710876,
+   "T":0.01138544693393501,
+   "V":1.740396168010154,
+   "W":1.726301780995238,
+   "Y":6.454280000000002
+  },
+ "G":{
+   "H":0.01951790902960288,
+   "I":0.00853908520045126,
+   "K":0.009916357006975655,
+   "L":0.02015784047319642,
+   "M":0.01351239855895584,
+   "N":0.03842588340203067,
+   "P":0.4991784217258328,
+   "Q":0.02673104932315177,
+   "R":0.02509445446663227,
+   "S":1.184507328093312,
+   "T":0.01808276865977914,
+   "V":1.263375219120006,
+   "W":0.008419693015981599,
+   "Y":0.03966542802790263
+  },
+ "H":{
+   "I":0.00825253871721464,
+   "K":0.1650159906983748,
+   "L":0.01863073134643911,
+   "M":0.01280862780067689,
+   "N":0.03323319645581031,
+   "P":1.477029506922952,
+   "Q":18.58821398806365,
+   "R":0.02277089386787002,
+   "S":3.266533910256534,
+   "T":0.01684422286116413,
+   "V":0.01891735798253818,
+   "W":0.006936867552189307,
+   "Y":0.03415634080180504
+  },
+ "I":{
+   "K":0.3681366425221225,
+   "L":1,
+   "M":10.07899222020052,
+   "N":0.01042057854970323,
+   "P":0.06791418509416854,
+   "Q":0.7537419023546744,
+   "R":0.00910835754714801,
+   "S":0.005614740953721376,
+   "T":1.877787455630168,
+   "V":7.821299999999996,
+   "W":0.005839153609598971,
+   "Y":0.01050964332363232
+  },
+ "K":{
+   "L":0.009682112353267571,
+   "M":0.007832027190222812,
+   "N":0.01254722723331614,
+   "P":0.4176376686690021,
+   "Q":14.18114680098498,
+   "R":9.941662029410622,
+   "S":0.2863560511776143,
+   "T":0.00917633036466404,
+   "V":0.8841132395203347,
+   "W":0.004020504850545918,
+   "Y":0.01267658009139156
+  },
+ "L":{
+   "M":58.95202248255447,
+   "N":0.03513223625328519,
+   "P":0.9972148760377213,
+   "Q":0.02509445446663228,
+   "R":8.727707257697315,
+   "S":0.009041384329889568,
+   "T":0.01731870801218284,
+   "V":5.022573657760995,
+   "W":0.01341180906121677,
+   "Y":0.03616553731955828
+  },
+ "M":{
+   "N":5.959294666135787,
+   "P":0.2919861151902482,
+   "Q":0.01556491479575926,
+   "R":0.805766727451636,
+   "S":0.007407399210030008,
+   "T":3.615345107160413,
+   "V":4.666770441398848,
+   "W":0.01412847794153833,
+   "Y":0.01921294170101534
+  },
+ "N":{
+   "P":0.01117843880786347,
+   "Q":0.06148141344324907,
+   "R":0.05346209864630354,
+   "S":0.01149185298004656,
+   "T":6.753347167910564,
+   "V":0.03616553731955827,
+   "W":0.002227449358123944,
+   "Y":0.2459256537729963
+  },
+ "P":{
+   "Q":0.009916357006975657,
+   "R":0.8019280273366987,
+   "S":0.7609893368122568,
+   "T":0.9505256927611104,
+   "V":0.008910349774383923,
+   "W":0.00439410582875527,
+   "Y":0.01128099329233928
+  },
+ "Q":{
+   "R":7.686743567883035,
+   "S":0.0101622170980577,
+   "T":0.02195764765830324,
+   "V":0.02561725560135378,
+   "W":0.005913142089931992,
+   "Y":0.06471727730868324
+  },
+ "R":{
+   "S":0.009916357006975657,
+   "T":5.984915546829438,
+   "V":0.02411035821303885,
+   "W":1.737143294138776,
+   "Y":0.05589219403931735
+  },
+ "S":{
+   "T":5.138298980609462,
+   "V":0.8939239489223625,
+   "W":0.01151733839423503,
+   "Y":0.01160026668740548
+  },
+ "T":{
+   "V":5.429854172912147,
+   "W":0.003316963084281686,
+   "Y":0.02999093338695076
+  },
+ "V":{
+   "W":0.008943787266881749,
+   "Y":0.03726146269287823
+  },
+ "W":{
+   "Y":1.708892949362525
+  }
+};
+
+
+EFV = {
+{0.053475935828877} 
+{0.1096256684491979} 
+{0.03475935828877005} 
+{0.125668449197861} 
+{0.06149732620320855} 
+{0.02584670231729055} 
+{0.0303030303030303} 
+{0.1024955436720143} 
+{0.08467023172905526} 
+{0.0285204991087344} 
+{0.0552584670231729} 
+{0.00267379679144385} 
+{0.09536541889483065} 
+{0.01515151515151515} 
+{0.017825311942959} 
+{0.0926916221033868} 
+{0.03475935828877005} 
+{0.02762923351158645} 
+{0} 
+{0.0017825311942959} 
+};
+
+
+CI = {
+ "Substitution rate from amino-acid A to amino-acid C":{
+   "From":"A",
+   "LB":0.2862862401729961,
+   "MLE":1.813713557645691,
+   "To":"C",
+   "UB":4.530631202248537
+  },
+ "Substitution rate from amino-acid A to amino-acid D":{
+   "From":"A",
+   "LB":0,
+   "MLE":0,
+   "To":"D",
+   "UB":3.563958685852334
+  },
+ "Substitution rate from amino-acid A to amino-acid E":{
+   "From":"A",
+   "LB":0,
+   "MLE":0.3840475072809506,
+   "To":"E",
+   "UB":1.621762822259343
+  },
+ "Substitution rate from amino-acid A to amino-acid F":{
+   "From":"A",
+   "LB":0,
+   "MLE":0,
+   "To":"F",
+   "UB":1.047470818544741
+  },
+ "Substitution rate from amino-acid A to amino-acid G":{
+   "From":"A",
+   "LB":0,
+   "MLE":2.221862794250647,
+   "To":"G",
+   "UB":9.430709248291173
+  },
+ "Substitution rate from amino-acid A to amino-acid H":{
+   "From":"A",
+   "LB":0,
+   "MLE":0,
+   "To":"H",
+   "UB":3.774894636362688
+  },
+ "Substitution rate from amino-acid A to amino-acid I":{
+   "From":"A",
+   "LB":0,
+   "MLE":0.1975102412102266,
+   "To":"I",
+   "UB":2.387730626627868
+  },
+ "Substitution rate from amino-acid A to amino-acid K":{
+   "From":"A",
+   "LB":0,
+   "MLE":0,
+   "To":"K",
+   "UB":1.851469233038728
+  },
+ "Substitution rate from amino-acid A to amino-acid L":{
+   "From":"A",
+   "LB":0,
+   "MLE":0,
+   "To":"L",
+   "UB":7.240417549294548
+  },
+ "Substitution rate from amino-acid A to amino-acid M":{
+   "From":"A",
+   "LB":0,
+   "MLE":1.586915630440937,
+   "To":"M",
+   "UB":5.895830309466847
+  },
+ "Substitution rate from amino-acid A to amino-acid N":{
+   "From":"A",
+   "LB":0,
+   "MLE":0,
+   "To":"N",
+   "UB":18.08975383182403
+  },
+ "Substitution rate from amino-acid A to amino-acid P":{
+   "From":"A",
+   "LB":0.4160398153793728,
+   "MLE":1.848290885305643,
+   "To":"P",
+   "UB":5.088755628720572
+  },
+ "Substitution rate from amino-acid A to amino-acid Q":{
+   "From":"A",
+   "LB":0,
+   "MLE":0,
+   "To":"Q",
+   "UB":6.493946908641006
+  },
+ "Substitution rate from amino-acid A to amino-acid R":{
+   "From":"A",
+   "LB":0.1621679532745735,
+   "MLE":6.008052861713848,
+   "To":"R",
+   "UB":20.21662583822881
+  },
+ "Substitution rate from amino-acid A to amino-acid S":{
+   "From":"A",
+   "LB":2.200020064955318,
+   "MLE":6.553409761060745,
+   "To":"S",
+   "UB":12.52813223833072
+  },
+ "Substitution rate from amino-acid A to amino-acid T":{
+   "From":"A",
+   "LB":0,
+   "MLE":2.96135750086624,
+   "To":"T",
+   "UB":15.25486788949679
+  },
+ "Substitution rate from amino-acid A to amino-acid V":{
+   "From":"A",
+   "LB":0,
+   "MLE":0,
+   "To":"V",
+   "UB":6.935815849068312
+  },
+ "Substitution rate from amino-acid A to amino-acid W":{
+   "From":"A",
+   "LB":0,
+   "MLE":0.003378156144718439,
+   "To":"W",
+   "UB":10000
+  },
+ "Substitution rate from amino-acid A to amino-acid Y":{
+   "From":"A",
+   "LB":0,
+   "MLE":0,
+   "To":"Y",
+   "UB":32.03377519897527
+  },
+ "Substitution rate from amino-acid C to amino-acid D":{
+   "From":"C",
+   "LB":0,
+   "MLE":0,
+   "To":"D",
+   "UB":0.9146514147376494
+  },
+ "Substitution rate from amino-acid C to amino-acid E":{
+   "From":"C",
+   "LB":0,
+   "MLE":0,
+   "To":"E",
+   "UB":0.326407241755045
+  },
+ "Substitution rate from amino-acid C to amino-acid F":{
+   "From":"C",
+   "LB":0,
+   "MLE":0.1404708096213899,
+   "To":"F",
+   "UB":1.046190159899582
+  },
+ "Substitution rate from amino-acid C to amino-acid G":{
+   "From":"C",
+   "LB":0,
+   "MLE":0.6638572255523233,
+   "To":"G",
+   "UB":3.479968464591031
+  },
+ "Substitution rate from amino-acid C to amino-acid H":{
+   "From":"C",
+   "LB":0,
+   "MLE":0.07345358876093629,
+   "To":"H",
+   "UB":2.068702449628156
+  },
+ "Substitution rate from amino-acid C to amino-acid I":{
+   "From":"C",
+   "LB":0.102947796279482,
+   "MLE":0.9776617608285618,
+   "To":"I",
+   "UB":2.304086980129489
+  },
+ "Substitution rate from amino-acid C to amino-acid K":{
+   "From":"C",
+   "LB":0,
+   "MLE":0,
+   "To":"K",
+   "UB":0.6992833422486177
+  },
+ "Substitution rate from amino-acid C to amino-acid L":{
+   "From":"C",
+   "LB":0,
+   "MLE":0,
+   "To":"L",
+   "UB":2.845128521854241
+  },
+ "Substitution rate from amino-acid C to amino-acid M":{
+   "From":"C",
+   "LB":0,
+   "MLE":0,
+   "To":"M",
+   "UB":1.450267320539437
+  },
+ "Substitution rate from amino-acid C to amino-acid N":{
+   "From":"C",
+   "LB":0,
+   "MLE":0,
+   "To":"N",
+   "UB":7.408344579377362
+  },
+ "Substitution rate from amino-acid C to amino-acid P":{
+   "From":"C",
+   "LB":0,
+   "MLE":0,
+   "To":"P",
+   "UB":0.3622724567366445
+  },
+ "Substitution rate from amino-acid C to amino-acid Q":{
+   "From":"C",
+   "LB":0.1378025248840492,
+   "MLE":1.748553883090046,
+   "To":"Q",
+   "UB":6.837225316653636
+  },
+ "Substitution rate from amino-acid C to amino-acid R":{
+   "From":"C",
+   "LB":0,
+   "MLE":0,
+   "To":"R",
+   "UB":3.31625726433268
+  },
+ "Substitution rate from amino-acid C to amino-acid S":{
+   "From":"C",
+   "LB":0,
+   "MLE":0.6927957432268061,
+   "To":"S",
+   "UB":2.130519794162276
+  },
+ "Substitution rate from amino-acid C to amino-acid T":{
+   "From":"C",
+   "LB":0,
+   "MLE":0.3744029665119544,
+   "To":"T",
+   "UB":3.606173506699112
+  },
+ "Substitution rate from amino-acid C to amino-acid V":{
+   "From":"C",
+   "LB":0.05600840505806307,
+   "MLE":2.665280862631719,
+   "To":"V",
+   "UB":8.100517988643915
+  },
+ "Substitution rate from amino-acid C to amino-acid W":{
+   "From":"C",
+   "LB":0,
+   "MLE":0.01402801882643936,
+   "To":"W",
+   "UB":10000
+  },
+ "Substitution rate from amino-acid C to amino-acid Y":{
+   "From":"C",
+   "LB":0,
+   "MLE":0,
+   "To":"Y",
+   "UB":30.35530920482446
+  },
+ "Substitution rate from amino-acid D to amino-acid E":{
+   "From":"D",
+   "LB":0.1710467365840677,
+   "MLE":0.8901375072591552,
+   "To":"E",
+   "UB":2.532719513122728
+  },
+ "Substitution rate from amino-acid D to amino-acid F":{
+   "From":"D",
+   "LB":0,
+   "MLE":0.2770209462484405,
+   "To":"F",
+   "UB":2.058758405068722
+  },
+ "Substitution rate from amino-acid D to amino-acid G":{
+   "From":"D",
+   "LB":0,
+   "MLE":0,
+   "To":"G",
+   "UB":2.989196369745465
+  },
+ "Substitution rate from amino-acid D to amino-acid H":{
+   "From":"D",
+   "LB":0,
+   "MLE":2.336791316238491,
+   "To":"H",
+   "UB":10.42167183069527
+  },
+ "Substitution rate from amino-acid D to amino-acid I":{
+   "From":"D",
+   "LB":0,
+   "MLE":0,
+   "To":"I",
+   "UB":0.85796642087492
+  },
+ "Substitution rate from amino-acid D to amino-acid K":{
+   "From":"D",
+   "LB":0,
+   "MLE":0,
+   "To":"K",
+   "UB":2.337735436106616
+  },
+ "Substitution rate from amino-acid D to amino-acid L":{
+   "From":"D",
+   "LB":0,
+   "MLE":0,
+   "To":"L",
+   "UB":2.797790373859653
+  },
+ "Substitution rate from amino-acid D to amino-acid M":{
+   "From":"D",
+   "LB":0,
+   "MLE":0,
+   "To":"M",
+   "UB":1.40662633975347
+  },
+ "Substitution rate from amino-acid D to amino-acid N":{
+   "From":"D",
+   "LB":0,
+   "MLE":0,
+   "To":"N",
+   "UB":19.15302481449752
+  },
+ "Substitution rate from amino-acid D to amino-acid P":{
+   "From":"D",
+   "LB":0,
+   "MLE":0.7623001439241955,
+   "To":"P",
+   "UB":2.972491020728961
+  },
+ "Substitution rate from amino-acid D to amino-acid Q":{
+   "From":"D",
+   "LB":0,
+   "MLE":3.257159165259939,
+   "To":"Q",
+   "UB":18.53262761983356
+  },
+ "Substitution rate from amino-acid D to amino-acid R":{
+   "From":"D",
+   "LB":0.5420446528092911,
+   "MLE":5.215872945761296,
+   "To":"R",
+   "UB":23.56237668156187
+  },
+ "Substitution rate from amino-acid D to amino-acid S":{
+   "From":"D",
+   "LB":0.2638205508575884,
+   "MLE":2.053567427985237,
+   "To":"S",
+   "UB":5.162526145406117
+  },
+ "Substitution rate from amino-acid D to amino-acid T":{
+   "From":"D",
+   "LB":0,
+   "MLE":0.8639880107452098,
+   "To":"T",
+   "UB":6.309706725462128
+  },
+ "Substitution rate from amino-acid D to amino-acid V":{
+   "From":"D",
+   "LB":0,
+   "MLE":0,
+   "To":"V",
+   "UB":3.578208090769783
+  },
+ "Substitution rate from amino-acid D to amino-acid W":{
+   "From":"D",
+   "LB":0,
+   "MLE":0.003819476384817823,
+   "To":"W",
+   "UB":10000
+  },
+ "Substitution rate from amino-acid D to amino-acid Y":{
+   "From":"D",
+   "LB":0,
+   "MLE":0,
+   "To":"Y",
+   "UB":54.99319574143529
+  },
+ "Substitution rate from amino-acid E to amino-acid F":{
+   "From":"E",
+   "LB":0,
+   "MLE":0,
+   "To":"F",
+   "UB":0.283152882166854
+  },
+ "Substitution rate from amino-acid E to amino-acid G":{
+   "From":"E",
+   "LB":0.02348941096888322,
+   "MLE":0.5344428226277397,
+   "To":"G",
+   "UB":2.432568919559147
+  },
+ "Substitution rate from amino-acid E to amino-acid H":{
+   "From":"E",
+   "LB":0,
+   "MLE":0,
+   "To":"H",
+   "UB":0.8024401574761437
+  },
+ "Substitution rate from amino-acid E to amino-acid I":{
+   "From":"E",
+   "LB":0,
+   "MLE":0,
+   "To":"I",
+   "UB":0.2686634706404853
+  },
+ "Substitution rate from amino-acid E to amino-acid K":{
+   "From":"E",
+   "LB":0.9159838351770953,
+   "MLE":1.726898296710566,
+   "To":"K",
+   "UB":3.345743456284216
+  },
+ "Substitution rate from amino-acid E to amino-acid L":{
+   "From":"E",
+   "LB":0,
+   "MLE":0,
+   "To":"L",
+   "UB":0.837160009931136
+  },
+ "Substitution rate from amino-acid E to amino-acid M":{
+   "From":"E",
+   "LB":0,
+   "MLE":0,
+   "To":"M",
+   "UB":0.418724917812597
+  },
+ "Substitution rate from amino-acid E to amino-acid N":{
+   "From":"E",
+   "LB":0,
+   "MLE":1.669745799293481,
+   "To":"N",
+   "UB":12.80112746601013
+  },
+ "Substitution rate from amino-acid E to amino-acid P":{
+   "From":"E",
+   "LB":0.00557218051207734,
+   "MLE":0.1385353147247129,
+   "To":"P",
+   "UB":0.5749966291887194
+  },
+ "Substitution rate from amino-acid E to amino-acid Q":{
+   "From":"E",
+   "LB":0,
+   "MLE":0,
+   "To":"Q",
+   "UB":2.927321737241851
+  },
+ "Substitution rate from amino-acid E to amino-acid R":{
+   "From":"E",
+   "LB":0,
+   "MLE":0,
+   "To":"R",
+   "UB":2.183071938701877
+  },
+ "Substitution rate from amino-acid E to amino-acid S":{
+   "From":"E",
+   "LB":0.07154660787695173,
+   "MLE":0.4073171720216657,
+   "To":"S",
+   "UB":1.40809344850568
+  },
+ "Substitution rate from amino-acid E to amino-acid T":{
+   "From":"E",
+   "LB":0,
+   "MLE":0.1045579020221131,
+   "To":"T",
+   "UB":1.528996082116774
+  },
+ "Substitution rate from amino-acid E to amino-acid V":{
+   "From":"E",
+   "LB":0,
+   "MLE":0.259637174176113,
+   "To":"V",
+   "UB":2.219407376321988
+  },
+ "Substitution rate from amino-acid E to amino-acid W":{
+   "From":"E",
+   "LB":0,
+   "MLE":0.004504328891052984,
+   "To":"W",
+   "UB":10000
+  },
+ "Substitution rate from amino-acid E to amino-acid Y":{
+   "From":"E",
+   "LB":0,
+   "MLE":0,
+   "To":"Y",
+   "UB":10.04307548320246
+  },
+ "Substitution rate from amino-acid F to amino-acid G":{
+   "From":"F",
+   "LB":0,
+   "MLE":0,
+   "To":"G",
+   "UB":1.513912199192851
+  },
+ "Substitution rate from amino-acid F to amino-acid H":{
+   "From":"F",
+   "LB":0,
+   "MLE":0,
+   "To":"H",
+   "UB":1.710814869902349
+  },
+ "Substitution rate from amino-acid F to amino-acid I":{
+   "From":"F",
+   "LB":0.1407455450252025,
+   "MLE":0.8621778439653975,
+   "To":"I",
+   "UB":2.709872331818949
+  },
+ "Substitution rate from amino-acid F to amino-acid K":{
+   "From":"F",
+   "LB":0,
+   "MLE":0.1956441680549408,
+   "To":"K",
+   "UB":0.9390643375143711
+  },
+ "Substitution rate from amino-acid F to amino-acid L":{
+   "From":"F",
+   "LB":0,
+   "MLE":0.573370049631606,
+   "To":"L",
+   "UB":7.201645735991465
+  },
+ "Substitution rate from amino-acid F to amino-acid M":{
+   "From":"F",
+   "LB":0.3100081858989692,
+   "MLE":1.486704497597445,
+   "To":"M",
+   "UB":5.655528203845257
+  },
+ "Substitution rate from amino-acid F to amino-acid N":{
+   "From":"F",
+   "LB":0,
+   "MLE":0,
+   "To":"N",
+   "UB":9.836264119269329
+  },
+ "Substitution rate from amino-acid F to amino-acid P":{
+   "From":"F",
+   "LB":0,
+   "MLE":0,
+   "To":"P",
+   "UB":0.4623919247555476
+  },
+ "Substitution rate from amino-acid F to amino-acid Q":{
+   "From":"F",
+   "LB":0,
+   "MLE":0,
+   "To":"Q",
+   "UB":3.373719787766551
+  },
+ "Substitution rate from amino-acid F to amino-acid R":{
+   "From":"F",
+   "LB":0,
+   "MLE":0,
+   "To":"R",
+   "UB":3.25503706574353
+  },
+ "Substitution rate from amino-acid F to amino-acid S":{
+   "From":"F",
+   "LB":0,
+   "MLE":0,
+   "To":"S",
+   "UB":0.5901244555147941
+  },
+ "Substitution rate from amino-acid F to amino-acid T":{
+   "From":"F",
+   "LB":0,
+   "MLE":0,
+   "To":"T",
+   "UB":1.599505706308411
+  },
+ "Substitution rate from amino-acid F to amino-acid V":{
+   "From":"F",
+   "LB":0,
+   "MLE":1.740396168010154,
+   "To":"V",
+   "UB":8.110989011821957
+  },
+ "Substitution rate from amino-acid F to amino-acid W":{
+   "From":"F",
+   "LB":0,
+   "MLE":1.726301780995238,
+   "To":"W",
+   "UB":10000
+  },
+ "Substitution rate from amino-acid F to amino-acid Y":{
+   "From":"F",
+   "LB":0.2063374682322751,
+   "MLE":6.454280000000002,
+   "To":"Y",
+   "UB":10000
+  },
+ "Substitution rate from amino-acid G to amino-acid H":{
+   "From":"G",
+   "LB":0,
+   "MLE":0,
+   "To":"H",
+   "UB":4.054780341367827
+  },
+ "Substitution rate from amino-acid G to amino-acid I":{
+   "From":"G",
+   "LB":0,
+   "MLE":0,
+   "To":"I",
+   "UB":1.373233514961859
+  },
+ "Substitution rate from amino-acid G to amino-acid K":{
+   "From":"G",
+   "LB":0,
+   "MLE":0,
+   "To":"K",
+   "UB":1.707318955090445
+  },
+ "Substitution rate from amino-acid G to amino-acid L":{
+   "From":"G",
+   "LB":0,
+   "MLE":0,
+   "To":"L",
+   "UB":4.083514859684082
+  },
+ "Substitution rate from amino-acid G to amino-acid M":{
+   "From":"G",
+   "LB":0,
+   "MLE":0,
+   "To":"M",
+   "UB":2.083557548162236
+  },
+ "Substitution rate from amino-acid G to amino-acid N":{
+   "From":"G",
+   "LB":0,
+   "MLE":0,
+   "To":"N",
+   "UB":23.72159729408582
+  },
+ "Substitution rate from amino-acid G to amino-acid P":{
+   "From":"G",
+   "LB":0,
+   "MLE":0.4991784217258328,
+   "To":"P",
+   "UB":2.659172285305651
+  },
+ "Substitution rate from amino-acid G to amino-acid Q":{
+   "From":"G",
+   "LB":0,
+   "MLE":0,
+   "To":"Q",
+   "UB":7.600592876603409
+  },
+ "Substitution rate from amino-acid G to amino-acid R":{
+   "From":"G",
+   "LB":0,
+   "MLE":0,
+   "To":"R",
+   "UB":7.542594758629064
+  },
+ "Substitution rate from amino-acid G to amino-acid S":{
+   "From":"G",
+   "LB":0,
+   "MLE":1.184507328093312,
+   "To":"S",
+   "UB":5.710021410810843
+  },
+ "Substitution rate from amino-acid G to amino-acid T":{
+   "From":"G",
+   "LB":0,
+   "MLE":0,
+   "To":"T",
+   "UB":4.261453117122364
+  },
+ "Substitution rate from amino-acid G to amino-acid V":{
+   "From":"G",
+   "LB":0,
+   "MLE":1.263375219120006,
+   "To":"V",
+   "UB":10.67051629217955
+  },
+ "Substitution rate from amino-acid G to amino-acid W":{
+   "From":"G",
+   "LB":0,
+   "MLE":0.008419693015981599,
+   "To":"W",
+   "UB":10000
+  },
+ "Substitution rate from amino-acid G to amino-acid Y":{
+   "From":"G",
+   "LB":0,
+   "MLE":0,
+   "To":"Y",
+   "UB":60.51097497926297
+  },
+ "Substitution rate from amino-acid H to amino-acid I":{
+   "From":"H",
+   "LB":0,
+   "MLE":0,
+   "To":"I",
+   "UB":1.704625414207593
+  },
+ "Substitution rate from amino-acid H to amino-acid K":{
+   "From":"H",
+   "LB":0,
+   "MLE":0.1650159906983748,
+   "To":"K",
+   "UB":3.907715287251086
+  },
+ "Substitution rate from amino-acid H to amino-acid L":{
+   "From":"H",
+   "LB":0,
+   "MLE":0,
+   "To":"L",
+   "UB":4.229098842423381
+  },
+ "Substitution rate from amino-acid H to amino-acid M":{
+   "From":"H",
+   "LB":0,
+   "MLE":0,
+   "To":"M",
+   "UB":2.102982702701985
+  },
+ "Substitution rate from amino-acid H to amino-acid N":{
+   "From":"H",
+   "LB":0,
+   "MLE":0,
+   "To":"N",
+   "UB":18.57105319508639
+  },
+ "Substitution rate from amino-acid H to amino-acid P":{
+   "From":"H",
+   "LB":0.07783998937696096,
+   "MLE":1.477029506922952,
+   "To":"P",
+   "UB":5.111893722124257
+  },
+ "Substitution rate from amino-acid H to amino-acid Q":{
+   "From":"H",
+   "LB":5.591883672295598,
+   "MLE":18.58821398806365,
+   "To":"Q",
+   "UB":55.45398165709219
+  },
+ "Substitution rate from amino-acid H to amino-acid R":{
+   "From":"H",
+   "LB":0,
+   "MLE":0,
+   "To":"R",
+   "UB":9.995655439698913
+  },
+ "Substitution rate from amino-acid H to amino-acid S":{
+   "From":"H",
+   "LB":1.099544104913304,
+   "MLE":3.266533910256534,
+   "To":"S",
+   "UB":8.87392866183102
+  },
+ "Substitution rate from amino-acid H to amino-acid T":{
+   "From":"H",
+   "LB":0,
+   "MLE":0,
+   "To":"T",
+   "UB":4.099205914741407
+  },
+ "Substitution rate from amino-acid H to amino-acid V":{
+   "From":"H",
+   "LB":0,
+   "MLE":0,
+   "To":"V",
+   "UB":5.905604347821225
+  },
+ "Substitution rate from amino-acid H to amino-acid W":{
+   "From":"H",
+   "LB":0,
+   "MLE":0.006936867552189307,
+   "To":"W",
+   "UB":10000
+  },
+ "Substitution rate from amino-acid H to amino-acid Y":{
+   "From":"H",
+   "LB":0,
+   "MLE":0,
+   "To":"Y",
+   "UB":52.06965472057519
+  },
+ "Substitution rate from amino-acid I to amino-acid K":{
+   "From":"I",
+   "LB":0,
+   "MLE":0.3681366425221225,
+   "To":"K",
+   "UB":1.457323332755104
+  },
+ "Substitution rate from amino-acid I to amino-acid M":{
+   "From":"I",
+   "LB":4.810154889286946,
+   "MLE":10.07899222020052,
+   "To":"M",
+   "UB":21.97568429362565
+  },
+ "Substitution rate from amino-acid I to amino-acid N":{
+   "From":"I",
+   "LB":0,
+   "MLE":0,
+   "To":"N",
+   "UB":10.29115909746754
+  },
+ "Substitution rate from amino-acid I to amino-acid P":{
+   "From":"I",
+   "LB":0,
+   "MLE":0.06791418509416854,
+   "To":"P",
+   "UB":0.7714542012811094
+  },
+ "Substitution rate from amino-acid I to amino-acid Q":{
+   "From":"I",
+   "LB":0,
+   "MLE":0.7537419023546744,
+   "To":"Q",
+   "UB":5.211918857120515
+  },
+ "Substitution rate from amino-acid I to amino-acid R":{
+   "From":"I",
+   "LB":0,
+   "MLE":0,
+   "To":"R",
+   "UB":5.131011188406319
+  },
+ "Substitution rate from amino-acid I to amino-acid S":{
+   "From":"I",
+   "LB":0,
+   "MLE":0,
+   "To":"S",
+   "UB":0.987255152323143
+  },
+ "Substitution rate from amino-acid I to amino-acid T":{
+   "From":"I",
+   "LB":0,
+   "MLE":1.877787455630168,
+   "To":"T",
+   "UB":6.177462895571255
+  },
+ "Substitution rate from amino-acid I to amino-acid V":{
+   "From":"I",
+   "LB":2.85987083841789,
+   "MLE":7.821299999999996,
+   "To":"V",
+   "UB":28.56227407796117
+  },
+ "Substitution rate from amino-acid I to amino-acid W":{
+   "From":"I",
+   "LB":0,
+   "MLE":0.005839153609598971,
+   "To":"W",
+   "UB":10000
+  },
+ "Substitution rate from amino-acid I to amino-acid Y":{
+   "From":"I",
+   "LB":0,
+   "MLE":0,
+   "To":"Y",
+   "UB":44.00311704732428
+  },
+ "Substitution rate from amino-acid K to amino-acid L":{
+   "From":"K",
+   "LB":0,
+   "MLE":0,
+   "To":"L",
+   "UB":2.365645055041343
+  },
+ "Substitution rate from amino-acid K to amino-acid M":{
+   "From":"K",
+   "LB":0,
+   "MLE":0,
+   "To":"M",
+   "UB":1.097837116152344
+  },
+ "Substitution rate from amino-acid K to amino-acid N":{
+   "From":"K",
+   "LB":0,
+   "MLE":0,
+   "To":"N",
+   "UB":9.705227542165414
+  },
+ "Substitution rate from amino-acid K to amino-acid P":{
+   "From":"K",
+   "LB":0,
+   "MLE":0.4176376686690021,
+   "To":"P",
+   "UB":1.358336788342874
+  },
+ "Substitution rate from amino-acid K to amino-acid Q":{
+   "From":"K",
+   "LB":5.662879209990998,
+   "MLE":14.18114680098498,
+   "To":"Q",
+   "UB":39.20342186411233
+  },
+ "Substitution rate from amino-acid K to amino-acid R":{
+   "From":"K",
+   "LB":3.26534261245356,
+   "MLE":9.941662029410622,
+   "To":"R",
+   "UB":27.89466563849515
+  },
+ "Substitution rate from amino-acid K to amino-acid S":{
+   "From":"K",
+   "LB":0,
+   "MLE":0.2863560511776143,
+   "To":"S",
+   "UB":1.582983727303227
+  },
+ "Substitution rate from amino-acid K to amino-acid T":{
+   "From":"K",
+   "LB":0,
+   "MLE":0,
+   "To":"T",
+   "UB":1.600665408173996
+  },
+ "Substitution rate from amino-acid K to amino-acid V":{
+   "From":"K",
+   "LB":0,
+   "MLE":0.8841132395203347,
+   "To":"V",
+   "UB":5.797615261453773
+  },
+ "Substitution rate from amino-acid K to amino-acid W":{
+   "From":"K",
+   "LB":0,
+   "MLE":0.004020504850545918,
+   "To":"W",
+   "UB":10000
+  },
+ "Substitution rate from amino-acid K to amino-acid Y":{
+   "From":"K",
+   "LB":0,
+   "MLE":0,
+   "To":"Y",
+   "UB":18.90960851873625
+  },
+ "Substitution rate from amino-acid L to amino-acid M":{
+   "From":"L",
+   "LB":16.34651740347773,
+   "MLE":58.95202248255447,
+   "To":"M",
+   "UB":270.6813647100728
+  },
+ "Substitution rate from amino-acid L to amino-acid N":{
+   "From":"L",
+   "LB":0,
+   "MLE":0,
+   "To":"N",
+   "UB":39.56173939135226
+  },
+ "Substitution rate from amino-acid L to amino-acid P":{
+   "From":"L",
+   "LB":0.07792743564798418,
+   "MLE":0.9972148760377213,
+   "To":"P",
+   "UB":4.945957079930954
+  },
+ "Substitution rate from amino-acid L to amino-acid Q":{
+   "From":"L",
+   "LB":0,
+   "MLE":0,
+   "To":"Q",
+   "UB":10.21623811199257
+  },
+ "Substitution rate from amino-acid L to amino-acid R":{
+   "From":"L",
+   "LB":1.552553851756114,
+   "MLE":8.727707257697315,
+   "To":"R",
+   "UB":42.72618464688149
+  },
+ "Substitution rate from amino-acid L to amino-acid S":{
+   "From":"L",
+   "LB":0,
+   "MLE":0,
+   "To":"S",
+   "UB":2.073414514743474
+  },
+ "Substitution rate from amino-acid L to amino-acid T":{
+   "From":"L",
+   "LB":0,
+   "MLE":0,
+   "To":"T",
+   "UB":13.7569769015727
+  },
+ "Substitution rate from amino-acid L to amino-acid V":{
+   "From":"L",
+   "LB":0,
+   "MLE":5.022573657760995,
+   "To":"V",
+   "UB":53.61614204292173
+  },
+ "Substitution rate from amino-acid L to amino-acid W":{
+   "From":"L",
+   "LB":0,
+   "MLE":0.01341180906121677,
+   "To":"W",
+   "UB":10000
+  },
+ "Substitution rate from amino-acid L to amino-acid Y":{
+   "From":"L",
+   "LB":0,
+   "MLE":0,
+   "To":"Y",
+   "UB":241.4394327760428
+  },
+ "Substitution rate from amino-acid M to amino-acid N":{
+   "From":"M",
+   "LB":0,
+   "MLE":5.959294666135787,
+   "To":"N",
+   "UB":29.70519064402114
+  },
+ "Substitution rate from amino-acid M to amino-acid P":{
+   "From":"M",
+   "LB":0,
+   "MLE":0.2919861151902482,
+   "To":"P",
+   "UB":1.854594786439796
+  },
+ "Substitution rate from amino-acid M to amino-acid Q":{
+   "From":"M",
+   "LB":0,
+   "MLE":0,
+   "To":"Q",
+   "UB":4.75073328484462
+  },
+ "Substitution rate from amino-acid M to amino-acid R":{
+   "From":"M",
+   "LB":0,
+   "MLE":0.805766727451636,
+   "To":"R",
+   "UB":13.88076609706561
+  },
+ "Substitution rate from amino-acid M to amino-acid S":{
+   "From":"M",
+   "LB":0,
+   "MLE":0,
+   "To":"S",
+   "UB":1.124197913947233
+  },
+ "Substitution rate from amino-acid M to amino-acid T":{
+   "From":"M",
+   "LB":0,
+   "MLE":3.615345107160413,
+   "To":"T",
+   "UB":11.92953571084231
+  },
+ "Substitution rate from amino-acid M to amino-acid V":{
+   "From":"M",
+   "LB":0,
+   "MLE":4.666770441398848,
+   "To":"V",
+   "UB":25.91979306423175
+  },
+ "Substitution rate from amino-acid M to amino-acid W":{
+   "From":"M",
+   "LB":0,
+   "MLE":0.01412847794153833,
+   "To":"W",
+   "UB":10000
+  },
+ "Substitution rate from amino-acid M to amino-acid Y":{
+   "From":"M",
+   "LB":0,
+   "MLE":0,
+   "To":"Y",
+   "UB":137.6138923930471
+  },
+ "Substitution rate from amino-acid N to amino-acid P":{
+   "From":"N",
+   "LB":0,
+   "MLE":0,
+   "To":"P",
+   "UB":6.901853638447015
+  },
+ "Substitution rate from amino-acid N to amino-acid Q":{
+   "From":"N",
+   "LB":0,
+   "MLE":0,
+   "To":"Q",
+   "UB":43.11011475324115
+  },
+ "Substitution rate from amino-acid N to amino-acid R":{
+   "From":"N",
+   "LB":0,
+   "MLE":0,
+   "To":"R",
+   "UB":60.73336170669973
+  },
+ "Substitution rate from amino-acid N to amino-acid S":{
+   "From":"N",
+   "LB":0,
+   "MLE":0,
+   "To":"S",
+   "UB":9.507476243471057
+  },
+ "Substitution rate from amino-acid N to amino-acid T":{
+   "From":"N",
+   "LB":0,
+   "MLE":6.753347167910564,
+   "To":"T",
+   "UB":62.55540232474762
+  },
+ "Substitution rate from amino-acid N to amino-acid V":{
+   "From":"N",
+   "LB":0,
+   "MLE":0,
+   "To":"V",
+   "UB":38.56280001677953
+  },
+ "Substitution rate from amino-acid N to amino-acid W":{
+   "From":"N",
+   "LB":0,
+   "MLE":0.002227449358123944,
+   "To":"W",
+   "UB":10000
+  },
+ "Substitution rate from amino-acid N to amino-acid Y":{
+   "From":"N",
+   "LB":0,
+   "MLE":0,
+   "To":"Y",
+   "UB":478.6291393869395
+  },
+ "Substitution rate from amino-acid P to amino-acid Q":{
+   "From":"P",
+   "LB":0,
+   "MLE":0,
+   "To":"Q",
+   "UB":3.878251681476343
+  },
+ "Substitution rate from amino-acid P to amino-acid R":{
+   "From":"P",
+   "LB":0,
+   "MLE":0.8019280273366987,
+   "To":"R",
+   "UB":6.650488580349029
+  },
+ "Substitution rate from amino-acid P to amino-acid S":{
+   "From":"P",
+   "LB":0.1304760614806616,
+   "MLE":0.7609893368122568,
+   "To":"S",
+   "UB":2.61002447551571
+  },
+ "Substitution rate from amino-acid P to amino-acid T":{
+   "From":"P",
+   "LB":0,
+   "MLE":0.9505256927611104,
+   "To":"T",
+   "UB":3.844883934916741
+  },
+ "Substitution rate from amino-acid P to amino-acid V":{
+   "From":"P",
+   "LB":0,
+   "MLE":0,
+   "To":"V",
+   "UB":1.796526451339685
+  },
+ "Substitution rate from amino-acid P to amino-acid W":{
+   "From":"P",
+   "LB":0,
+   "MLE":0.00439410582875527,
+   "To":"W",
+   "UB":10000
+  },
+ "Substitution rate from amino-acid P to amino-acid Y":{
+   "From":"P",
+   "LB":0,
+   "MLE":0,
+   "To":"Y",
+   "UB":14.80865645563592
+  },
+ "Substitution rate from amino-acid Q to amino-acid R":{
+   "From":"Q",
+   "LB":0,
+   "MLE":7.686743567883035,
+   "To":"R",
+   "UB":53.79714907481886
+  },
+ "Substitution rate from amino-acid Q to amino-acid S":{
+   "From":"Q",
+   "LB":0,
+   "MLE":0,
+   "To":"S",
+   "UB":5.628929670835015
+  },
+ "Substitution rate from amino-acid Q to amino-acid T":{
+   "From":"Q",
+   "LB":0,
+   "MLE":0,
+   "To":"T",
+   "UB":7.12260966965221
+  },
+ "Substitution rate from amino-acid Q to amino-acid V":{
+   "From":"Q",
+   "LB":0,
+   "MLE":0,
+   "To":"V",
+   "UB":14.94357082909642
+  },
+ "Substitution rate from amino-acid Q to amino-acid W":{
+   "From":"Q",
+   "LB":0,
+   "MLE":0.005913142089931992,
+   "To":"W",
+   "UB":10000
+  },
+ "Substitution rate from amino-acid Q to amino-acid Y":{
+   "From":"Q",
+   "LB":0,
+   "MLE":0,
+   "To":"Y",
+   "UB":90.8210146284169
+  },
+ "Substitution rate from amino-acid R to amino-acid S":{
+   "From":"R",
+   "LB":0,
+   "MLE":0,
+   "To":"S",
+   "UB":4.331357980439673
+  },
+ "Substitution rate from amino-acid R to amino-acid T":{
+   "From":"R",
+   "LB":0,
+   "MLE":5.984915546829438,
+   "To":"T",
+   "UB":22.23718529108465
+  },
+ "Substitution rate from amino-acid R to amino-acid V":{
+   "From":"R",
+   "LB":0,
+   "MLE":0,
+   "To":"V",
+   "UB":17.55843312017492
+  },
+ "Substitution rate from amino-acid R to amino-acid W":{
+   "From":"R",
+   "LB":0,
+   "MLE":1.737143294138776,
+   "To":"W",
+   "UB":10000
+  },
+ "Substitution rate from amino-acid R to amino-acid Y":{
+   "From":"R",
+   "LB":0,
+   "MLE":0,
+   "To":"Y",
+   "UB":86.06676048760222
+  },
+ "Substitution rate from amino-acid S to amino-acid T":{
+   "From":"S",
+   "LB":1.961418392101932,
+   "MLE":5.138298980609462,
+   "To":"T",
+   "UB":13.61588560866195
+  },
+ "Substitution rate from amino-acid S to amino-acid V":{
+   "From":"S",
+   "LB":0,
+   "MLE":0.8939239489223625,
+   "To":"V",
+   "UB":5.81432910246069
+  },
+ "Substitution rate from amino-acid S to amino-acid W":{
+   "From":"S",
+   "LB":0,
+   "MLE":0.01151733839423503,
+   "To":"W",
+   "UB":10000
+  },
+ "Substitution rate from amino-acid S to amino-acid Y":{
+   "From":"S",
+   "LB":0,
+   "MLE":0,
+   "To":"Y",
+   "UB":17.74753386843738
+  },
+ "Substitution rate from amino-acid T to amino-acid V":{
+   "From":"T",
+   "LB":0.4952089782189185,
+   "MLE":5.429854172912147,
+   "To":"V",
+   "UB":29.88475064421539
+  },
+ "Substitution rate from amino-acid T to amino-acid W":{
+   "From":"T",
+   "LB":0,
+   "MLE":0.003316963084281686,
+   "To":"W",
+   "UB":10000
+  },
+ "Substitution rate from amino-acid T to amino-acid Y":{
+   "From":"T",
+   "LB":0,
+   "MLE":0,
+   "To":"Y",
+   "UB":46.94150396813684
+  },
+ "Substitution rate from amino-acid V to amino-acid W":{
+   "From":"V",
+   "LB":0,
+   "MLE":0.008943787266881749,
+   "To":"W",
+   "UB":10000
+  },
+ "Substitution rate from amino-acid V to amino-acid Y":{
+   "From":"V",
+   "LB":0,
+   "MLE":0,
+   "To":"Y",
+   "UB":166.6773445000051
+  },
+ "Substitution rate from amino-acid W to amino-acid Y":{
+   "From":"W",
+   "LB":0,
+   "MLE":1.708892949362525,
+   "To":"Y",
+   "UB":10000
+  }
+};

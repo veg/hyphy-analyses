@@ -7,7 +7,7 @@ function pogofit.fitGTR_fixalpha (current_results) {
     index_to_file_name   = {};
     for (file_index = 0; file_index < pogofit.file_list_count; file_index += 1) {
         file_path = pogofit.file_list [file_index];
-        dataset_name = "pogofit.msa." + file_index;
+        dataset_name = "pogofit.msa.part" + file_index;
         data_info = alignments.ReadNucleotideDataSet (dataset_name, file_path);
         data_info = alignments.EnsureMapping (dataset_name, data_info);
 
@@ -28,15 +28,19 @@ function pogofit.fitGTR_fixalpha (current_results) {
 
     utility.SetEnvVariable ("VERBOSITY_LEVEL", 1);
     utility.ToggleEnvVariable ("AUTO_PARALLELIZE_OPTIMIZE", 1);
-    utility.ToggleEnvVariable ("OPTIMIZATION_METHOD", 0);
     
     // run options including fix branch lengths
     fit_options = {
         terms.run_options.proportional_branch_length_scaler: {
         },
+        terms.run_options.optimization_settings : 
+        {
+            "OPTIMIZATION_METHOD" : "coordinate-wise",
+            "OPTIMIZATION_PRECISION" : pogofit.precision
+        },
         terms.run_options.retain_lf_object : TRUE
     };
-    (fit_options[terms.run_options.proportional_branch_length_scaler])[0] = terms.model.branch_length_constrain;
+    //(fit_options[terms.run_options.proportional_branch_length_scaler])[0] = terms.model.branch_length_constrain;
 
     
     // set intial values to user chosen matrix (same as baseline)
@@ -59,13 +63,15 @@ function pogofit.fitGTR_fixalpha (current_results) {
                                         initial_values,
                                         fit_options
                                    );                         
+
+                  
+
     /*   
     // Uncomment these lines if you'd like to save the NEXUS LF.                        
     lf_id = pogofit.rev.mle[terms.likelihood_function];
     Export(pogofit.finalphase_LF, ^lf_id);
     fprintf(pogofit.final_likelihood_function, pogofit.finalphase_LF);
     */
-    pogofit.rev_mle - terms.likelihood_function;
     
     // Save the rev.mle into the analysis_results, and cache it.
     (^"pogofit.analysis_results")[pogofit.final_phase] = pogofit.rev_mle;
@@ -94,7 +100,7 @@ function pogofit.fitBaselineTogether () {
     
     for (file_index = 0; file_index < pogofit.file_list_count; file_index += 1) {
         file_path = pogofit.file_list [file_index];
-        dataset_name = "pogofit.msa." + file_index;
+        dataset_name = "pogofit.msa.part" + file_index;
         
         file_info = alignments.ReadNucleotideDataSet (dataset_name, file_path);
         file_info = alignments.EnsureMapping(dataset_name, file_info);
@@ -341,7 +347,7 @@ function pogofit.fitGTR_gamma (current_bl, current_gtr, phase) {
 
     for (file_index = 0; file_index < pogofit.file_list_count; file_index += 1) {
         file_path = pogofit.file_list [file_index];
-        dataset_name = "pogofit.msa." + file_index;
+        dataset_name = "pogofit.msa.part" + file_index;
         partition_info [file_index] = alignments.ReadNucleotideDataSet (dataset_name, file_path);
         partition_specification = { "0" : {terms.data.name : "all", terms.data.filter_string : "", terms.data.tree : ((current_bl[file_index])[terms.fit.trees])[0]}};
 
@@ -355,17 +361,24 @@ function pogofit.fitGTR_gamma (current_bl, current_gtr, phase) {
     initial_values[terms.global] = current_gtr[terms.global];
 
 
-    utility.SetEnvVariable ("VERBOSITY_LEVEL", 1);
-    utility.ToggleEnvVariable ("AUTO_PARALLELIZE_OPTIMIZE", 1);
-    utility.ToggleEnvVariable ("OPTIMIZATION_METHOD", 0);
 
+    utility.SetEnvVariable    ("VERBOSITY_LEVEL", 1);
+    utility.ToggleEnvVariable ("AUTO_PARALLELIZE_OPTIMIZE", 1);
+ 
 
    pogofit.rev_mle = estimators.FitSingleModel_Ext (
                                        utility.Map (filter_info, "_value_", "_value_[terms.data.name]"),
                                         trees,
                                         pogofit.rev_model_gamma,
                                         initial_values,
-                                       {terms.run_options.retain_lf_object : TRUE}
+                                       {terms.run_options.retain_lf_object : TRUE,
+                                       terms.run_options.optimization_settings : 
+                                            {
+                                                "OPTIMIZATION_METHOD" : "nedler-mead",
+                                                "MAXIMUM_OPTIMIZATION_ITERATIONS" : 500,
+                                                "OPTIMIZATION_PRECISION" : 1
+                                            }
+                                         }
                                        );
     /*   
     // Uncomment these lines if you'd like to save the NEXUS LF.                        
@@ -410,7 +423,7 @@ function pogofit.fitGTR_twophase(current_results, phase, isfinalphase) {
 
     for (file_index = 0; file_index < pogofit.file_list_count; file_index += 1) {
         file_path = pogofit.file_list [file_index];
-        dataset_name = "pogofit.msa." + file_index;
+        dataset_name = "pogofit.msa.part" + file_index;
         partition_info [file_index] = alignments.ReadNucleotideDataSet (dataset_name, file_path);
         partition_specification = { "0" : {terms.data.name : "all", terms.data.filter_string : "", terms.data.tree : ((current_results[file_index])[terms.fit.trees])[0]}};
 
@@ -596,8 +609,7 @@ function pogofit.extract_rates() {
     rij = {};
     for (l1 = 0; l1 < 20 - 1; l1 += 1) {
         rij[models.protein.alphabet[l1]] = {};
-        for (l2 = l1 + 1; l2 < 20; l2 += 1) {
-    
+        for (l2 = l1 + 1; l2 < 20; l2 += 1) { 
             rate_search = terms.aminoacidRate(models.protein.alphabet[l1], models.protein.alphabet[l2]);       
             (rij[models.protein.alphabet[l1]])[models.protein.alphabet[l2]] = ((pogofit.gtr_fit[terms.global])[rate_search])[terms.fit.MLE];
         }
@@ -669,6 +681,7 @@ function pogofit.save_hyphy_model(){
     fprintf(pogofit.output_model_prefix + pogofit.hyphy_model_ext, CLEAR_FILE, "Rij = " + pogofit.final_rij + ";");
     fprintf(pogofit.output_model_prefix + pogofit.hyphy_model_ext, "\n\n\n");
     fprintf(pogofit.output_model_prefix + pogofit.hyphy_model_ext, "EFV = " + pogofit.final_efv + ";");
+    fprintf(pogofit.output_model_prefix + pogofit.hyphy_model_ext, "\n\n\nCI = " + pogofit.final_ci + ";");
 }
 
 function pogofit.save_raxml_model(){

@@ -70,22 +70,27 @@ pogofit.timers = {};
 /********************************************** MENU PROMPTS ********************************************************/
 /********************************************************************************************************************/
 
+KeywordArgument ("mode",        "Single or Multiple files ", pogofit.multiple);  
+
 
 // Prompt for number of files to analyze, and read file list accordingly //
 pogofit.one_or_many  = io.SelectAnOption ({{pogofit.multiple, "Infer a protein model from multiple training datasets (this is more common)."}, 
                                                {pogofit.single, "Infer a protein model from a single training datasets."}}, 
                                                 "How many datasets will be used to fit the protein model?");                                    
-if (pogofit.one_or_many == pogofit.single)
-{
+if (pogofit.one_or_many == pogofit.single) {
+    KeywordArgument ("alignment",        "The alignment to analyze");  
     pogofit.input_file = io.PromptUserForString ("Provide the filename of the alignment to analyze");
     pogofit.file_list           = {{pogofit.input_file}};
-}
-
-if (pogofit.one_or_many == pogofit.multiple)
-{
-    SetDialogPrompt ("Supply a list of files to include in the analysis (one per line)");
-    fscanf (PROMPT_FOR_FILE, "Lines", pogofit.file_list);
-    pogofit.input_file  = utility.getGlobalValue("LAST_FILE_PATH");
+} else {
+    if (pogofit.one_or_many == pogofit.multiple) {
+        KeywordArgument ("list",        "The list of alignments (one per line) to analyze");  
+        SetDialogPrompt ("Supply a list of files to include in the analysis (one per line)");
+        fscanf (PROMPT_FOR_FILE, "Lines", pogofit.file_list);
+        pogofit.input_file  = utility.getGlobalValue("LAST_FILE_PATH");
+        // convert paths to globals relative to the input file
+        pogofit.input_file_dir = (io.splitFilePath (   pogofit.input_file)) [0];   
+        pogofit.file_list = utility.Map (pogofit.file_list, "_file_name_", 'pogofit.input_file_dir + _file_name_');
+    }
 }
 
 
@@ -96,12 +101,19 @@ pogofit.file_list_count     = Abs (pogofit.file_list);
 pogofit.index_to_filename   = utility.SwapKeysAndValues(pogofit.file_list);
 
 
+KeywordArgument ("baseline-model",        "The empirical protein model to use for optimizing branch lengths", "WAG");  
+
 pogofit.baseline_model  = io.SelectAnOption (models.protein.empirical_models,
                                                 "Select an empirical protein model to use for optimizing the provided branch lengths:");
 
 // Prompt for F inference //
+
+KeywordArgument ("frequencies",      "Equilibrium frequency estimator", pogofit.emp_freq);  
+
 pogofit.frequency_type  = io.SelectAnOption ({{pogofit.emp_freq, "+F (Empirical)"}, {pogofit.ml_freq, "Maximum likelihood"}},
                                                 "Select an frequency specification:");
+ 
+KeywordArgument ("output-format",      "Output format for the fitted model", pogofit.output_all);  
                      
 // Prompt for output format //
 pogofit.output_format  = io.SelectAnOption ({
@@ -112,11 +124,18 @@ pogofit.output_format  = io.SelectAnOption ({
                                                  "Select an output format for the fitted model:");
 
 // Prompt for zero-rate imputation //
+
+KeywordArgument ("zero-rates",      "Should zero rates be imputed or left at 0", pogofit.impute);  
+
 pogofit.imputation  = io.SelectAnOption ({{pogofit.impute, "Impute zero rates as in Nickle et al. 2007 (Recommended)"},
                                           {pogofit.no_impute, "Leave zero rates at zero"}},
                                            "Impute zero rates for final model files (*excluding* JSON)?:");
 
 pogofit.use_rate_variation = "Yes"; 
+
+KeywordArgument ("precision",        "Optimization precision", 0.001);  
+
+pogofit.precision = io.PromptUser ("Optimization precision", 0.001, 1e-5, 1, FALSE);
 
 pogofit.save_options();
 
@@ -132,6 +151,7 @@ if (pogofit.frequency_type == pogofit.ml_freq){
     pogofit.rev_model = "models.protein.REVML.ModelDescription";
 }
 */
+
 pogofit.baseline_model_name = pogofit.baseline_model + "+F, with 4 category Gamma rates";
 pogofit.baseline_model_desc_nogamma = "pogofit.Baseline.ModelDescription";
 pogofit.baseline_model_desc_gamma = "pogofit.Baseline.ModelDescription.withGamma";
@@ -205,14 +225,13 @@ pogofit.stopTimer (pogofit.timers, pogofit.final_phase);
 /*************************************************************************************************************/
 /*************************************************************************************************************/
 
-console.log("\n\n Saving results");
+
 
 
 /*********************** Save custom model to file(s) as specified **************************/
 pogofit.final_efv = pogofit.extract_efv(); // fitted frequencies
 
-if (pogofit.imputation == pogofit.impute) 
-{
+if (pogofit.imputation == pogofit.impute) {
     // Tree length for each alignment
     pogofit.tree_lengths = {};
     utility.ForEachPair (pogofit.gtr_fit[terms.branch_length], "_part_", "_value_",
@@ -235,10 +254,37 @@ if (pogofit.imputation == pogofit.impute)
     );
     pogofit.final_rij = pogofit.extract_rates_imputation();
 }
-else 
-{
+else  {
     pogofit.final_rij = pogofit.extract_rates();
 }
+
+io.ReportProgressMessageMD ("Protein GTR Fitter", "Confidence intervals", "Computing confidence intervals for individual rate parameters");
+
+namespace pogofit {
+    final_ci    = {};
+    lf_id = gtr_fit[^"terms.likelihood_function"];
+    for (l1 = 0; l1 < 20; l1 += 1) {
+        for (l2 = l1 + 1; l2 < 20; l2 += 1) {
+            rate_term = terms.aminoacidRate ((^"models.protein.alphabet")[l1],(^"models.protein.alphabet")[l2]);
+            parameter_name = ((gtr_fit[^"terms.global"])[rate_term])[^"terms.id"];
+            if (utility.Has ((gtr_fit[^"terms.global"])[rate_term], ^"terms.constraint", "String")) {
+               console.log ((^"models.protein.alphabet")[l1] + "--" + (^"models.protein.alphabet")[l2] + ": Constrained");
+            } else {
+                ci = parameters.GetProfileCI (parameter_name, lf_id, 0.95);
+                
+                console.log ((^"models.protein.alphabet")[l1] + "--" + (^"models.protein.alphabet")[l2] + ": " + Format (ci [^("terms.fit.MLE")], 8, 4) + " [" + Format (ci [^("terms.lower_bound")],8,4) + ", " + Format (ci [^("terms.upper_bound")],8,4) + "]");
+                
+                ci["From"] = (^"models.protein.alphabet")[l1];
+                ci["To"] = (^"models.protein.alphabet")[l2];
+                final_ci [rate_term] = ci;
+            }
+        }
+    }
+}
+
+
+console.log("\n\n Saving results");
+
 pogofit.write_model_to_file();
 
 /************************************* Save analysis JSON ***********************************/
