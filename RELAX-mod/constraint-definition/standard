@@ -1,0 +1,14 @@
+lfunction    relax.impose_distributional_constraints_alternative (rate_index, test_parameter, reference_parameter, relax_parameter) {
+    parameters.SetConstraint (test_parameter, reference_parameter + "^" + relax_parameter, ^"terms.global");
+}
+
+lfunction    relax.impose_distributional_constraints_null (rate_index, test_parameter, reference_parameter, relax_parameter) {
+    parameters.SetConstraint (relax_parameter, ^"terms.parameters.one", ^"terms.global");
+}
+
+lfunction    relax.declare_parameter_with_ranges (group_index, parameter_name) {
+    parameters.DeclareGlobalWithRanges (parameter_name, 1, 0, 50);
+}
+
+
+

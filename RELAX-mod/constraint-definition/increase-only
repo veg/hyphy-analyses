@@ -1,0 +1,65 @@
+relax.skip_convergence_checking = TRUE;
+/** this variable must be set because some convergence testing heuristics 
+in RELAX assume the standard w^K parameterization **/
+
+/**
+ * @name relax.declare_parameter_with_ranges
+ 
+ * Define and constrain the range of the "K" parameter 
+ 
+ * @param group_index {Number}  the index of the branch group (1 in standard testing, 1 : N-1, for testing on N groups of branches)
+ * @param parameter_name {String} the name of the K parameter (internal variable name)
+ * @return nothing
+ */
+
+lfunction    relax.declare_parameter_with_ranges (group_index, parameter_name) {
+    parameters.DeclareGlobalWithRanges (parameter_name, 1, 1, 50);
+    /** declare the variable set the initial value to 1, and the permitted range of values to [1,50] **/
+}
+
+
+/**
+ * @name relax.impose_distributional_constraints_alternative 
+ 
+ * Define the functional constraints on omega
+ 
+ * @param rate_index {Number}  the index of the rate group (i.e. the 'i' in omega_i)
+ * @param test_parameter {String} the name of the test omega parameter for group i
+ * @param reference_parameter {String} the name of the reference omega parameter for group i
+ * @param relax_parameter {String} the name of the reference rela (K) parameter for group
+ * @return nothing
+ */
+
+
+lfunction    relax.impose_distributional_constraints_alternative (rate_index, test_parameter, reference_parameter, relax_parameter) {
+    if (rate_index < ^"relax.rate_classes") { // only the last omega ratio is allowed to be >=1
+        parameters.SetConstraint (test_parameter, reference_parameter + "^(1/" + relax_parameter + ")", ^"terms.global");      
+        /**
+            if omega < 1, then omega_T := omega_R ^ (1/K)
+        */  
+    } else {
+        parameters.SetConstraint (test_parameter, reference_parameter + "^(" + relax_parameter + ")", ^"terms.global");
+       /**
+            if omega >= 1, then omega_T := omega_R ^ K
+        */  
+    }
+}
+
+/**
+ * @name relax.impose_distributional_constraints_null
+ 
+ * Apply the necessary constraints to define the null hypothesis
+ 
+ * @param rate_index {Number}  the index of the rate group (i.e. the 'i' in omega_i)
+ * @param test_parameter {String} the name of the test omega parameter for group i
+ * @param reference_parameter {String} the name of the reference omega parameter for group i
+ * @param relax_parameter {String} the name of the reference rela (K) parameter for group
+ * @return nothing
+ */
+ 
+lfunction    relax.impose_distributional_constraints_null (rate_index, test_parameter, reference_parameter, relax_parameter) {
+    parameters.SetConstraint (relax_parameter, ^"terms.parameters.one", ^"terms.global");
+        // set K := 1
+}
+
+
