@@ -1,6 +1,6 @@
 ## Partitioned analysis of selection.
 
-> Analysis inspired by Marina Escalera marinaescalera@gmail.com
+> Analysis inspired by Marina Escalera Zamudio marinaescalera@gmail.com
 
 The purpose of this analysis is to compare **selective pressures** between partitions in an alignment of coding sequences. The input is comprised of a `NEXUS` file with at least two defined partitions (see `data/Measles_Fusion_Complete.nex` for an example) as `CHARSET` in the `ASSUMPTION` block. 
 
