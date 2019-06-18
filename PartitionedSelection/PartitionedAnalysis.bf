@@ -88,6 +88,7 @@ partitioned.run_mg_rev = io.SelectAnOption ({"Yes" : "Run MG94 analyses",
 KeywordArgument ("output", "Write the resulting JSON to this file (default is to save to the same path as the alignment file + 'partitioned.json')", partitioned.codon_data_info [terms.json.json]);
 partitioned.codon_data_info [terms.json.json] = io.PromptUserForFilePath ("Save the resulting JSON file to");
 
+
 selection.io.startTimer (partitioned.json [terms.json.timers], "Preliminary model fitting", 1);
 
 namespace partitioned {
@@ -264,6 +265,8 @@ if (partitioned.run_bs_rel) {
                                                 terms.run_options.retain_lf_object : TRUE
                                             }
                                           );
+    KeywordArgument ("save-fit", "Save BUSTED model fit to this file (default is not to save)", "/dev/null");
+    io.SpoolLFToPath(partitioned.bsrel_fit[terms.likelihood_function], io.PromptUserForFilePath ("Save BS-REL model fit to this file ['/dev/null' to skip]"));
 
     /*fprintf ("/Users/sergei/Desktop/fit.dump", CLEAR_FILE, partitioned.bsrel_fit);
     Export (lfe, ^(partitioned.bsrel_fit[terms.likelihood_function]));
@@ -282,13 +285,13 @@ if (partitioned.run_bs_rel) {
         io.ReportProgressMessageMD("partitioned", "BSREL", "* Inferred rate distribution for \`" +  (partitioned.partitions_and_trees [partitioned.k])[terms.data.name] + "\`");
         partitioned.inferred_test_distribution = parameters.GetStickBreakingDistribution (partitioned.BSREL_distributions [partitioned.k]) % 0;
         selection.io.report_dnds (partitioned.inferred_test_distribution);
+        partitioned.has_selection = partitioned.has_selection || partitioned.inferred_test_distribution[partitioned.rate_classes-1][0] > 1 &&  partitioned.inferred_test_distribution[partitioned.rate_classes-1][1] > 0;
         if (partitioned.has_background) {
             io.ReportProgressMessageMD("partitioned", "BSREL", "* _background_ rate distribution for \`" +  (partitioned.partitions_and_trees [partitioned.k])[terms.data.name] + "\`");
             partitioned.inferred_test_distribution = parameters.GetStickBreakingDistribution (partitioned.BSREL_bg_distributions[partitioned.k]) % 0;
             selection.io.report_dnds (partitioned.inferred_test_distribution);
    
         }
-        partitioned.has_selection = partitioned.has_selection || partitioned.inferred_test_distribution[partitioned.rate_classes-1][0] > 1 &&  partitioned.inferred_test_distribution[partitioned.rate_classes-1][1] > 0;
     } 
 
     if (partitioned.has_selection) {
