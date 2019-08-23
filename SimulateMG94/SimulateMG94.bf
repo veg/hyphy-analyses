@@ -139,7 +139,7 @@ ExecuteAFile (PATH_TO_CURRENT_BF + "modules/site-variation/"   + simulator.modul
 
 simulator.site_profile = simulator.prepare_site_distribution (simulator.model, simulator.sites, "simulator.T", simulator.tree);
 
-console.log (simulator.site_profile);
+//console.log (simulator.site_profile);
 
 simulator.sites_by_profile = {
 };
@@ -196,6 +196,8 @@ utility.ForEachPair (simulator.sites_by_profile, "_rate_distribution_", "_site_c
     }
     simulator.rate_type += 1;
 ');
+
+
 
 simulator.inverse_map = Join ("," ,simulator.inverse_map);
 

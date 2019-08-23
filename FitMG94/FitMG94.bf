@@ -99,7 +99,28 @@ fitter.results =  estimators.FitCodonModel (fitter.filter_names, fitter.trees, "
 io.ReportProgressMessageMD("fitter", fitter.terms.MG94 , "* " + selection.io.report_fit (fitter.results, 0, fitter.codon_data_info[terms.data.sample_size]));
 fitter.global_dnds = selection.io.extract_global_MLE_re (fitter.results, terms.parameters.omega_ratio);
 
-utility.ForEach (fitter.global_dnds, "_value_", 'io.ReportProgressMessageMD ("fitter", fitter.terms.MG94 , "* " + _value_[terms.description] + " = " + Format (_value_[terms.fit.MLE],8,4));');
+   /*utility.ForEach (partitioned.global_dnds, "_value_", '
+        if (null != regexp.Find (_value_[utility.getGlobalValue("terms.description")],"\|" + terms.tree_attributes.test)) {
+           partitioned.omega_parameters + ((partitioned.mg_fit[terms.global])[_value_[terms.description]])[terms.id];
+           partitioned.omega.CI [_value_[terms.description]] = parameters.GetProfileCI(partitioned.omega_parameters[Abs(partitioned.omega_parameters)-1],partitioned.mg_fit[terms.likelihood_function], 0.95);
+            io.ReportProgressMessageMD ("partitioned", "MG94", "* " + _value_[utility.getGlobalValue("terms.description")] + " = " + Format (_value_[utility.getGlobalValue("terms.fit.MLE")],8,4) + 
+                    " (95% profile CI " + Format ((partitioned.omega.CI [_value_[terms.description]])[terms.lower_bound],8,4) + "-" + Format ((partitioned.omega.CI [_value_[terms.description]])[terms.upper_bound],8,4) + ")");
+       
+        } else {
+            io.ReportProgressMessageMD ("partitioned", "MG94", "* " + _value_[utility.getGlobalValue("terms.description")] + " = " + Format (_value_[utility.getGlobalValue("terms.fit.MLE")],8,4));
+        }
+    ');*/
+
+
+utility.ForEach (fitter.global_dnds, "_value_", 
+'
+    //io.ReportProgressMessageMD ("fitter", fitter.terms.MG94 , "* " + _value_[terms.description] + " = " + Format (_value_[terms.fit.MLE],8,4));
+    fitter.omega_parameters = ((fitter.results[terms.global])[_value_[terms.description]])[terms.id];
+    fitter.omega.CI = parameters.GetProfileCI(fitter.omega_parameters,fitter.results[terms.likelihood_function], 0.95);
+    io.ReportProgressMessageMD ("fitter", fitter.terms.MG94, "* " + _value_[utility.getGlobalValue("terms.description")] + " = " + Format (_value_[utility.getGlobalValue("terms.fit.MLE")],8,4) + 
+                    " (95% profile CI " + Format ((fitter.omega.CI )[terms.lower_bound],8,4) + "-" + Format ((fitter.omega.CI )[terms.upper_bound],8,4) + ")");
+
+');
 
 selection.io.json_store_lf (fitter.json,
                             fitter.terms.MG94 ,

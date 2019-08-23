@@ -43,9 +43,11 @@ KeywordArgument ("tree",      "A phylogenetic tree (optionally annotated with {}
 
 KeywordArgument ("rates", "The number omega rate classes to include in the model [2-10, default 3]", 3);
 
+KeywordArgument ("triple-islands", "Use a separate rate parameter for synonymous triple-hit substitutions", "No");
 
-fitter.analysis_description = {terms.io.info : "Examine whether or not a codon alignment is better fit by models which permit multiple instantaneous substitutions",
-                           terms.io.version : "0.1",
+
+fitter.analysis_description = {terms.io.info : "Examine whether or not a codon alignment is better fit by models which permit multiple instantaneous substitutions. v0.2 adds a separate rate for codon-island triple-hit rates",
+                           terms.io.version : "0.2",
                            terms.io.authors : "Sergei L Kosakovsky Pond, Sadie Wisotsky and Alexander Lucaci",
                            terms.io.contact : "spond@temple.edu",
                            terms.io.requirements : "in-frame codon alignment and a phylogenetic tree"
@@ -58,6 +60,7 @@ namespace fitter.terms {
     MG94 = "Standard MG94";
     MG94x2 = "MG94 with double instantaneous substitutions";
     MG94x3 = "MG94 with double and triple instantaneous substitutions";
+    MG94x3xS = "MG94 with double and triple instantaneous substitutions [only synonymous islands]";
     json.site_logl  = "Site Log Likelihood";
     json.evidence_ratios  = "Evidence Ratios";
     json.site_reports = "Site substitutions";
@@ -90,6 +93,12 @@ namespace fitter {
 }
 
 fitter.rate_classes = io.PromptUser ("The number of omega rate classes to include in the model", 3, 2, 10, TRUE);
+
+fitter.do_islands = io.SelectAnOption ({"Yes" : "Use a separate rate parameter for synonymous triple-hit substitutions (e.g. serine islands)",
+                                    "No"  : "All triple hits have the same rate multiplier"},
+                                    "Synonymous triple-hit substitutions use a separate rate"
+                                    ) == "Yes";
+
 
 namespace fitter {
     doGTR ("fitter");
@@ -213,13 +222,42 @@ fitter.two_hit_results = fitter.run_model_fit (fitter.terms.MG94x2, "MG_REV_MH.m
 
 utility.Extend (fitter.two_hit_results[terms.global],
                 {
-                    terms.parameters.triple_hit_rate : { utility.getGlobalValue ("terms.fit.MLE") : 0.05, terms.fix : FALSE}
-
+                    terms.parameters.triple_hit_rate : { utility.getGlobalValue ("terms.fit.MLE") : 0.05, terms.fix : FALSE},
+                    terms.parameters.triple_hit_rate_syn : { utility.getGlobalValue ("terms.fit.MLE") : 0.05, terms.fix : FALSE}
 
                 });
 
-fitter.three_hit_results = fitter.run_model_fit (fitter.terms.MG94x3, "MG_REV_TRIP.model.with.GDD", fitter.one_hit_results);
 
+lfunction fitter.MG_REV_TRIP.model.with.GDD (type, code) {
+    model = MG_REV_TRIP.model.with.GDD (type, code);
+    model[utility.getGlobalValue("terms.model.post_definition")] = "fitter.handle_triple_islands";
+    return model;
+}
+
+lfunction fitter.MG_REV_TRIP.model.with.GDD.islands (type, code) {
+    model = MG_REV_TRIP.model.with.GDD (type, code);
+    model[utility.getGlobalValue("terms.model.post_definition")] = "fitter.handle_only_triple_islands";
+    return model;
+}
+
+lfunction fitter.handle_triple_islands (model) {
+    if (utility.getGlobalValue("fitter.do_islands") == FALSE) {
+        parameters.SetConstraint (model.generic.GetGlobalParameter (model, utility.getGlobalValue("terms.parameters.triple_hit_rate_syn")),
+                                  model.generic.GetGlobalParameter (model, utility.getGlobalValue("terms.parameters.triple_hit_rate")), "");
+    }
+    return models.generic.post.definition (model);
+}
+
+lfunction fitter.handle_only_triple_islands (model) {
+    parameters.SetConstraint (model.generic.GetGlobalParameter (model, utility.getGlobalValue("terms.parameters.triple_hit_rate")), "0", "");
+    return models.generic.post.definition (model);
+}
+
+fitter.three_hit_results = fitter.run_model_fit (fitter.terms.MG94x3, "fitter.MG_REV_TRIP.model.with.GDD", fitter.one_hit_results);
+
+if (fitter.do_islands) {
+     fitter.three_hit_island_results = fitter.run_model_fit (fitter.terms.MG94x3xS, "fitter.MG_REV_TRIP.model.with.GDD.islands", fitter.three_hit_results);
+}
 //
 
 selection.io.stopTimer (fitter.json [terms.json.timers], "Overall");
@@ -229,8 +267,13 @@ selection.io.stopTimer (fitter.json [terms.json.timers], "Overall");
 fitter.LRT = {
     "Double-hit vs single-hit" : math.DoLRT (fitter.one_hit_results[terms.fit.log_likelihood], fitter.two_hit_results[terms.fit.log_likelihood], 1),
     "Triple-hit vs single-hit" : math.DoLRT (fitter.one_hit_results[terms.fit.log_likelihood], fitter.three_hit_results[terms.fit.log_likelihood], 2),
-    "Triple-hit vs double-hit" : math.DoLRT (fitter.two_hit_results[terms.fit.log_likelihood], fitter.three_hit_results[terms.fit.log_likelihood], 1)
+    "Triple-hit vs double-hit" : math.DoLRT (fitter.two_hit_results[terms.fit.log_likelihood], fitter.three_hit_results[terms.fit.log_likelihood], 1 + fitter.do_islands)
 };
+
+if (fitter.do_islands) {
+    fitter.LRT ["Triple-hit-island vs double-hit"] = math.DoLRT (fitter.two_hit_results[terms.fit.log_likelihood], fitter.three_hit_island_results[terms.fit.log_likelihood],1);
+    fitter.LRT ["Triple-hit vs Triple-hit-island"] = math.DoLRT (fitter.three_hit_island_results[terms.fit.log_likelihood], fitter.three_hit_results[terms.fit.log_likelihood],1);
+}
 
 fitter.json [terms.json.test_results] = fitter.LRT;
 
@@ -239,13 +282,13 @@ fitter.table_output_options = {
         utility.getGlobalValue("terms.table_options.minimum_column_width"): 10,
         utility.getGlobalValue("terms.table_options.align"): "center",
         utility.getGlobalValue("terms.table_options.column_widths"): {
-            "0": 35,
+            "0": 38,
             "1": 12,
             "2": 12,
             "3": 12,
-            "4": 33,
+            "4": 36,
             "5": 12,
-            "6": 30
+            "6": 36
         }
     };
 
@@ -293,6 +336,26 @@ fprintf(stdout, io.FormatTableRow(
     fitter.table_output_options)
 );
 
+if (fitter.do_islands) {
+
+
+
+    fprintf(stdout, io.FormatTableRow(
+        {
+         {
+         fitter.terms.MG94 + " + 3 hits (islands)",
+         Format (fitter.three_hit_island_results[terms.fit.log_likelihood], 8, 2),
+         Format (((fitter.three_hit_island_results[terms.global])[terms.parameters.omega_ratio])[terms.fit.MLE],8,4),
+         Format (((fitter.three_hit_island_results[terms.global])[terms.parameters.triple_hit_rate_syn])[terms.fit.MLE],8,4) ,
+         Format ((fitter.LRT["Triple-hit-island vs double-hit"])[terms.p_value], 8, 4) + " (3-hit island vs 2-hit)",
+         Format (((fitter.three_hit_results[terms.global])[terms.parameters.triple_hit_rate])[terms.fit.MLE],8,4),
+         Format ((fitter.LRT["Triple-hit vs Triple-hit-island"])[terms.p_value], 8, 4) + " (3-hit = 0)"
+         }
+        },
+        fitter.table_output_options)
+    );
+}
+
 // triple-hit rate model
 fprintf(stdout, io.FormatTableRow(
     {
@@ -303,7 +366,7 @@ fprintf(stdout, io.FormatTableRow(
      Format (((fitter.three_hit_results[terms.global])[terms.parameters.multiple_hit_rate])[terms.fit.MLE],8,4),
      Format ((fitter.LRT["Triple-hit vs single-hit"])[terms.p_value], 8, 4) + " (2&3-hit rates = 0)",
      Format (((fitter.three_hit_results[terms.global])[terms.parameters.triple_hit_rate])[terms.fit.MLE],8,4),
-     Format ((fitter.LRT["Triple-hit vs double-hit"])[terms.p_value], 8, 4) + " (3-hit rate = 0)"
+     Format ((fitter.LRT["Triple-hit vs double-hit"])[terms.p_value], 8, 4) + " (3-hit rate(s) = 0)"
      }
     },
     fitter.table_output_options)
@@ -318,6 +381,18 @@ fprintf(stdout, io.FormatTableRow(
 (fitter.json [fitter.terms.json.evidence_ratios])["Three-hit"] =
         fitter.EvidenceRatios ((fitter.json[fitter.terms.json.site_logl])[fitter.terms.MG94x3],
                                (fitter.json[fitter.terms.json.site_logl])[fitter.terms.MG94x2]);
+
+if (fitter.do_islands) {
+    (fitter.json [fitter.terms.json.evidence_ratios])["Three-hit islands vs 2-hit"] =
+        fitter.EvidenceRatios ((fitter.json[fitter.terms.json.site_logl])[fitter.terms.MG94x3xS],
+                               (fitter.json[fitter.terms.json.site_logl])[fitter.terms.MG94x2]);
+
+    (fitter.json [fitter.terms.json.evidence_ratios])["Three-hit vs three-hit islands"] =
+        fitter.EvidenceRatios ((fitter.json[fitter.terms.json.site_logl])[fitter.terms.MG94x3],
+                               (fitter.json[fitter.terms.json.site_logl])[fitter.terms.MG94x3xS]);
+
+}
+
 
 fitter.callout = {};
 
@@ -334,6 +409,21 @@ utility.ForEachPair ((fitter.json [fitter.terms.json.evidence_ratios])["Three-hi
         fitter.callout [_index_[1]] = 1;
     }
 ');
+
+if (fitter.do_islands) {
+    utility.ForEachPair ((fitter.json [fitter.terms.json.evidence_ratios])["Three-hit islands vs 2-hit"], "_index_", "_value_",
+    '
+        if (Log (_value_) > 2) {
+            fitter.callout [_index_[1]] = 1;
+        }
+    ');
+    utility.ForEachPair ((fitter.json [fitter.terms.json.evidence_ratios])["Three-hit vs three-hit islands"], "_index_", "_value_",
+    '
+        if (Log (_value_) > 2) {
+            fitter.callout [_index_[1]] = 1;
+        }
+    ');
+}
 
 if (utility.Array1D (fitter.callout)) {
 
@@ -356,28 +446,56 @@ if (utility.Array1D (fitter.callout)) {
             }
         };
 
-    fitter.report = {
-        {
-            "Site", "Evidence Ratio (2-hit)", "Evidence Ratio (3-hit)", "Substitutions"
-        }
-    };
-    fprintf(stdout, io.FormatTableRow(fitter.report , fitter.table_output_options));
+
+    if (fitter.do_islands) {
+        (fitter.table_output_options[utility.getGlobalValue("terms.table_options.column_widths")]) [3] = 25;
+        (fitter.table_output_options[utility.getGlobalValue("terms.table_options.column_widths")]) [4] = 25;
+        (fitter.table_output_options[utility.getGlobalValue("terms.table_options.column_widths")]) [5] = 60;
+         fitter.report = {
+            {
+                "Site", "ER (2 vs 1)", "ER (3 vs 2)", "ER (3-island vs 2)", "ER (3-island vs 3)", "Substitutions"
+            }
+        };
+    } else {
+        fitter.report = {
+            {
+                "Site", "ER (2 vs 1)", "ER (3 vs 2)", "Substitutions"
+            }
+        };
+    }
+    fprintf(stdout, "\n", io.FormatTableRow(fitter.report , fitter.table_output_options));
 
     fitter.table_output_options[utility.getGlobalValue("terms.table_options.header")] = FALSE;
     utility.ForEachPair (fitter.callout, "_site_", "_value_", "
 
          fitter.site_reports [_site_] = (ancestral.ComputeSubstitutionBySite (fitter.ancestral_cache, +_site_, None))[terms.substitutions];
 
-         fprintf(stdout, io.FormatTableRow(
-            {
-                {
-                    '' + (+_site_ + 1),
-                    Format (((fitter.json [fitter.terms.json.evidence_ratios])['Two-hit'])[+_site_], 10, 4),
-                    Format (((fitter.json [fitter.terms.json.evidence_ratios])['Three-hit'])[+_site_], 10, 4),
-                    fitter.SubstitutionHistory (fitter.site_reports [_site_])
-                }
+             if (fitter.do_islands) {
+                 fprintf(stdout, io.FormatTableRow(
+                    {
+                        {
+                            '' + (+_site_ + 1),
+                            Format (((fitter.json [fitter.terms.json.evidence_ratios])['Two-hit'])[+_site_], 10, 4),
+                            Format (((fitter.json [fitter.terms.json.evidence_ratios])['Three-hit'])[+_site_], 10, 4),
+                            Format (((fitter.json [fitter.terms.json.evidence_ratios])['Three-hit islands vs 2-hit'])[+_site_], 10, 4),
+                            Format (((fitter.json [fitter.terms.json.evidence_ratios])['Three-hit vs three-hit islands'])[+_site_], 10, 4),
+                            fitter.SubstitutionHistory (fitter.site_reports [_site_])
+                        }
+                    }
+                , fitter.table_output_options));
+
+             } else {
+                 fprintf(stdout, io.FormatTableRow(
+                    {
+                        {
+                            '' + (+_site_ + 1),
+                            Format (((fitter.json [fitter.terms.json.evidence_ratios])['Two-hit'])[+_site_], 10, 4),
+                            Format (((fitter.json [fitter.terms.json.evidence_ratios])['Three-hit'])[+_site_], 10, 4),
+                            fitter.SubstitutionHistory (fitter.site_reports [_site_])
+                        }
+                    }
+                , fitter.table_output_options));
             }
-        , fitter.table_output_options));
     ");
 
     fitter.json [fitter.terms.json.site_reports] = fitter.site_reports;

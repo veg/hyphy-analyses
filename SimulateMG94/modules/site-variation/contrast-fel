@@ -65,7 +65,6 @@ lfunction simulator.prepare_site_distribution (model, site_count, tree, tree_inf
 
 lfunction simulator.apply_site_distribution (model, site, tree) {
     site = Eval (site);
-    console.log (site);
     ^"simulator.site.alpha" = site[0];
     for (k = 1; k < Abs (^"simulator.site_betas"); k+=1) {
         parameters.SetValue (((^"simulator.site_profile")["variables"])[k-1], site[k]);
