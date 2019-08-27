@@ -62,6 +62,7 @@ busted.synonymous_rate_classes = 3;
 busted.initial_grid.N = 250;
 busted.delta.parameter = "busted.delta";
 busted.psi.parameter = "busted.psi";
+busted.psi_islands.parameter = "busted.psi_islands";
 
 
 busted.json    = { terms.json.analysis: busted.analysis_description,
@@ -196,7 +197,8 @@ busted.two_hit_results = busted.run_model_fit (busted.MG94x2, "models.codon.MG_R
 
 utility.Extend (busted.two_hit_results[terms.global],
                 {
-                    terms.parameters.triple_hit_rate : { utility.getGlobalValue ("terms.fit.MLE") : 0.05, terms.fix : FALSE}
+                    terms.parameters.triple_hit_rate : { utility.getGlobalValue ("terms.fit.MLE") : 0.05, terms.fix : FALSE},
+                    terms.parameters.triple_hit_rate_syn : { utility.getGlobalValue ("terms.fit.MLE") : 0.05, terms.fix : FALSE}
 
                 });
 
@@ -302,7 +304,10 @@ busted.initial_ranges [((busted.test.bsrel_model[terms.parameters])[terms.global
                     terms.lower_bound : 0,
                     terms.upper_bound : 1
                 };
-
+busted.initial_ranges [((busted.test.bsrel_model[terms.parameters])[terms.global])[terms.parameters.triple_hit_rate_syn]] = {
+                    terms.lower_bound : 0,
+                    terms.upper_bound : 1
+                };
 
 if (busted.has_background) {
     busted.model_object_map = { "busted.background" : busted.background.bsrel_model,
@@ -318,7 +323,10 @@ if (busted.has_background) {
                         terms.lower_bound : 0,
                         terms.upper_bound : 1
                     };
-
+    busted.initial_ranges [((busted.background.bsrel_model[terms.parameters])[terms.global])[terms.parameters.triple_hit_rate_syn]] = {
+                        terms.lower_bound : 0,
+                        terms.upper_bound : 1
+                    };
     PARAMETER_GROUPING = {};
     PARAMETER_GROUPING + busted.background_distribution["rates"];
     PARAMETER_GROUPING + busted.background_distribution["weights"];
@@ -420,7 +428,7 @@ KeywordArgument ("save-fit", "Save BUSTED model fit to this file (default is not
 io.SpoolLFToPath(busted.full_model[terms.likelihood_function], io.PromptUserForFilePath ("Save BUSTED model fit to this file ['/dev/null' to skip]"));
 
 io.ReportProgressMessageMD("BUSTED", "main", "* " + selection.io.report_fit (busted.full_model, 9, busted.codon_data_info[terms.data.sample_size]));
-busted.global_dnds = selection.io.extract_global_MLE_re (busted.full_model, "(" + terms.parameters.multiple_hit_rate  + "|" + terms.parameters.triple_hit_rate + ")");
+busted.global_dnds = selection.io.extract_global_MLE_re (busted.full_model, "(" + terms.parameters.multiple_hit_rate  + "|" + terms.parameters.triple_hit_rate + "|" + terms.parameters.triple_hit_rate + ")");
 utility.ForEach (busted.global_dnds, "_value_", 'io.ReportProgressMessageMD ("BUSTED", "main", "* " + _value_[terms.description] + " = " + Format (_value_[terms.fit.MLE],8,4));');
 
 io.ReportProgressMessageMD("BUSTED", "main", "* For *test* branches, the following rate distribution for branch-site combinations was inferred");
@@ -515,7 +523,7 @@ if (!busted.run_test) {
                                                  _key_,
                                                  selection.io.extract_branch_info((busted.null_results[terms.branch_length])[_key_], "selection.io.branch.length"));');
 
-    busted.global_dnds = selection.io.extract_global_MLE_re (busted.null_results, "(" + terms.parameters.multiple_hit_rate  + "|" + terms.parameters.triple_hit_rate + ")");
+    busted.global_dnds = selection.io.extract_global_MLE_re (busted.null_results, "(" + terms.parameters.multiple_hit_rate  + "|" + terms.parameters.triple_hit_rate + "|" + terms.parameters.triple_hit_rate + ")");
     utility.ForEach (busted.global_dnds, "_value_", 'io.ReportProgressMessageMD ("BUSTED", "test", "* " + _value_[terms.description] + " = " + Format (_value_[terms.fit.MLE],8,4));');
 
     io.ReportProgressMessageMD("BUSTED", "test", "* For *test* branches under the null (no dN/dS > 1 model), the following rate distribution for branch-site combinations was inferred");
@@ -678,7 +686,9 @@ function busted.init_triple (lf_id, components, data_filter, tree, model_map, in
     busted.init_delta (lf_id, components, data_filter, tree, model_map, initial_values, model_objects);
     parameters.DeclareGlobalWithRanges (busted.psi.parameter, 0.05, 0, 1000);
     model.generic.AddGlobal (model_objects[utility.Keys(model_objects)[0]],busted.psi.parameter,terms.parameters.triple_hit_rate);
+    model.generic.AddGlobal (model_objects[utility.Keys(model_objects)[0]],busted.psi_islands.parameter,terms.parameters.triple_hit_rate_syn);
     estimators.TraverseLocalParameters (lf_id, model_objects, "busted.set.psi");
+    estimators.TraverseLocalParameters (lf_id, model_objects, "busted.set.psi_islands");
     return 0;
 }
 
@@ -712,6 +722,17 @@ lfunction busted.set.psi (tree_name, node_name, model_description) {
     }
     return "";
 }
+
+lfunction busted.set.psi_islands (tree_name, node_name, model_description) {
+    if (utility.Has (model_description [utility.getGlobalValue ("terms.local")], utility.getGlobalValue ("terms.parameters.triple_hit_rate_syn"), "String")) {
+        k = (model_description [utility.getGlobalValue ("terms.local")])[utility.getGlobalValue ("terms.parameters.triple_hit_rate_syn")];
+        //console.log (k);
+        parameters.SetConstraint (tree_name + "." + node_name + "." + k, utility.getGlobalValue ("busted.psi_islands.parameter"), "");
+        return tree_name + "." + node_name + "." + k;
+    }
+    return "";
+}
+
 //------------------------------------------------------------------------------
 
 
@@ -785,7 +806,8 @@ lfunction models.codon.BS_REL._DefineQ.MH (bs_rel, namespace) {
                 'beta_`component`', terms.AddCategory (utility.getGlobalValue('terms.parameters.nonsynonymous_rate'), component),
                 'omega`component`', terms.AddCategory (utility.getGlobalValue('terms.parameters.omega_ratio'), component),
                 'delta', utility.getGlobalValue('terms.parameters.multiple_hit_rate'),
-                'psi', utility.getGlobalValue('terms.parameters.triple_hit_rate')
+                'psi', utility.getGlobalValue('terms.parameters.triple_hit_rate'),
+                'psi_islands', utility.getGlobalValue('terms.parameters.triple_hit_rate_syn')
                );
             }"
        );
