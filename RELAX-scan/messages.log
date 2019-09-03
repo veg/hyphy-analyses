@@ -1,0 +1,2575 @@
+
+Loaded 'libv3/all-terms.bf' from '/usr/local/lib/hyphy/TemplateBatchFiles/libv3/all-terms.bf'
+Loaded 'libv3/UtilityFunctions.bf' from '/usr/local/lib/hyphy/TemplateBatchFiles/libv3/UtilityFunctions.bf'
+Loaded 'IOFunctions.bf' from '/usr/local/lib/hyphy/TemplateBatchFiles/libv3/IOFunctions.bf'
+Already loaded 'libv3/UtilityFunctions.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/UtilityFunctions.bf
+Loaded 'convenience/regexp.bf' from '/usr/local/lib/hyphy/TemplateBatchFiles/libv3/convenience/regexp.bf'
+Already loaded 'libv3/all-terms.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/all-terms.bf
+Already loaded 'libv3/IOFunctions.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/IOFunctions.bf
+Loaded 'libv3/models/codon/MG_REV.bf' from '/usr/local/lib/hyphy/TemplateBatchFiles/libv3/models/codon/MG_REV.bf'
+Loaded '../codon.bf' from '/usr/local/lib/hyphy/TemplateBatchFiles/libv3/models/codon.bf'
+Loaded '../tasks/genetic_code.bf' from '/usr/local/lib/hyphy/TemplateBatchFiles/libv3/tasks/genetic_code.bf'
+Loaded 'libv3/convenience/matrix.bf' from '/usr/local/lib/hyphy/TemplateBatchFiles/libv3/convenience/matrix.bf'
+Already loaded 'libv3/UtilityFunctions.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/UtilityFunctions.bf
+Already loaded 'libv3/all-terms.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/all-terms.bf
+Already loaded '../UtilityFunctions.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/UtilityFunctions.bf
+Loaded '../DNA.bf' from '/usr/local/lib/hyphy/TemplateBatchFiles/libv3/models/DNA.bf'
+Loaded 'frequencies.bf' from '/usr/local/lib/hyphy/TemplateBatchFiles/libv3/models/frequencies.bf'
+Already loaded '../all-terms.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/all-terms.bf
+Loaded 'parameters.bf' from '/usr/local/lib/hyphy/TemplateBatchFiles/libv3/models/parameters.bf'
+Loaded 'GrabBag' from '/usr/local/lib/hyphy/TemplateBatchFiles/Utility/GrabBag.bf'
+Overwritten previously defined function:'_sortStringsAux'
+Already loaded 'libv3/all-terms.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/all-terms.bf
+Already loaded '../UtilityFunctions.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/UtilityFunctions.bf
+Loaded 'model_functions.bf' from '/usr/local/lib/hyphy/TemplateBatchFiles/libv3/models/model_functions.bf'
+Already loaded 'DNA.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/models/DNA.bf
+Already loaded 'parameters.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/models/parameters.bf
+Already loaded 'frequencies.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/models/frequencies.bf
+Already loaded '../UtilityFunctions.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/UtilityFunctions.bf
+Already loaded '../convenience/regexp.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/convenience/regexp.bf
+Already loaded 'libv3/all-terms.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/all-terms.bf
+Already loaded '../parameters.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/models/parameters.bf
+Already loaded '../frequencies.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/models/frequencies.bf
+Already loaded '../../UtilityFunctions.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/UtilityFunctions.bf
+Loaded 'libv3/tasks/estimators.bf' from '/usr/local/lib/hyphy/TemplateBatchFiles/libv3/tasks/estimators.bf'
+Already loaded '../models/model_functions.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/models/model_functions.bf
+Loaded '../models/DNA/GTR.bf' from '/usr/local/lib/hyphy/TemplateBatchFiles/libv3/models/DNA/GTR.bf'
+Already loaded '../DNA.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/models/DNA.bf
+Already loaded '../parameters.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/models/parameters.bf
+Already loaded '../frequencies.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/models/frequencies.bf
+Already loaded '../../UtilityFunctions.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/UtilityFunctions.bf
+Already loaded 'libv3/all-terms.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/all-terms.bf
+Already loaded '../convenience/regexp.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/convenience/regexp.bf
+Loaded 'mpi.bf' from '/usr/local/lib/hyphy/TemplateBatchFiles/libv3/tasks/mpi.bf'
+Already loaded '../all-terms.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/all-terms.bf
+Already loaded '../models/parameters.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/models/parameters.bf
+Already loaded 'libv3/all-terms.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/all-terms.bf
+Loaded 'libv3/tasks/alignments.bf' from '/usr/local/lib/hyphy/TemplateBatchFiles/libv3/tasks/alignments.bf'
+Already loaded '../IOFunctions.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/IOFunctions.bf
+Already loaded '../all-terms.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/all-terms.bf
+Loaded 'libv3/tasks/trees.bf' from '/usr/local/lib/hyphy/TemplateBatchFiles/libv3/tasks/trees.bf'
+Already loaded '../IOFunctions.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/IOFunctions.bf
+Already loaded '../all-terms.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/all-terms.bf
+Already loaded '../convenience/regexp.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/convenience/regexp.bf
+Already loaded '../UtilityFunctions.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/UtilityFunctions.bf
+Loaded 'TreeTools' from '/usr/local/lib/hyphy/TemplateBatchFiles/TreeTools.ibf'
+Loaded 'distances.bf' from '/usr/local/lib/hyphy/TemplateBatchFiles/libv3/tasks/distances.bf'
+Already loaded '../IOFunctions.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/IOFunctions.bf
+Already loaded '../all-terms.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/all-terms.bf
+Already loaded '../models/frequencies.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/models/frequencies.bf
+Loaded 'SelectionAnalyses/modules/io_functions.ibf' from '/usr/local/lib/hyphy/TemplateBatchFiles/SelectionAnalyses/modules/io_functions.ibf'
+Already loaded 'libv3/UtilityFunctions.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/UtilityFunctions.bf
+Already loaded 'libv3/IOFunctions.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/IOFunctions.bf
+Already loaded 'libv3/convenience/regexp.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/convenience/regexp.bf
+Already loaded 'libv3/all-terms.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/all-terms.bf
+Loaded 'SelectionAnalyses/modules/selection_lib.ibf' from '/usr/local/lib/hyphy/TemplateBatchFiles/SelectionAnalyses/modules/selection_lib.ibf'
+Loaded 'libv3/models/codon/BS_REL.bf' from '/usr/local/lib/hyphy/TemplateBatchFiles/libv3/models/codon/BS_REL.bf'
+Already loaded '../codon.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/models/codon.bf
+Already loaded '../DNA.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/models/DNA.bf
+Already loaded '../parameters.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/models/parameters.bf
+Already loaded '../frequencies.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/models/frequencies.bf
+Already loaded '../../UtilityFunctions.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/UtilityFunctions.bf
+Already loaded 'MG_REV.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/models/codon/MG_REV.bf
+Loaded '../../convenience/math.bf' from '/usr/local/lib/hyphy/TemplateBatchFiles/libv3/convenience/math.bf'
+Already loaded 'libv3/UtilityFunctions.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/UtilityFunctions.bf
+Already loaded 'libv3/convenience/math.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/convenience/math.bf
+Already loaded 'libv3/tasks/mpi.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/tasks/mpi.bf
+Variable 'NORMALIZE_SEQUENCE_NAMES' was not initialized prior to being used
+Variable 'ASSUME_REVERSIBLE_MODELS' was not initialized prior to being used
+Variable 'USE_MEMORY_SAVING_DATA_STRUCTURES' was not initialized prior to being used
+Variable 'LF_SMOOTHING_SCALER' was not initialized prior to being used
+Variable 'False' was not initialized prior to being used
+Loaded 'SelectionAnalyses/modules/shared-load-file.bf' from '/usr/local/lib/hyphy/TemplateBatchFiles/SelectionAnalyses/modules/shared-load-file.bf'
+Variable 'MARKDOWN_OUTPUT' was not initialized prior to being used
+Already loaded 'libv3/convenience/matrix.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/convenience/matrix.bf
+Already loaded 'libv3/UtilityFunctions.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/UtilityFunctions.bf
+Variable 'dejZzFsJ.skipCodeSelectionStep' was not initialized prior to being used
+Node names should begin with a letter, a number, or an underscore: '((((PIG:0.147969,COW:0.213430):0.085099,HORSE:0.165787,CAT:0.264806):0.058611,((RHMONKEY{ <=? PR}:0.002015,BABOON{PR}:0.003108){PR}:0.022733,(HUMAN{PR}:0.004349,CHIMP{PR}:0.000799){PR}:0.011873){PR}:0.101856){PR}:0.340802,RAT:0.050958,MOUSE:0.097950)'
+Unbalanced '(,)' in the tree string:'((((PIG:0.147969,COW:0.213430):0.085099,HORSE:0.165787,CAT:0.264806):0.058611,((RHMONKEY'
+Variable 'DATA_FILE_PARTITION_MATRIX' was not initialized prior to being used
+Row and/or column partition is empty. All the data will be used by default.
+Variable 'partition_count' was not initialized prior to being used
+Variable 'utility.ToggleEnvVariable.cache' was not initialized prior to being used
+Variable 'TREE_NODE_NAME_MAPPING' was not initialized prior to being used
+Variable '_DO_TREE_REBALANCE_' was not initialized prior to being used
+Variable '_KEEP_I_LABELS_' was not initialized prior to being used
+Variable 'INCLUDE_MODEL_SPECS' was not initialized prior to being used
+'flat_tree' is not a supported agrument type for DeleteObject(
+'branch_lengths' is not a supported agrument type for DeleteObject(
+'branch_names' is not a supported agrument type for DeleteObject(
+'branch_count' is not a supported agrument type for DeleteObject(
+Variable 'utility.ForEachPair.warn_non_reentrant' was not initialized prior to being used
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Row and/or column partition is empty. All the data will be used by default.
+Row and/or column partition is empty. All the data will be used by default.
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.Map.CB'
+Overwritten previously defined function:'utility.Map.CB'
+Overwritten previously defined function:'utility.Map.CB'
+Loaded 'SelectionAnalyses/modules/grid_compute.ibf' from '/usr/local/lib/hyphy/TemplateBatchFiles/SelectionAnalyses/modules/grid_compute.ibf'
+Variable '_ADneUBe.cache' was not initialized prior to being used
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Row and/or column partition is empty. All the data will be used by default.
+Variable 'COUNT_GAPS_IN_FREQUENCIES' was not initialized prior to being used
+Variable 'hwPezhNT.model_pi' was not initialized prior to being used
+Model 'hwPezhNT.model' assigned to 'PIG'
+Model 'hwPezhNT.model' assigned to 'COW'
+Model 'hwPezhNT.model' assigned to 'Node3'
+Model 'hwPezhNT.model' assigned to 'HORSE'
+Model 'hwPezhNT.model' assigned to 'CAT'
+Model 'hwPezhNT.model' assigned to 'Node2'
+Model 'hwPezhNT.model' assigned to 'RHMONKEY'
+Model 'hwPezhNT.model' assigned to 'BABOON'
+Model 'hwPezhNT.model' assigned to 'Node9'
+Model 'hwPezhNT.model' assigned to 'HUMAN'
+Model 'hwPezhNT.model' assigned to 'CHIMP'
+Model 'hwPezhNT.model' assigned to 'Node12'
+Model 'hwPezhNT.model' assigned to 'Node8'
+Model 'hwPezhNT.model' assigned to 'Node1'
+Model 'hwPezhNT.model' assigned to 'RAT'
+Model 'hwPezhNT.model' assigned to 'MOUSE'
+The tips of the tree:hwPezhNT.tree_0 were matched with the species names from the data in the following numeric order (0-based) {5,4,6,7,3,2,0,1,9,8}
+
+Pseudo-optimal path's cost 2330 vs 4284 for 1..k=> a 1.83863 x improvement
+Partition 0 is ASSUMED to have a reversible model
+Variable 'USE_LAST_RESULTS' was not initialized prior to being used
+models.generic.SetBranchLength: hwPezhNT.tree_0.PIG.t=0.3976145919119131
+models.generic.SetBranchLength: hwPezhNT.tree_0.COW.t=0.5735179824947092
+models.generic.SetBranchLength: hwPezhNT.tree_0.Node3.t=0.2286736016132561
+models.generic.SetBranchLength: hwPezhNT.tree_0.HORSE.t=0.445494193711523
+models.generic.SetBranchLength: hwPezhNT.tree_0.CAT.t=0.7115728944969965
+models.generic.SetBranchLength: hwPezhNT.tree_0.Node2.t=0.1574964272688816
+models.generic.SetBranchLength: hwPezhNT.tree_0.RHMONKEY.t=0.005414603077012786
+models.generic.SetBranchLength: hwPezhNT.tree_0.BABOON.t=0.00835165576345198
+models.generic.SetBranchLength: hwPezhNT.tree_0.Node9.t=0.06108693387083458
+models.generic.SetBranchLength: hwPezhNT.tree_0.HUMAN.t=0.01168640634338889
+models.generic.SetBranchLength: hwPezhNT.tree_0.CHIMP.t=0.002147031195301844
+models.generic.SetBranchLength: hwPezhNT.tree_0.Node12.t=0.03190450736147534
+models.generic.SetBranchLength: hwPezhNT.tree_0.Node8.t=0.273702139460156
+models.generic.SetBranchLength: hwPezhNT.tree_0.Node1.t=0.9157853885122142
+models.generic.SetBranchLength: hwPezhNT.tree_0.RAT.t=0.1369316841679492
+models.generic.SetBranchLength: hwPezhNT.tree_0.MOUSE.t=0.2632061396493312
+Variable 'SAVE_OPT_STATUS_TO' was not initialized prior to being used
+Auto-benchmarked an optimal number (3) of threads.
+Optimization settings:
+	OPTIMIZATION_METHOD = hybrid
+	OPTIMIZATION_PRECISION = 0.001
+	MAXIMUM_ITERATIONS_PER_VARIABLE = 5000
+
+Initial parameter values
+
+hwPezhNT.model.theta_GT = 0.25
+hwPezhNT.model.theta_CG = 0.25
+hwPezhNT.model.theta_CT = 1
+hwPezhNT.model.theta_AT = 0.25
+hwPezhNT.model.theta_AC = 0.25
+hwPezhNT.tree_0.PIG.t = 0.3976145919119131
+hwPezhNT.tree_0.COW.t = 0.5735179824947092
+hwPezhNT.tree_0.Node3.t = 0.2286736016132561
+hwPezhNT.tree_0.HORSE.t = 0.445494193711523
+hwPezhNT.tree_0.CAT.t = 0.7115728944969965
+hwPezhNT.tree_0.Node2.t = 0.1574964272688816
+hwPezhNT.tree_0.RHMONKEY.t = 0.005414603077012786
+hwPezhNT.tree_0.BABOON.t = 0.00835165576345198
+hwPezhNT.tree_0.Node9.t = 0.06108693387083458
+hwPezhNT.tree_0.HUMAN.t = 0.01168640634338889
+hwPezhNT.tree_0.CHIMP.t = 0.002147031195301844
+hwPezhNT.tree_0.Node12.t = 0.03190450736147534
+hwPezhNT.tree_0.Node8.t = 0.273702139460156
+hwPezhNT.tree_0.Node1.t = 0.9157853885122142
+hwPezhNT.tree_0.RAT.t = 0.1369316841679492
+hwPezhNT.tree_0.MOUSE.t = 0.2632061396493312
+Optimization finished in 17 loop passes.
+1152 likelihood evaluation calls and 7265 matrix exponentiations calls were made
+
+Variable 'BRANCH_LENGTH_STENCIL' was not initialized prior to being used
+Variable 'hwPezhNT.option' was not initialized prior to being used
+Overwritten previously defined function:'utility.Map.CB'
+Overwritten previously defined function:'utility.Map.CB'
+Variable 'relax.terms.json.nucleotide_gtr' was not initialized prior to being used
+Variable 'Unknown' was not initialized prior to being used
+Variable 'QwcIZpff.data_filter' was not initialized prior to being used
+Row and/or column partition is empty. All the data will be used by default.
+Auto-benchmarked an optimal number (8) of threads.
+Optimization settings:
+	OPTIMIZATION_METHOD = hybrid
+	OPTIMIZATION_PRECISION = 0.001
+	MAXIMUM_ITERATIONS_PER_VARIABLE = 5000
+
+Initial parameter values
+
+frequencies._aux.CF3x4.p0_0 = 0.4203296703296703
+frequencies._aux.CF3x4.p0_1 = 0.24739336492891
+frequencies._aux.CF3x4.p0_2 = 0.6574307304785895
+frequencies._aux.CF3x4.p1_0 = 0.4035714285714286
+frequencies._aux.CF3x4.p1_1 = 0.281437125748503
+frequencies._aux.CF3x4.p1_2 = 0.3878205128205128
+frequencies._aux.CF3x4.p2_0 = 0.2538461538461538
+frequencies._aux.CF3x4.p2_1 = 0.3144329896907216
+frequencies._aux.CF3x4.p2_2 = 0.5220193340494093
+Optimization finished in 7 loop passes.
+332 likelihood evaluation calls and 0 matrix exponentiations calls were made
+
+Overwritten previously defined function:'utility.Map.CB'
+Variable 'QwcIZpff.model_MGREV_pi' was not initialized prior to being used
+Model 'QwcIZpff.model_MGREV' assigned to 'PIG'
+Model 'QwcIZpff.model_MGREV' assigned to 'COW'
+Model 'QwcIZpff.model_MGREV' assigned to 'Node3'
+Model 'QwcIZpff.model_MGREV' assigned to 'HORSE'
+Model 'QwcIZpff.model_MGREV' assigned to 'CAT'
+Model 'QwcIZpff.model_MGREV' assigned to 'Node2'
+Model 'QwcIZpff.model_MGREV' assigned to 'RHMONKEY'
+Model 'QwcIZpff.model_MGREV' assigned to 'BABOON'
+Model 'QwcIZpff.model_MGREV' assigned to 'Node9'
+Model 'QwcIZpff.model_MGREV' assigned to 'HUMAN'
+Model 'QwcIZpff.model_MGREV' assigned to 'CHIMP'
+Model 'QwcIZpff.model_MGREV' assigned to 'Node12'
+Model 'QwcIZpff.model_MGREV' assigned to 'Node8'
+Model 'QwcIZpff.model_MGREV' assigned to 'Node1'
+Model 'QwcIZpff.model_MGREV' assigned to 'RAT'
+Model 'QwcIZpff.model_MGREV' assigned to 'MOUSE'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+The tips of the tree:QwcIZpff.tree_0 were matched with the species names from the data in the following numeric order (0-based) {5,4,6,7,3,2,0,1,9,8}
+
+Pseudo-optimal path's cost 2286 vs 2927 for 1..k=> a 1.2804 x improvement
+Partition 0 is ASSUMED to have a reversible model
+QwcIZpff.model_MGREV.theta_AG was already constrained in estimators.SetGlobals2
+Auto-benchmarked an optimal number (4) of threads.
+Optimization settings:
+	OPTIMIZATION_METHOD = hybrid
+	OPTIMIZATION_PRECISION = 0.001
+	MAXIMUM_ITERATIONS_PER_VARIABLE = 5000
+
+Initial parameter values
+
+QwcIZpff.model_MGREV.omega_0 = 1
+relax.scaler_0 = 3
+Optimization finished in 5 loop passes.
+82 likelihood evaluation calls and 1101 matrix exponentiations calls were made
+
+Overwritten previously defined function:'utility.Map.CB'
+Row and/or column partition is empty. All the data will be used by default.
+Auto-benchmarked an optimal number (5) of threads.
+Optimization settings:
+	OPTIMIZATION_METHOD = hybrid
+	OPTIMIZATION_PRECISION = 0.001
+	MAXIMUM_ITERATIONS_PER_VARIABLE = 5000
+
+Initial parameter values
+
+frequencies._aux.CF3x4.p0_0 = 0.4203296703296703
+frequencies._aux.CF3x4.p0_1 = 0.24739336492891
+frequencies._aux.CF3x4.p0_2 = 0.6574307304785895
+frequencies._aux.CF3x4.p1_0 = 0.4035714285714286
+frequencies._aux.CF3x4.p1_1 = 0.281437125748503
+frequencies._aux.CF3x4.p1_2 = 0.3878205128205128
+frequencies._aux.CF3x4.p2_0 = 0.2538461538461538
+frequencies._aux.CF3x4.p2_1 = 0.3144329896907216
+frequencies._aux.CF3x4.p2_2 = 0.5220193340494093
+Optimization finished in 7 loop passes.
+330 likelihood evaluation calls and 0 matrix exponentiations calls were made
+
+Overwritten previously defined function:'utility.Map.CB'
+Variable 'QwcIZpff.model_MGREV_pi' was not initialized prior to being used
+Model 'QwcIZpff.model_MGREV' assigned to 'PIG'
+Model 'QwcIZpff.model_MGREV' assigned to 'COW'
+Model 'QwcIZpff.model_MGREV' assigned to 'Node3'
+Model 'QwcIZpff.model_MGREV' assigned to 'HORSE'
+Model 'QwcIZpff.model_MGREV' assigned to 'CAT'
+Model 'QwcIZpff.model_MGREV' assigned to 'Node2'
+Model 'QwcIZpff.model_MGREV' assigned to 'RHMONKEY'
+Model 'QwcIZpff.model_MGREV' assigned to 'BABOON'
+Model 'QwcIZpff.model_MGREV' assigned to 'Node9'
+Model 'QwcIZpff.model_MGREV' assigned to 'HUMAN'
+Model 'QwcIZpff.model_MGREV' assigned to 'CHIMP'
+Model 'QwcIZpff.model_MGREV' assigned to 'Node12'
+Model 'QwcIZpff.model_MGREV' assigned to 'Node8'
+Model 'QwcIZpff.model_MGREV' assigned to 'Node1'
+Model 'QwcIZpff.model_MGREV' assigned to 'RAT'
+Model 'QwcIZpff.model_MGREV' assigned to 'MOUSE'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+The tips of the tree:QwcIZpff.tree_0 were matched with the species names from the data in the following numeric order (0-based) {5,4,6,7,3,2,0,1,9,8}
+
+Pseudo-optimal path's cost 2286 vs 2927 for 1..k=> a 1.2804 x improvement
+Partition 0 is ASSUMED to have a reversible model
+QwcIZpff.model_MGREV.theta_AG was already constrained in estimators.SetGlobals2
+Variable 'QwcIZpff.tree_0.PIG.alpha' was not initialized prior to being used
+models.codon.MG_REV.set_branch_length: QwcIZpff.tree_0.PIG.alpha=1.740827648549089
+Variable 'QwcIZpff.tree_0.COW.alpha' was not initialized prior to being used
+models.codon.MG_REV.set_branch_length: QwcIZpff.tree_0.COW.alpha=2.306321673304897
+Variable 'QwcIZpff.tree_0.Node3.alpha' was not initialized prior to being used
+models.codon.MG_REV.set_branch_length: QwcIZpff.tree_0.Node3.alpha=0.9190550116604648
+Variable 'QwcIZpff.tree_0.HORSE.alpha' was not initialized prior to being used
+models.codon.MG_REV.set_branch_length: QwcIZpff.tree_0.HORSE.alpha=1.943900054621546
+Variable 'QwcIZpff.tree_0.CAT.alpha' was not initialized prior to being used
+models.codon.MG_REV.set_branch_length: QwcIZpff.tree_0.CAT.alpha=2.474358972361164
+Variable 'QwcIZpff.tree_0.Node2.alpha' was not initialized prior to being used
+models.codon.MG_REV.set_branch_length: QwcIZpff.tree_0.Node2.alpha=0.614786858748447
+Variable 'QwcIZpff.tree_0.RHMONKEY.alpha' was not initialized prior to being used
+models.codon.MG_REV.set_branch_length: QwcIZpff.tree_0.RHMONKEY.alpha=0.03511996233088042
+Variable 'QwcIZpff.tree_0.BABOON.alpha' was not initialized prior to being used
+models.codon.MG_REV.set_branch_length: QwcIZpff.tree_0.BABOON.alpha=0.0156141859020759
+Variable 'QwcIZpff.tree_0.Node9.alpha' was not initialized prior to being used
+models.codon.MG_REV.set_branch_length: QwcIZpff.tree_0.Node9.alpha=0.2385820455238243
+Variable 'QwcIZpff.tree_0.HUMAN.alpha' was not initialized prior to being used
+models.codon.MG_REV.set_branch_length: QwcIZpff.tree_0.HUMAN.alpha=0
+Variable 'QwcIZpff.tree_0.CHIMP.alpha' was not initialized prior to being used
+models.codon.MG_REV.set_branch_length: QwcIZpff.tree_0.CHIMP.alpha=0.01689996734463928
+Variable 'QwcIZpff.tree_0.Node12.alpha' was not initialized prior to being used
+models.codon.MG_REV.set_branch_length: QwcIZpff.tree_0.Node12.alpha=0.1659207399892115
+Variable 'QwcIZpff.tree_0.Node8.alpha' was not initialized prior to being used
+models.codon.MG_REV.set_branch_length: QwcIZpff.tree_0.Node8.alpha=0.9877262959478394
+Variable 'QwcIZpff.tree_0.Node1.alpha' was not initialized prior to being used
+models.codon.MG_REV.set_branch_length: QwcIZpff.tree_0.Node1.alpha=2.573765181658033
+Variable 'QwcIZpff.tree_0.RAT.alpha' was not initialized prior to being used
+models.codon.MG_REV.set_branch_length: QwcIZpff.tree_0.RAT.alpha=0.6190977333630252
+Variable 'QwcIZpff.tree_0.MOUSE.alpha' was not initialized prior to being used
+models.codon.MG_REV.set_branch_length: QwcIZpff.tree_0.MOUSE.alpha=1.098223964946156
+Auto-benchmarked an optimal number (4) of threads.
+Optimization settings:
+	OPTIMIZATION_METHOD = hybrid
+	OPTIMIZATION_PRECISION = 0.001
+	MAXIMUM_ITERATIONS_PER_VARIABLE = 5000
+
+Initial parameter values
+
+QwcIZpff.model_MGREV.theta_CG = 0.4920080764336704
+QwcIZpff.model_MGREV.theta_CT = 1.029030936984105
+QwcIZpff.model_MGREV.theta_AT = 0.2648635274603969
+QwcIZpff.model_MGREV.theta_AC = 0.5499881865339117
+QwcIZpff.model_MGREV.theta_GT = 0.3044448708371276
+QwcIZpff.model_MGREV.omega_0 = 1.007888776641056
+QwcIZpff.tree_0.PIG.alpha = 1.740827648549089
+QwcIZpff.tree_0.COW.alpha = 2.306321673304897
+QwcIZpff.tree_0.Node3.alpha = 0.9190550116604648
+QwcIZpff.tree_0.HORSE.alpha = 1.943900054621546
+QwcIZpff.tree_0.CAT.alpha = 2.474358972361164
+QwcIZpff.tree_0.Node2.alpha = 0.614786858748447
+QwcIZpff.tree_0.RHMONKEY.alpha = 0.03511996233088042
+QwcIZpff.tree_0.BABOON.alpha = 0.0156141859020759
+QwcIZpff.tree_0.Node9.alpha = 0.2385820455238243
+QwcIZpff.tree_0.HUMAN.alpha = 0
+QwcIZpff.tree_0.CHIMP.alpha = 0.01689996734463928
+QwcIZpff.tree_0.Node12.alpha = 0.1659207399892115
+QwcIZpff.tree_0.Node8.alpha = 0.9877262959478394
+QwcIZpff.tree_0.Node1.alpha = 2.573765181658033
+QwcIZpff.tree_0.RAT.alpha = 0.6190977333630252
+QwcIZpff.tree_0.MOUSE.alpha = 1.098223964946156
+Optimization finished in 25 loop passes.
+1937 likelihood evaluation calls and 12330 matrix exponentiations calls were made
+
+Overwritten previously defined function:'utility.Map.CB'
+Overwritten previously defined function:'utility.Map.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'_BXYwkND.rate_generator'
+Overwritten previously defined function:'_BXYwkND.rate_generator'
+Auto-benchmarked an optimal number (7) of threads.
+Optimization settings:
+	OPTIMIZATION_METHOD = hybrid
+	OPTIMIZATION_PRECISION = 0.001
+	MAXIMUM_ITERATIONS_PER_VARIABLE = 5000
+
+Initial parameter values
+
+frequencies._aux.CF3x4.p0_0 = 0.4203296703296703
+frequencies._aux.CF3x4.p0_1 = 0.24739336492891
+frequencies._aux.CF3x4.p0_2 = 0.6574307304785895
+frequencies._aux.CF3x4.p1_0 = 0.4035714285714286
+frequencies._aux.CF3x4.p1_1 = 0.281437125748503
+frequencies._aux.CF3x4.p1_2 = 0.3878205128205128
+frequencies._aux.CF3x4.p2_0 = 0.2538461538461538
+frequencies._aux.CF3x4.p2_1 = 0.3144329896907216
+frequencies._aux.CF3x4.p2_2 = 0.5220193340494093
+Optimization finished in 7 loop passes.
+332 likelihood evaluation calls and 0 matrix exponentiations calls were made
+
+Overwritten previously defined function:'utility.Map.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Variable 'relax.ge_pi' was not initialized prior to being used
+Variable 'k' was not initialized prior to being used
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.Map.CB'
+Overwritten previously defined function:'utility.Map.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.Map.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Model 'relax.ge' assigned to 'PIG'
+Model 'relax.ge' assigned to 'COW'
+Model 'relax.ge' assigned to 'Node3'
+Model 'relax.ge' assigned to 'HORSE'
+Model 'relax.ge' assigned to 'CAT'
+Model 'relax.ge' assigned to 'Node2'
+Model 'relax.ge' assigned to 'RHMONKEY'
+Model 'relax.ge' assigned to 'BABOON'
+Model 'relax.ge' assigned to 'Node9'
+Model 'relax.ge' assigned to 'HUMAN'
+Model 'relax.ge' assigned to 'CHIMP'
+Model 'relax.ge' assigned to 'Node12'
+Model 'relax.ge' assigned to 'Node8'
+Model 'relax.ge' assigned to 'Node1'
+Model 'relax.ge' assigned to 'RAT'
+Model 'relax.ge' assigned to 'MOUSE'
+The tips of the tree:CtQDxkpQ.tree_id_0 were matched with the species names from the data in the following numeric order (0-based) {5,4,6,7,3,2,0,1,9,8}
+
+Pseudo-optimal path's cost 2286 vs 2927 for 1..k=> a 1.2804 x improvement
+Partition 0 is ASSUMED to have a reversible model
+Variable 'CtQDxkpQ.tree_id_0.PIG.t' was not initialized prior to being used
+Variable 'CtQDxkpQ.tree_id_0.COW.t' was not initialized prior to being used
+Variable 'CtQDxkpQ.tree_id_0.Node3.t' was not initialized prior to being used
+Variable 'CtQDxkpQ.tree_id_0.HORSE.t' was not initialized prior to being used
+Variable 'CtQDxkpQ.tree_id_0.CAT.t' was not initialized prior to being used
+Variable 'CtQDxkpQ.tree_id_0.Node2.t' was not initialized prior to being used
+Variable 'CtQDxkpQ.tree_id_0.RHMONKEY.t' was not initialized prior to being used
+Variable 'CtQDxkpQ.tree_id_0.BABOON.t' was not initialized prior to being used
+Variable 'CtQDxkpQ.tree_id_0.Node9.t' was not initialized prior to being used
+Variable 'CtQDxkpQ.tree_id_0.HUMAN.t' was not initialized prior to being used
+Variable 'CtQDxkpQ.tree_id_0.CHIMP.t' was not initialized prior to being used
+Variable 'CtQDxkpQ.tree_id_0.Node12.t' was not initialized prior to being used
+Variable 'CtQDxkpQ.tree_id_0.Node8.t' was not initialized prior to being used
+Variable 'CtQDxkpQ.tree_id_0.Node1.t' was not initialized prior to being used
+Variable 'CtQDxkpQ.tree_id_0.RAT.t' was not initialized prior to being used
+Variable 'CtQDxkpQ.tree_id_0.MOUSE.t' was not initialized prior to being used
+relax.ge.theta_AG was already constrained in estimators.SetGlobals2
+Variable 'UGvrIhpu.terms.branch_length' was not initialized prior to being used
+models.generic.SetBranchLength: CtQDxkpQ.tree_id_0.PIG.t:=(relax.bl.scaler)*0.4591661037760676
+models.generic.SetBranchLength: CtQDxkpQ.tree_id_0.COW.t:=(relax.bl.scaler)*0.5910122632542807
+models.generic.SetBranchLength: CtQDxkpQ.tree_id_0.Node3.t:=(relax.bl.scaler)*0.2427200961587714
+models.generic.SetBranchLength: CtQDxkpQ.tree_id_0.HORSE.t:=(relax.bl.scaler)*0.5036188836292885
+models.generic.SetBranchLength: CtQDxkpQ.tree_id_0.CAT.t:=(relax.bl.scaler)*0.6529238277236569
+models.generic.SetBranchLength: CtQDxkpQ.tree_id_0.Node2.t:=(relax.bl.scaler)*0.1532392690891237
+models.generic.SetBranchLength: CtQDxkpQ.tree_id_0.RHMONKEY.t:=(relax.bl.scaler)*0.008859986300996435
+models.generic.SetBranchLength: CtQDxkpQ.tree_id_0.BABOON.t:=(relax.bl.scaler)*0.004224706974841763
+models.generic.SetBranchLength: CtQDxkpQ.tree_id_0.Node9.t:=(relax.bl.scaler)*0.06176773476381434
+models.generic.SetBranchLength: CtQDxkpQ.tree_id_0.HUMAN.t:=(relax.bl.scaler)*0
+models.generic.SetBranchLength: CtQDxkpQ.tree_id_0.CHIMP.t:=(relax.bl.scaler)*0.00435858506476507
+models.generic.SetBranchLength: CtQDxkpQ.tree_id_0.Node12.t:=(relax.bl.scaler)*0.04266867113201003
+models.generic.SetBranchLength: CtQDxkpQ.tree_id_0.Node8.t:=(relax.bl.scaler)*0.2612726492964234
+models.generic.SetBranchLength: CtQDxkpQ.tree_id_0.Node1.t:=(relax.bl.scaler)*0.6771481042384405
+models.generic.SetBranchLength: CtQDxkpQ.tree_id_0.RAT.t:=(relax.bl.scaler)*0.159560865565342
+models.generic.SetBranchLength: CtQDxkpQ.tree_id_0.MOUSE.t:=(relax.bl.scaler)*0.2867483995622507
+Variable 'MPI_NODE_COUNT' was not initialized prior to being used
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Auto-benchmarked an optimal number (8) of threads.
+Optimization settings:
+	OPTIMIZATION_METHOD = nedler-mead
+	OPTIMIZATION_PRECISION = 0.8667516034021056
+	MAXIMUM_ITERATIONS_PER_VARIABLE = 5000
+
+Initial parameter values
+
+relax.ge.bsrel_mixture_aux_0 = 0.1583166332665331
+relax.ge.bsrel_mixture_aux_1 = 0.5070140280561122
+relax.ge.omega1 = 0.3565319156942237
+relax.ge.omega2 = 0.03436452199462396
+relax.ge.omega3 = 2.212932030945473
+relax.ge.theta_GT = 0.3165607657460529
+relax.ge.theta_CT = 0.9753279659166523
+relax.ge.theta_CG = 0.4741842919488712
+relax.ge.theta_AT = 0.2655957193279573
+relax.ge.theta_AC = 0.5772599491116606
+relax.K = 1
+relax.bl.scaler = 1
+Model 'relax.ge' assigned to 'PIG'
+Model 'relax.ge' assigned to 'COW'
+Model 'relax.ge' assigned to 'Node3'
+Model 'relax.ge' assigned to 'HORSE'
+Model 'relax.ge' assigned to 'CAT'
+Model 'relax.ge' assigned to 'Node2'
+Model 'relax.ge' assigned to 'RHMONKEY'
+Model 'relax.ge' assigned to 'BABOON'
+Model 'relax.ge' assigned to 'Node9'
+Model 'relax.ge' assigned to 'HUMAN'
+Model 'relax.ge' assigned to 'CHIMP'
+Model 'relax.ge' assigned to 'Node12'
+Model 'relax.ge' assigned to 'Node8'
+Model 'relax.ge' assigned to 'Node1'
+Model 'relax.ge' assigned to 'RAT'
+Model 'relax.ge' assigned to 'MOUSE'
+The tips of the tree:CtQDxkpQ.tree_id_0 were matched with the species names from the data in the following numeric order (0-based) {5,4,6,7,3,2,0,1,9,8}
+
+Pseudo-optimal path's cost 2286 vs 2927 for 1..k=> a 1.2804 x improvement
+Partition 0 is ASSUMED to have a reversible model
+relax.ge.theta_AG was already constrained in estimators.SetGlobals2
+models.generic.SetBranchLength: CtQDxkpQ.tree_id_0.PIG.t=0.4226526481140948
+models.generic.SetBranchLength: CtQDxkpQ.tree_id_0.COW.t=0.5440142381549761
+models.generic.SetBranchLength: CtQDxkpQ.tree_id_0.Node3.t=0.2234186943425657
+models.generic.SetBranchLength: CtQDxkpQ.tree_id_0.HORSE.t=0.4635704880123102
+models.generic.SetBranchLength: CtQDxkpQ.tree_id_0.CAT.t=0.601002518554328
+models.generic.SetBranchLength: CtQDxkpQ.tree_id_0.Node2.t=0.1410534931541304
+models.generic.SetBranchLength: CtQDxkpQ.tree_id_0.RHMONKEY.t=0.008155429247881206
+models.generic.SetBranchLength: CtQDxkpQ.tree_id_0.BABOON.t=0.003888753058509523
+models.generic.SetBranchLength: CtQDxkpQ.tree_id_0.Node9.t=0.05685588820961176
+models.generic.SetBranchLength: CtQDxkpQ.tree_id_0.HUMAN.t=0
+models.generic.SetBranchLength: CtQDxkpQ.tree_id_0.CHIMP.t=0.004011984997376985
+models.generic.SetBranchLength: CtQDxkpQ.tree_id_0.Node12.t=0.03927560570596583
+models.generic.SetBranchLength: CtQDxkpQ.tree_id_0.Node8.t=0.2404959255415181
+models.generic.SetBranchLength: CtQDxkpQ.tree_id_0.Node1.t=0.6233004506826423
+models.generic.SetBranchLength: CtQDxkpQ.tree_id_0.RAT.t=0.1468723884711188
+models.generic.SetBranchLength: CtQDxkpQ.tree_id_0.MOUSE.t=0.2639458126825699
+Auto-benchmarked an optimal number (4) of threads.
+Optimization settings:
+	OPTIMIZATION_METHOD = hybrid
+	OPTIMIZATION_PRECISION = 0.001
+	MAXIMUM_ITERATIONS_PER_VARIABLE = 5000
+
+Initial parameter values
+
+relax.ge.bsrel_mixture_aux_0 = 0.1492645443969207
+relax.ge.bsrel_mixture_aux_1 = 0.5065283651239814
+relax.ge.omega1 = 0.3761688465558484
+relax.ge.omega2 = 0.05983720152177466
+relax.ge.omega3 = 3.132886142357854
+relax.ge.theta_GT = 0.3066292437059392
+relax.ge.theta_CT = 1.025609358674762
+relax.ge.theta_AT = 0.2224705849782134
+relax.ge.theta_AC = 0.4900854333822703
+relax.ge.theta_CG = 0.4752266686574664
+relax.K = 1.044768965614959
+CtQDxkpQ.tree_id_0.PIG.t = 0.4226526481140948
+CtQDxkpQ.tree_id_0.COW.t = 0.5440142381549761
+CtQDxkpQ.tree_id_0.Node3.t = 0.2234186943425657
+CtQDxkpQ.tree_id_0.HORSE.t = 0.4635704880123102
+CtQDxkpQ.tree_id_0.CAT.t = 0.601002518554328
+CtQDxkpQ.tree_id_0.Node2.t = 0.1410534931541304
+CtQDxkpQ.tree_id_0.RHMONKEY.t = 0.008155429247881206
+CtQDxkpQ.tree_id_0.BABOON.t = 0.003888753058509523
+CtQDxkpQ.tree_id_0.Node9.t = 0.05685588820961176
+CtQDxkpQ.tree_id_0.HUMAN.t = 0
+CtQDxkpQ.tree_id_0.CHIMP.t = 0.004011984997376985
+CtQDxkpQ.tree_id_0.Node12.t = 0.03927560570596583
+CtQDxkpQ.tree_id_0.Node8.t = 0.2404959255415181
+CtQDxkpQ.tree_id_0.Node1.t = 0.6233004506826423
+CtQDxkpQ.tree_id_0.RAT.t = 0.1468723884711188
+CtQDxkpQ.tree_id_0.MOUSE.t = 0.2639458126825699
+Optimization finished in 39 loop passes.
+3997 likelihood evaluation calls and 109164 matrix exponentiations calls were made
+
+Auto-benchmarked an optimal number (8) of threads.
+Optimization settings:
+	OPTIMIZATION_METHOD = hybrid
+	OPTIMIZATION_PRECISION = 0.001
+	MAXIMUM_ITERATIONS_PER_VARIABLE = 5000
+
+Initial parameter values
+
+relax.ge.bsrel_mixture_aux_0 = 0.2278228082973571
+relax.ge.bsrel_mixture_aux_1 = 0.5291806437964246
+relax.ge.omega1 = 0.2821459588550811
+relax.ge.omega2 = 0.1300297764366852
+relax.ge.omega3 = 3.296132943747079
+relax.ge.theta_GT = 0.2757367897618359
+relax.ge.theta_CT = 0.9820991826982608
+relax.ge.theta_AC = 0.4736993943071336
+relax.ge.theta_CG = 0.4204226358976177
+relax.ge.theta_AT = 0.2165183650663624
+CtQDxkpQ.tree_id_0.PIG.k = 1.123032616207725
+CtQDxkpQ.tree_id_0.PIG.t = 0.4095918782564303
+CtQDxkpQ.tree_id_0.COW.k = 1.123032616207725
+CtQDxkpQ.tree_id_0.COW.t = 0.5560576991639055
+CtQDxkpQ.tree_id_0.Node3.k = 1.123032616207725
+CtQDxkpQ.tree_id_0.Node3.t = 0.2408569533874992
+CtQDxkpQ.tree_id_0.HORSE.k = 1.123032616207725
+CtQDxkpQ.tree_id_0.HORSE.t = 0.4830794837499675
+CtQDxkpQ.tree_id_0.CAT.k = 1.123032616207725
+CtQDxkpQ.tree_id_0.CAT.t = 0.615134086407587
+CtQDxkpQ.tree_id_0.Node2.k = 1.123032616207725
+CtQDxkpQ.tree_id_0.Node2.t = 0.1161779598037727
+CtQDxkpQ.tree_id_0.RHMONKEY.k = 1.123032616207725
+CtQDxkpQ.tree_id_0.RHMONKEY.t = 0.006896427635361477
+CtQDxkpQ.tree_id_0.BABOON.k = 1.123032616207725
+CtQDxkpQ.tree_id_0.BABOON.t = 0.003491520956080406
+CtQDxkpQ.tree_id_0.Node9.k = 1.123032616207725
+CtQDxkpQ.tree_id_0.Node9.t = 0.05186705606767933
+CtQDxkpQ.tree_id_0.HUMAN.k = 1.123032616207725
+CtQDxkpQ.tree_id_0.HUMAN.t = 0
+CtQDxkpQ.tree_id_0.CHIMP.k = 1.123032616207725
+CtQDxkpQ.tree_id_0.CHIMP.t = 0.003451909908713212
+CtQDxkpQ.tree_id_0.Node12.k = 1.123032616207725
+CtQDxkpQ.tree_id_0.Node12.t = 0.03437456981541309
+CtQDxkpQ.tree_id_0.Node8.k = 1.123032616207725
+CtQDxkpQ.tree_id_0.Node8.t = 0.2533358121074304
+CtQDxkpQ.tree_id_0.Node1.k = 1.123032616207725
+CtQDxkpQ.tree_id_0.Node1.t = 0.857139428847514
+CtQDxkpQ.tree_id_0.RAT.k = 1.123032616207725
+CtQDxkpQ.tree_id_0.RAT.t = 0.1383158188094702
+CtQDxkpQ.tree_id_0.MOUSE.k = 1.123032616207725
+CtQDxkpQ.tree_id_0.MOUSE.t = 0.2779526528701575
+Optimization finished in 101 loop passes.
+14591 likelihood evaluation calls and 304344 matrix exponentiations calls were made
+
+Overwritten previously defined function:'_BXYwkND.rate_generator'
+Overwritten previously defined function:'_BXYwkND.rate_generator'
+Auto-benchmarked an optimal number (4) of threads.
+Optimization settings:
+	OPTIMIZATION_METHOD = hybrid
+	OPTIMIZATION_PRECISION = 0.001
+	MAXIMUM_ITERATIONS_PER_VARIABLE = 5000
+
+Initial parameter values
+
+frequencies._aux.CF3x4.p0_0 = 0.4203296703296703
+frequencies._aux.CF3x4.p0_1 = 0.24739336492891
+frequencies._aux.CF3x4.p0_2 = 0.6574307304785895
+frequencies._aux.CF3x4.p1_0 = 0.4035714285714286
+frequencies._aux.CF3x4.p1_1 = 0.281437125748503
+frequencies._aux.CF3x4.p1_2 = 0.3878205128205128
+frequencies._aux.CF3x4.p2_0 = 0.2538461538461538
+frequencies._aux.CF3x4.p2_1 = 0.3144329896907216
+frequencies._aux.CF3x4.p2_2 = 0.5220193340494093
+Optimization finished in 7 loop passes.
+329 likelihood evaluation calls and 0 matrix exponentiations calls were made
+
+Overwritten previously defined function:'utility.Map.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Model 'relax.ge' assigned to 'PIG'
+Model 'relax.ge' assigned to 'COW'
+Model 'relax.ge' assigned to 'Node3'
+Model 'relax.ge' assigned to 'HORSE'
+Model 'relax.ge' assigned to 'CAT'
+Model 'relax.ge' assigned to 'Node2'
+Model 'relax.ge' assigned to 'RHMONKEY'
+Model 'relax.ge' assigned to 'BABOON'
+Model 'relax.ge' assigned to 'Node9'
+Model 'relax.ge' assigned to 'HUMAN'
+Model 'relax.ge' assigned to 'CHIMP'
+Model 'relax.ge' assigned to 'Node12'
+Model 'relax.ge' assigned to 'Node8'
+Model 'relax.ge' assigned to 'Node1'
+Model 'relax.ge' assigned to 'RAT'
+Model 'relax.ge' assigned to 'MOUSE'
+The tips of the tree:CtQDxkpQ.tree_id_0 were matched with the species names from the data in the following numeric order (0-based) {5,4,6,7,3,2,0,1,9,8}
+
+Pseudo-optimal path's cost 2286 vs 2927 for 1..k=> a 1.2804 x improvement
+Partition 0 is ASSUMED to have a reversible model
+relax.ge.theta_AG was already constrained in estimators.SetGlobals2
+models.generic.SetBranchLength: CtQDxkpQ.tree_id_0.PIG.t=2.32316089540977
+models.generic.SetBranchLength: CtQDxkpQ.tree_id_0.COW.t=2.990239408807887
+models.generic.SetBranchLength: CtQDxkpQ.tree_id_0.Node3.t=1.228047609109136
+models.generic.SetBranchLength: CtQDxkpQ.tree_id_0.HORSE.t=2.548070702553608
+models.generic.SetBranchLength: CtQDxkpQ.tree_id_0.CAT.t=3.303482316692571
+models.generic.SetBranchLength: CtQDxkpQ.tree_id_0.Node2.t=0.7753174170771242
+models.generic.SetBranchLength: CtQDxkpQ.tree_id_0.RHMONKEY.t=0.04482729351986195
+models.generic.SetBranchLength: CtQDxkpQ.tree_id_0.BABOON.t=0.02137499688632034
+models.generic.SetBranchLength: CtQDxkpQ.tree_id_0.Node9.t=0.3125151983590637
+models.generic.SetBranchLength: CtQDxkpQ.tree_id_0.HUMAN.t=0
+models.generic.SetBranchLength: CtQDxkpQ.tree_id_0.CHIMP.t=0.02205235599602863
+models.generic.SetBranchLength: CtQDxkpQ.tree_id_0.Node12.t=0.2158830702392803
+models.generic.SetBranchLength: CtQDxkpQ.tree_id_0.Node8.t=1.321914655489424
+models.generic.SetBranchLength: CtQDxkpQ.tree_id_0.Node1.t=3.426045570939636
+models.generic.SetBranchLength: CtQDxkpQ.tree_id_0.RAT.t=0.8073016720326526
+models.generic.SetBranchLength: CtQDxkpQ.tree_id_0.MOUSE.t=1.450809768417141
+Auto-benchmarked an optimal number (4) of threads.
+Optimization settings:
+	OPTIMIZATION_METHOD = hybrid
+	OPTIMIZATION_PRECISION = 0.001
+	MAXIMUM_ITERATIONS_PER_VARIABLE = 5000
+
+Initial parameter values
+
+relax.ge.bsrel_mixture_aux_0 = 0.5481761900309119
+relax.ge.omega1 = 1e-08
+relax.ge.omega2 = 1
+relax.ge.theta_CT = 0.9753279659166523
+relax.ge.theta_GT = 0.3165607657460529
+relax.ge.theta_CG = 0.4741842919488712
+relax.ge.theta_AT = 0.2655957193279573
+relax.ge.theta_AC = 0.5772599491116606
+relax.K = 1.123032616207725
+CtQDxkpQ.tree_id_0.PIG.t = 2.32316089540977
+CtQDxkpQ.tree_id_0.COW.t = 2.990239408807887
+CtQDxkpQ.tree_id_0.Node3.t = 1.228047609109136
+CtQDxkpQ.tree_id_0.HORSE.t = 2.548070702553608
+CtQDxkpQ.tree_id_0.CAT.t = 3.303482316692571
+CtQDxkpQ.tree_id_0.Node2.t = 0.7753174170771242
+CtQDxkpQ.tree_id_0.RHMONKEY.t = 0.04482729351986195
+CtQDxkpQ.tree_id_0.BABOON.t = 0.02137499688632034
+CtQDxkpQ.tree_id_0.Node9.t = 0.3125151983590637
+CtQDxkpQ.tree_id_0.HUMAN.t = 0
+CtQDxkpQ.tree_id_0.CHIMP.t = 0.02205235599602863
+CtQDxkpQ.tree_id_0.Node12.t = 0.2158830702392803
+CtQDxkpQ.tree_id_0.Node8.t = 1.321914655489424
+CtQDxkpQ.tree_id_0.Node1.t = 3.426045570939636
+CtQDxkpQ.tree_id_0.RAT.t = 0.8073016720326526
+CtQDxkpQ.tree_id_0.MOUSE.t = 1.450809768417141
+Optimization finished in 92 loop passes.
+6408 likelihood evaluation calls and 116822 matrix exponentiations calls were made
+
+Auto-benchmarked an optimal number (5) of threads.
+Optimization settings:
+	OPTIMIZATION_METHOD = hybrid
+	OPTIMIZATION_PRECISION = 0.001
+	MAXIMUM_ITERATIONS_PER_VARIABLE = 5000
+
+Initial parameter values
+
+relax.ge.bsrel_mixture_aux_0 = 0.6261481412613272
+relax.ge.omega1 = 0.1613140432926749
+relax.ge.omega2 = 3.286316088682638
+relax.ge.theta_CT = 0.9829036103464759
+relax.ge.theta_GT = 0.2764265953389169
+relax.ge.theta_CG = 0.4213327337446027
+relax.ge.theta_AT = 0.2172670237175844
+relax.ge.theta_AC = 0.4745414712127696
+CtQDxkpQ.tree_id_0.PIG.k = 1.105793257576807
+CtQDxkpQ.tree_id_0.PIG.t = 0.4091755263380734
+CtQDxkpQ.tree_id_0.COW.k = 1.105793257576807
+CtQDxkpQ.tree_id_0.COW.t = 0.557299606843784
+CtQDxkpQ.tree_id_0.Node3.k = 1.105793257576807
+CtQDxkpQ.tree_id_0.Node3.t = 0.241257260137189
+CtQDxkpQ.tree_id_0.HORSE.k = 1.105793257576807
+CtQDxkpQ.tree_id_0.HORSE.t = 0.483443964661916
+CtQDxkpQ.tree_id_0.CAT.k = 1.105793257576807
+CtQDxkpQ.tree_id_0.CAT.t = 0.6146940594454507
+CtQDxkpQ.tree_id_0.Node2.k = 1.105793257576807
+CtQDxkpQ.tree_id_0.Node2.t = 0.1160678316851465
+CtQDxkpQ.tree_id_0.RHMONKEY.k = 1.105793257576807
+CtQDxkpQ.tree_id_0.RHMONKEY.t = 0.006919297828601248
+CtQDxkpQ.tree_id_0.BABOON.k = 1.105793257576807
+CtQDxkpQ.tree_id_0.BABOON.t = 0.003501963975068267
+CtQDxkpQ.tree_id_0.Node9.k = 1.105793257576807
+CtQDxkpQ.tree_id_0.Node9.t = 0.05197732931523865
+CtQDxkpQ.tree_id_0.HUMAN.k = 1.105793257576807
+CtQDxkpQ.tree_id_0.HUMAN.t = 0
+CtQDxkpQ.tree_id_0.CHIMP.k = 1.105793257576807
+CtQDxkpQ.tree_id_0.CHIMP.t = 0.003463114538530066
+CtQDxkpQ.tree_id_0.Node12.k = 1.105793257576807
+CtQDxkpQ.tree_id_0.Node12.t = 0.03443070247533117
+CtQDxkpQ.tree_id_0.Node8.k = 1.105793257576807
+CtQDxkpQ.tree_id_0.Node8.t = 0.2538298601205765
+CtQDxkpQ.tree_id_0.Node1.k = 1.105793257576807
+CtQDxkpQ.tree_id_0.Node1.t = 0.8561074274719929
+CtQDxkpQ.tree_id_0.RAT.k = 1.105793257576807
+CtQDxkpQ.tree_id_0.RAT.t = 0.1387970066181086
+CtQDxkpQ.tree_id_0.MOUSE.k = 1.105793257576807
+CtQDxkpQ.tree_id_0.MOUSE.t = 0.277526755561115
+Optimization finished in 97 loop passes.
+13589 likelihood evaluation calls and 179742 matrix exponentiations calls were made
+
+Overwritten previously defined function:'utility.Map.CB'
+Overwritten previously defined function:'utility.ForEachPair.CB'
+Variable 'meme.queue' was not initialized prior to being used
+Overwritten previously defined function:'utility.Map.CB'
+Auto-benchmarked an optimal number (8) of threads.
+Optimization settings:
+	OPTIMIZATION_METHOD = hybrid
+	OPTIMIZATION_PRECISION = 0.001
+	MAXIMUM_ITERATIONS_PER_VARIABLE = 5000
+
+Initial parameter values
+
+relax.ge.bsrel_mixture_aux_0 = 0.5481278386469045
+relax.ge.omega1 = 1e-08
+relax.ge.omega2 = 3.795786278071114
+relax.ge.theta_CT = 0.981997193839492
+relax.ge.theta_GT = 0.2726093343710502
+relax.ge.theta_CG = 0.4012562258492369
+relax.ge.theta_AT = 0.209529665633088
+relax.ge.theta_AC = 0.4546177451033268
+CtQDxkpQ.tree_id_0.PIG.k = 0.9397245774885724
+CtQDxkpQ.tree_id_0.PIG.t = 0.3812915479796473
+CtQDxkpQ.tree_id_0.COW.k = 1.696056425383731
+CtQDxkpQ.tree_id_0.COW.t = 0.2799527678110069
+CtQDxkpQ.tree_id_0.Node3.k = 1.175409468141817
+CtQDxkpQ.tree_id_0.Node3.t = 0.1856286953801244
+CtQDxkpQ.tree_id_0.HORSE.k = 1.146470506872732
+CtQDxkpQ.tree_id_0.HORSE.t = 0.4038615757201778
+CtQDxkpQ.tree_id_0.CAT.k = 1.376528156480146
+CtQDxkpQ.tree_id_0.CAT.t = 0.4015149441914407
+CtQDxkpQ.tree_id_0.Node2.k = 0.3480824150767076
+CtQDxkpQ.tree_id_0.Node2.t = 0.188530167849215
+CtQDxkpQ.tree_id_0.RHMONKEY.k = 3.294040758962568
+CtQDxkpQ.tree_id_0.RHMONKEY.t = 0.0003496236824927097
+CtQDxkpQ.tree_id_0.BABOON.t = 0.006929401018013915
+CtQDxkpQ.tree_id_0.Node9.k = 0.1242304254731281
+CtQDxkpQ.tree_id_0.Node9.t = 0.09858129031361776
+CtQDxkpQ.tree_id_0.HUMAN.k = 0.9516312976310192
+CtQDxkpQ.tree_id_0.HUMAN.t = 0
+CtQDxkpQ.tree_id_0.CHIMP.k = 3.360679204020391
+CtQDxkpQ.tree_id_0.CHIMP.t = 0.0001613506164047767
+CtQDxkpQ.tree_id_0.Node12.k = 0.1803240820719757
+CtQDxkpQ.tree_id_0.Node12.t = 0.06519829316110715
+CtQDxkpQ.tree_id_0.Node8.k = 1.308678167608366
+CtQDxkpQ.tree_id_0.Node8.t = 0.1677350766402411
+CtQDxkpQ.tree_id_0.Node1.k = 0.2807485126191248
+CtQDxkpQ.tree_id_0.Node1.t = 1.207774344212604
+CtQDxkpQ.tree_id_0.RAT.k = 0.7685744943514632
+CtQDxkpQ.tree_id_0.RAT.t = 0.1555116095388084
+CtQDxkpQ.tree_id_0.MOUSE.k = 0.2927242541805604
+CtQDxkpQ.tree_id_0.MOUSE.t = 0.4468878065638997
+Optimization finished in 261 loop passes.
+43632 likelihood evaluation calls and 576570 matrix exponentiations calls were made
+
+Overwritten previously defined function:'utility.Map.CB'
+Auto-benchmarked an optimal number (3) of threads.
+Optimization settings:
+	OPTIMIZATION_METHOD = hybrid
+	OPTIMIZATION_PRECISION = 0.001
+	MAXIMUM_ITERATIONS_PER_VARIABLE = 5000
+
+Initial parameter values
+
+relax.ge.bsrel_mixture_aux_0 = 0.5481278386469045
+relax.ge.omega1 = 1e-08
+relax.ge.omega2 = 3.795786278071114
+relax.ge.theta_CT = 0.981997193839492
+relax.ge.theta_CG = 0.4012562258492369
+relax.ge.theta_GT = 0.2726093343710502
+relax.ge.theta_AT = 0.209529665633088
+relax.ge.theta_AC = 0.4546177451033268
+CtQDxkpQ.tree_id_0.PIG.k = 0.9397245774885724
+CtQDxkpQ.tree_id_0.PIG.t = 0.3812915479796473
+CtQDxkpQ.tree_id_0.COW.k = 1.696056425383731
+CtQDxkpQ.tree_id_0.COW.t = 0.2799527678110069
+CtQDxkpQ.tree_id_0.Node3.k = 1.175409468141817
+CtQDxkpQ.tree_id_0.Node3.t = 0.1856286953801244
+CtQDxkpQ.tree_id_0.HORSE.k = 1.146470506872732
+CtQDxkpQ.tree_id_0.HORSE.t = 0.4038615757201778
+CtQDxkpQ.tree_id_0.CAT.t = 0.4015149441914407
+CtQDxkpQ.tree_id_0.Node2.k = 0.3480824150767076
+CtQDxkpQ.tree_id_0.Node2.t = 0.188530167849215
+CtQDxkpQ.tree_id_0.RHMONKEY.k = 3.294040758962568
+CtQDxkpQ.tree_id_0.RHMONKEY.t = 0.0003496236824927097
+CtQDxkpQ.tree_id_0.BABOON.k = 0.1430821835609039
+CtQDxkpQ.tree_id_0.BABOON.t = 0.006929401018013915
+CtQDxkpQ.tree_id_0.Node9.k = 0.1242304254731281
+CtQDxkpQ.tree_id_0.Node9.t = 0.09858129031361776
+CtQDxkpQ.tree_id_0.HUMAN.k = 0.9516312976310192
+CtQDxkpQ.tree_id_0.HUMAN.t = 0
+CtQDxkpQ.tree_id_0.CHIMP.k = 3.360679204020391
+CtQDxkpQ.tree_id_0.CHIMP.t = 0.0001613506164047767
+CtQDxkpQ.tree_id_0.Node12.k = 0.1803240820719757
+CtQDxkpQ.tree_id_0.Node12.t = 0.06519829316110715
+CtQDxkpQ.tree_id_0.Node8.k = 1.308678167608366
+CtQDxkpQ.tree_id_0.Node8.t = 0.1677350766402411
+CtQDxkpQ.tree_id_0.Node1.k = 0.2807485126191248
+CtQDxkpQ.tree_id_0.Node1.t = 1.207774344212604
+CtQDxkpQ.tree_id_0.RAT.k = 0.7685744943514632
+CtQDxkpQ.tree_id_0.RAT.t = 0.1555116095388084
+CtQDxkpQ.tree_id_0.MOUSE.k = 0.2927242541805604
+CtQDxkpQ.tree_id_0.MOUSE.t = 0.4468878065638997
+Optimization finished in 59 loop passes.
+8912 likelihood evaluation calls and 113088 matrix exponentiations calls were made
+
+Overwritten previously defined function:'utility.Map.CB'
+Auto-benchmarked an optimal number (4) of threads.
+Optimization settings:
+	OPTIMIZATION_METHOD = hybrid
+	OPTIMIZATION_PRECISION = 0.001
+	MAXIMUM_ITERATIONS_PER_VARIABLE = 5000
+
+Initial parameter values
+
+relax.ge.bsrel_mixture_aux_0 = 0.5481278386469045
+relax.ge.omega1 = 1e-08
+relax.ge.omega2 = 3.795786278071114
+relax.ge.theta_CT = 0.981997193839492
+relax.ge.theta_GT = 0.2726093343710502
+relax.ge.theta_CG = 0.4012562258492369
+relax.ge.theta_AT = 0.209529665633088
+relax.ge.theta_AC = 0.4546177451033268
+CtQDxkpQ.tree_id_0.PIG.k = 0.9397245774885724
+CtQDxkpQ.tree_id_0.PIG.t = 0.3812915479796473
+CtQDxkpQ.tree_id_0.COW.k = 1.696056425383731
+CtQDxkpQ.tree_id_0.COW.t = 0.2799527678110069
+CtQDxkpQ.tree_id_0.Node3.k = 1.175409468141817
+CtQDxkpQ.tree_id_0.Node3.t = 0.1856286953801244
+CtQDxkpQ.tree_id_0.HORSE.k = 1.146470506872732
+CtQDxkpQ.tree_id_0.HORSE.t = 0.4038615757201778
+CtQDxkpQ.tree_id_0.CAT.k = 1.376528156480146
+CtQDxkpQ.tree_id_0.CAT.t = 0.4015149441914407
+CtQDxkpQ.tree_id_0.Node2.k = 0.3480824150767076
+CtQDxkpQ.tree_id_0.Node2.t = 0.188530167849215
+CtQDxkpQ.tree_id_0.RHMONKEY.k = 3.294040758962568
+CtQDxkpQ.tree_id_0.RHMONKEY.t = 0.0003496236824927097
+CtQDxkpQ.tree_id_0.BABOON.k = 0.1430821835609039
+CtQDxkpQ.tree_id_0.BABOON.t = 0.006929401018013915
+CtQDxkpQ.tree_id_0.Node9.k = 0.1242304254731281
+CtQDxkpQ.tree_id_0.Node9.t = 0.09858129031361776
+CtQDxkpQ.tree_id_0.HUMAN.k = 0.9516312976310192
+CtQDxkpQ.tree_id_0.HUMAN.t = 0
+CtQDxkpQ.tree_id_0.CHIMP.t = 0.0001613506164047767
+CtQDxkpQ.tree_id_0.Node12.k = 0.1803240820719757
+CtQDxkpQ.tree_id_0.Node12.t = 0.06519829316110715
+CtQDxkpQ.tree_id_0.Node8.k = 1.308678167608366
+CtQDxkpQ.tree_id_0.Node8.t = 0.1677350766402411
+CtQDxkpQ.tree_id_0.Node1.k = 0.2807485126191248
+CtQDxkpQ.tree_id_0.Node1.t = 1.207774344212604
+CtQDxkpQ.tree_id_0.RAT.k = 0.7685744943514632
+CtQDxkpQ.tree_id_0.RAT.t = 0.1555116095388084
+CtQDxkpQ.tree_id_0.MOUSE.k = 0.2927242541805604
+CtQDxkpQ.tree_id_0.MOUSE.t = 0.4468878065638997
+Optimization finished in 15 loop passes.
+2197 likelihood evaluation calls and 31656 matrix exponentiations calls were made
+
+Overwritten previously defined function:'utility.Map.CB'
+Auto-benchmarked an optimal number (3) of threads.
+Optimization settings:
+	OPTIMIZATION_METHOD = hybrid
+	OPTIMIZATION_PRECISION = 0.001
+	MAXIMUM_ITERATIONS_PER_VARIABLE = 5000
+
+Initial parameter values
+
+relax.ge.bsrel_mixture_aux_0 = 0.5481278386469045
+relax.ge.omega1 = 1e-08
+relax.ge.omega2 = 3.795786278071114
+relax.ge.theta_CT = 0.981997193839492
+relax.ge.theta_CG = 0.4012562258492369
+relax.ge.theta_GT = 0.2726093343710502
+relax.ge.theta_AT = 0.209529665633088
+relax.ge.theta_AC = 0.4546177451033268
+CtQDxkpQ.tree_id_0.PIG.k = 0.9397245774885724
+CtQDxkpQ.tree_id_0.PIG.t = 0.3812915479796473
+CtQDxkpQ.tree_id_0.COW.t = 0.2799527678110069
+CtQDxkpQ.tree_id_0.Node3.k = 1.175409468141817
+CtQDxkpQ.tree_id_0.Node3.t = 0.1856286953801244
+CtQDxkpQ.tree_id_0.HORSE.k = 1.146470506872732
+CtQDxkpQ.tree_id_0.HORSE.t = 0.4038615757201778
+CtQDxkpQ.tree_id_0.CAT.k = 1.376528156480146
+CtQDxkpQ.tree_id_0.CAT.t = 0.4015149441914407
+CtQDxkpQ.tree_id_0.Node2.k = 0.3480824150767076
+CtQDxkpQ.tree_id_0.Node2.t = 0.188530167849215
+CtQDxkpQ.tree_id_0.RHMONKEY.k = 3.294040758962568
+CtQDxkpQ.tree_id_0.RHMONKEY.t = 0.0003496236824927097
+CtQDxkpQ.tree_id_0.BABOON.k = 0.1430821835609039
+CtQDxkpQ.tree_id_0.BABOON.t = 0.006929401018013915
+CtQDxkpQ.tree_id_0.Node9.k = 0.1242304254731281
+CtQDxkpQ.tree_id_0.Node9.t = 0.09858129031361776
+CtQDxkpQ.tree_id_0.HUMAN.k = 0.9516312976310192
+CtQDxkpQ.tree_id_0.HUMAN.t = 0
+CtQDxkpQ.tree_id_0.CHIMP.k = 3.360679204020391
+CtQDxkpQ.tree_id_0.CHIMP.t = 0.0001613506164047767
+CtQDxkpQ.tree_id_0.Node12.k = 0.1803240820719757
+CtQDxkpQ.tree_id_0.Node12.t = 0.06519829316110715
+CtQDxkpQ.tree_id_0.Node8.k = 1.308678167608366
+CtQDxkpQ.tree_id_0.Node8.t = 0.1677350766402411
+CtQDxkpQ.tree_id_0.Node1.k = 0.2807485126191248
+CtQDxkpQ.tree_id_0.Node1.t = 1.207774344212604
+CtQDxkpQ.tree_id_0.RAT.k = 0.7685744943514632
+CtQDxkpQ.tree_id_0.RAT.t = 0.1555116095388084
+CtQDxkpQ.tree_id_0.MOUSE.k = 0.2927242541805604
+CtQDxkpQ.tree_id_0.MOUSE.t = 0.4468878065638997
+Optimization finished in 60 loop passes.
+11391 likelihood evaluation calls and 140484 matrix exponentiations calls were made
+
+Overwritten previously defined function:'utility.Map.CB'
+Auto-benchmarked an optimal number (4) of threads.
+Optimization settings:
+	OPTIMIZATION_METHOD = hybrid
+	OPTIMIZATION_PRECISION = 0.001
+	MAXIMUM_ITERATIONS_PER_VARIABLE = 5000
+
+Initial parameter values
+
+relax.ge.bsrel_mixture_aux_0 = 0.5481278386469045
+relax.ge.omega1 = 1e-08
+relax.ge.omega2 = 3.795786278071114
+relax.ge.theta_CT = 0.981997193839492
+relax.ge.theta_CG = 0.4012562258492369
+relax.ge.theta_GT = 0.2726093343710502
+relax.ge.theta_AT = 0.209529665633088
+relax.ge.theta_AC = 0.4546177451033268
+CtQDxkpQ.tree_id_0.PIG.k = 0.9397245774885724
+CtQDxkpQ.tree_id_0.PIG.t = 0.3812915479796473
+CtQDxkpQ.tree_id_0.COW.k = 1.696056425383731
+CtQDxkpQ.tree_id_0.COW.t = 0.2799527678110069
+CtQDxkpQ.tree_id_0.Node3.k = 1.175409468141817
+CtQDxkpQ.tree_id_0.Node3.t = 0.1856286953801244
+CtQDxkpQ.tree_id_0.HORSE.t = 0.4038615757201778
+CtQDxkpQ.tree_id_0.CAT.k = 1.376528156480146
+CtQDxkpQ.tree_id_0.CAT.t = 0.4015149441914407
+CtQDxkpQ.tree_id_0.Node2.k = 0.3480824150767076
+CtQDxkpQ.tree_id_0.Node2.t = 0.188530167849215
+CtQDxkpQ.tree_id_0.RHMONKEY.k = 3.294040758962568
+CtQDxkpQ.tree_id_0.RHMONKEY.t = 0.0003496236824927097
+CtQDxkpQ.tree_id_0.BABOON.k = 0.1430821835609039
+CtQDxkpQ.tree_id_0.BABOON.t = 0.006929401018013915
+CtQDxkpQ.tree_id_0.Node9.k = 0.1242304254731281
+CtQDxkpQ.tree_id_0.Node9.t = 0.09858129031361776
+CtQDxkpQ.tree_id_0.HUMAN.k = 0.9516312976310192
+CtQDxkpQ.tree_id_0.HUMAN.t = 0
+CtQDxkpQ.tree_id_0.CHIMP.k = 3.360679204020391
+CtQDxkpQ.tree_id_0.CHIMP.t = 0.0001613506164047767
+CtQDxkpQ.tree_id_0.Node12.k = 0.1803240820719757
+CtQDxkpQ.tree_id_0.Node12.t = 0.06519829316110715
+CtQDxkpQ.tree_id_0.Node8.k = 1.308678167608366
+CtQDxkpQ.tree_id_0.Node8.t = 0.1677350766402411
+CtQDxkpQ.tree_id_0.Node1.k = 0.2807485126191248
+CtQDxkpQ.tree_id_0.Node1.t = 1.207774344212604
+CtQDxkpQ.tree_id_0.RAT.k = 0.7685744943514632
+CtQDxkpQ.tree_id_0.RAT.t = 0.1555116095388084
+CtQDxkpQ.tree_id_0.MOUSE.k = 0.2927242541805604
+CtQDxkpQ.tree_id_0.MOUSE.t = 0.4468878065638997
+Optimization finished in 25 loop passes.
+3954 likelihood evaluation calls and 51308 matrix exponentiations calls were made
+
+Overwritten previously defined function:'utility.Map.CB'
+Auto-benchmarked an optimal number (3) of threads.
+Optimization settings:
+	OPTIMIZATION_METHOD = hybrid
+	OPTIMIZATION_PRECISION = 0.001
+	MAXIMUM_ITERATIONS_PER_VARIABLE = 5000
+
+Initial parameter values
+
+relax.ge.bsrel_mixture_aux_0 = 0.5481278386469045
+relax.ge.omega1 = 1e-08
+relax.ge.omega2 = 3.795786278071114
+relax.ge.theta_CT = 0.981997193839492
+relax.ge.theta_GT = 0.2726093343710502
+relax.ge.theta_CG = 0.4012562258492369
+relax.ge.theta_AT = 0.209529665633088
+relax.ge.theta_AC = 0.4546177451033268
+CtQDxkpQ.tree_id_0.PIG.k = 0.9397245774885724
+CtQDxkpQ.tree_id_0.PIG.t = 0.3812915479796473
+CtQDxkpQ.tree_id_0.COW.k = 1.696056425383731
+CtQDxkpQ.tree_id_0.COW.t = 0.2799527678110069
+CtQDxkpQ.tree_id_0.Node3.k = 1.175409468141817
+CtQDxkpQ.tree_id_0.Node3.t = 0.1856286953801244
+CtQDxkpQ.tree_id_0.HORSE.k = 1.146470506872732
+CtQDxkpQ.tree_id_0.HORSE.t = 0.4038615757201778
+CtQDxkpQ.tree_id_0.CAT.k = 1.376528156480146
+CtQDxkpQ.tree_id_0.CAT.t = 0.4015149441914407
+CtQDxkpQ.tree_id_0.Node2.k = 0.3480824150767076
+CtQDxkpQ.tree_id_0.Node2.t = 0.188530167849215
+CtQDxkpQ.tree_id_0.RHMONKEY.k = 3.294040758962568
+CtQDxkpQ.tree_id_0.RHMONKEY.t = 0.0003496236824927097
+CtQDxkpQ.tree_id_0.BABOON.k = 0.1430821835609039
+CtQDxkpQ.tree_id_0.BABOON.t = 0.006929401018013915
+CtQDxkpQ.tree_id_0.Node9.k = 0.1242304254731281
+CtQDxkpQ.tree_id_0.Node9.t = 0.09858129031361776
+CtQDxkpQ.tree_id_0.HUMAN.t = 0
+CtQDxkpQ.tree_id_0.CHIMP.k = 3.360679204020391
+CtQDxkpQ.tree_id_0.CHIMP.t = 0.0001613506164047767
+CtQDxkpQ.tree_id_0.Node12.k = 0.1803240820719757
+CtQDxkpQ.tree_id_0.Node12.t = 0.06519829316110715
+CtQDxkpQ.tree_id_0.Node8.k = 1.308678167608366
+CtQDxkpQ.tree_id_0.Node8.t = 0.1677350766402411
+CtQDxkpQ.tree_id_0.Node1.k = 0.2807485126191248
+CtQDxkpQ.tree_id_0.Node1.t = 1.207774344212604
+CtQDxkpQ.tree_id_0.RAT.k = 0.7685744943514632
+CtQDxkpQ.tree_id_0.RAT.t = 0.1555116095388084
+CtQDxkpQ.tree_id_0.MOUSE.k = 0.2927242541805604
+CtQDxkpQ.tree_id_0.MOUSE.t = 0.4468878065638997
+Optimization finished in 6 loop passes.
+868 likelihood evaluation calls and 11802 matrix exponentiations calls were made
+
+CChi2(x,n) only makes sense for both arguments positive
+Overwritten previously defined function:'utility.Map.CB'
+Auto-benchmarked an optimal number (8) of threads.
+Optimization settings:
+	OPTIMIZATION_METHOD = hybrid
+	OPTIMIZATION_PRECISION = 0.001
+	MAXIMUM_ITERATIONS_PER_VARIABLE = 5000
+
+Initial parameter values
+
+relax.ge.bsrel_mixture_aux_0 = 0.5481278386469045
+relax.ge.omega1 = 1e-08
+relax.ge.omega2 = 3.795786278071114
+relax.ge.theta_CT = 0.981997193839492
+relax.ge.theta_GT = 0.2726093343710502
+relax.ge.theta_CG = 0.4012562258492369
+relax.ge.theta_AT = 0.209529665633088
+relax.ge.theta_AC = 0.4546177451033268
+CtQDxkpQ.tree_id_0.PIG.k = 0.9397245774885724
+CtQDxkpQ.tree_id_0.PIG.t = 0.3812915479796473
+CtQDxkpQ.tree_id_0.COW.k = 1.696056425383731
+CtQDxkpQ.tree_id_0.COW.t = 0.2799527678110069
+CtQDxkpQ.tree_id_0.Node3.k = 1.175409468141817
+CtQDxkpQ.tree_id_0.Node3.t = 0.1856286953801244
+CtQDxkpQ.tree_id_0.HORSE.k = 1.146470506872732
+CtQDxkpQ.tree_id_0.HORSE.t = 0.4038615757201778
+CtQDxkpQ.tree_id_0.CAT.k = 1.376528156480146
+CtQDxkpQ.tree_id_0.CAT.t = 0.4015149441914407
+CtQDxkpQ.tree_id_0.Node2.k = 0.3480824150767076
+CtQDxkpQ.tree_id_0.Node2.t = 0.188530167849215
+CtQDxkpQ.tree_id_0.RHMONKEY.k = 3.294040758962568
+CtQDxkpQ.tree_id_0.RHMONKEY.t = 0.0003496236824927097
+CtQDxkpQ.tree_id_0.BABOON.k = 0.1430821835609039
+CtQDxkpQ.tree_id_0.BABOON.t = 0.006929401018013915
+CtQDxkpQ.tree_id_0.Node9.k = 0.1242304254731281
+CtQDxkpQ.tree_id_0.Node9.t = 0.09858129031361776
+CtQDxkpQ.tree_id_0.HUMAN.k = 0.9516312976310192
+CtQDxkpQ.tree_id_0.HUMAN.t = 0
+CtQDxkpQ.tree_id_0.CHIMP.k = 3.360679204020391
+CtQDxkpQ.tree_id_0.CHIMP.t = 0.0001613506164047767
+CtQDxkpQ.tree_id_0.Node12.k = 0.1803240820719757
+CtQDxkpQ.tree_id_0.Node12.t = 0.06519829316110715
+CtQDxkpQ.tree_id_0.Node8.k = 1.308678167608366
+CtQDxkpQ.tree_id_0.Node8.t = 0.1677350766402411
+CtQDxkpQ.tree_id_0.Node1.k = 0.2807485126191248
+CtQDxkpQ.tree_id_0.Node1.t = 1.207774344212604
+CtQDxkpQ.tree_id_0.RAT.k = 0.7685744943514632
+CtQDxkpQ.tree_id_0.RAT.t = 0.1555116095388084
+CtQDxkpQ.tree_id_0.MOUSE.t = 0.4468878065638997
+Optimization finished in 255 loop passes.
+36085 likelihood evaluation calls and 449106 matrix exponentiations calls were made
+
+CChi2(x,n) only makes sense for both arguments positive
+Overwritten previously defined function:'utility.Map.CB'
+Auto-benchmarked an optimal number (3) of threads.
+Optimization settings:
+	OPTIMIZATION_METHOD = hybrid
+	OPTIMIZATION_PRECISION = 0.001
+	MAXIMUM_ITERATIONS_PER_VARIABLE = 5000
+
+Initial parameter values
+
+relax.ge.bsrel_mixture_aux_0 = 0.5481278386469045
+relax.ge.omega1 = 1e-08
+relax.ge.omega2 = 3.795786278071114
+relax.ge.theta_CT = 0.981997193839492
+relax.ge.theta_GT = 0.2726093343710502
+relax.ge.theta_CG = 0.4012562258492369
+relax.ge.theta_AT = 0.209529665633088
+relax.ge.theta_AC = 0.4546177451033268
+CtQDxkpQ.tree_id_0.PIG.k = 0.9397245774885724
+CtQDxkpQ.tree_id_0.PIG.t = 0.3812915479796473
+CtQDxkpQ.tree_id_0.COW.k = 1.696056425383731
+CtQDxkpQ.tree_id_0.COW.t = 0.2799527678110069
+CtQDxkpQ.tree_id_0.Node3.k = 1.175409468141817
+CtQDxkpQ.tree_id_0.Node3.t = 0.1856286953801244
+CtQDxkpQ.tree_id_0.HORSE.k = 1.146470506872732
+CtQDxkpQ.tree_id_0.HORSE.t = 0.4038615757201778
+CtQDxkpQ.tree_id_0.CAT.k = 1.376528156480146
+CtQDxkpQ.tree_id_0.CAT.t = 0.4015149441914407
+CtQDxkpQ.tree_id_0.Node2.k = 0.3480824150767076
+CtQDxkpQ.tree_id_0.Node2.t = 0.188530167849215
+CtQDxkpQ.tree_id_0.RHMONKEY.k = 3.294040758962568
+CtQDxkpQ.tree_id_0.RHMONKEY.t = 0.0003496236824927097
+CtQDxkpQ.tree_id_0.BABOON.k = 0.1430821835609039
+CtQDxkpQ.tree_id_0.BABOON.t = 0.006929401018013915
+CtQDxkpQ.tree_id_0.Node9.k = 0.1242304254731281
+CtQDxkpQ.tree_id_0.Node9.t = 0.09858129031361776
+CtQDxkpQ.tree_id_0.HUMAN.k = 0.9516312976310192
+CtQDxkpQ.tree_id_0.HUMAN.t = 0
+CtQDxkpQ.tree_id_0.CHIMP.k = 3.360679204020391
+CtQDxkpQ.tree_id_0.CHIMP.t = 0.0001613506164047767
+CtQDxkpQ.tree_id_0.Node12.k = 0.1803240820719757
+CtQDxkpQ.tree_id_0.Node12.t = 0.06519829316110715
+CtQDxkpQ.tree_id_0.Node8.k = 1.308678167608366
+CtQDxkpQ.tree_id_0.Node8.t = 0.1677350766402411
+CtQDxkpQ.tree_id_0.Node1.t = 1.207774344212604
+CtQDxkpQ.tree_id_0.RAT.k = 0.7685744943514632
+CtQDxkpQ.tree_id_0.RAT.t = 0.1555116095388084
+CtQDxkpQ.tree_id_0.MOUSE.k = 0.2927242541805604
+CtQDxkpQ.tree_id_0.MOUSE.t = 0.4468878065638997
+Optimization finished in 190 loop passes.
+28841 likelihood evaluation calls and 353520 matrix exponentiations calls were made
+
+CChi2(x,n) only makes sense for both arguments positive
+Overwritten previously defined function:'utility.Map.CB'
+Auto-benchmarked an optimal number (6) of threads.
+Optimization settings:
+	OPTIMIZATION_METHOD = hybrid
+	OPTIMIZATION_PRECISION = 0.001
+	MAXIMUM_ITERATIONS_PER_VARIABLE = 5000
+
+Initial parameter values
+
+relax.ge.bsrel_mixture_aux_0 = 0.5481278386469045
+relax.ge.omega1 = 1e-08
+relax.ge.omega2 = 3.795786278071114
+relax.ge.theta_CT = 0.981997193839492
+relax.ge.theta_GT = 0.2726093343710502
+relax.ge.theta_CG = 0.4012562258492369
+relax.ge.theta_AT = 0.209529665633088
+relax.ge.theta_AC = 0.4546177451033268
+CtQDxkpQ.tree_id_0.PIG.k = 0.9397245774885724
+CtQDxkpQ.tree_id_0.PIG.t = 0.3812915479796473
+CtQDxkpQ.tree_id_0.COW.k = 1.696056425383731
+CtQDxkpQ.tree_id_0.COW.t = 0.2799527678110069
+CtQDxkpQ.tree_id_0.Node3.k = 1.175409468141817
+CtQDxkpQ.tree_id_0.Node3.t = 0.1856286953801244
+CtQDxkpQ.tree_id_0.HORSE.k = 1.146470506872732
+CtQDxkpQ.tree_id_0.HORSE.t = 0.4038615757201778
+CtQDxkpQ.tree_id_0.CAT.k = 1.376528156480146
+CtQDxkpQ.tree_id_0.CAT.t = 0.4015149441914407
+CtQDxkpQ.tree_id_0.Node2.k = 0.3480824150767076
+CtQDxkpQ.tree_id_0.Node2.t = 0.188530167849215
+CtQDxkpQ.tree_id_0.RHMONKEY.k = 3.294040758962568
+CtQDxkpQ.tree_id_0.RHMONKEY.t = 0.0003496236824927097
+CtQDxkpQ.tree_id_0.BABOON.k = 0.1430821835609039
+CtQDxkpQ.tree_id_0.BABOON.t = 0.006929401018013915
+CtQDxkpQ.tree_id_0.Node9.k = 0.1242304254731281
+CtQDxkpQ.tree_id_0.Node9.t = 0.09858129031361776
+CtQDxkpQ.tree_id_0.HUMAN.k = 0.9516312976310192
+CtQDxkpQ.tree_id_0.HUMAN.t = 0
+CtQDxkpQ.tree_id_0.CHIMP.k = 3.360679204020391
+CtQDxkpQ.tree_id_0.CHIMP.t = 0.0001613506164047767
+CtQDxkpQ.tree_id_0.Node12.t = 0.06519829316110715
+CtQDxkpQ.tree_id_0.Node8.k = 1.308678167608366
+CtQDxkpQ.tree_id_0.Node8.t = 0.1677350766402411
+CtQDxkpQ.tree_id_0.Node1.k = 0.2807485126191248
+CtQDxkpQ.tree_id_0.Node1.t = 1.207774344212604
+CtQDxkpQ.tree_id_0.RAT.k = 0.7685744943514632
+CtQDxkpQ.tree_id_0.RAT.t = 0.1555116095388084
+CtQDxkpQ.tree_id_0.MOUSE.k = 0.2927242541805604
+CtQDxkpQ.tree_id_0.MOUSE.t = 0.4468878065638997
+Optimization finished in 293 loop passes.
+42047 likelihood evaluation calls and 534742 matrix exponentiations calls were made
+
+Overwritten previously defined function:'utility.Map.CB'
+Auto-benchmarked an optimal number (4) of threads.
+Optimization settings:
+	OPTIMIZATION_METHOD = hybrid
+	OPTIMIZATION_PRECISION = 0.001
+	MAXIMUM_ITERATIONS_PER_VARIABLE = 5000
+
+Initial parameter values
+
+relax.ge.bsrel_mixture_aux_0 = 0.5481278386469045
+relax.ge.omega1 = 1e-08
+relax.ge.omega2 = 3.795786278071114
+relax.ge.theta_CT = 0.981997193839492
+relax.ge.theta_CG = 0.4012562258492369
+relax.ge.theta_GT = 0.2726093343710502
+relax.ge.theta_AT = 0.209529665633088
+relax.ge.theta_AC = 0.4546177451033268
+CtQDxkpQ.tree_id_0.PIG.k = 0.9397245774885724
+CtQDxkpQ.tree_id_0.PIG.t = 0.3812915479796473
+CtQDxkpQ.tree_id_0.COW.k = 1.696056425383731
+CtQDxkpQ.tree_id_0.COW.t = 0.2799527678110069
+CtQDxkpQ.tree_id_0.Node3.k = 1.175409468141817
+CtQDxkpQ.tree_id_0.Node3.t = 0.1856286953801244
+CtQDxkpQ.tree_id_0.HORSE.k = 1.146470506872732
+CtQDxkpQ.tree_id_0.HORSE.t = 0.4038615757201778
+CtQDxkpQ.tree_id_0.CAT.k = 1.376528156480146
+CtQDxkpQ.tree_id_0.CAT.t = 0.4015149441914407
+CtQDxkpQ.tree_id_0.Node2.t = 0.188530167849215
+CtQDxkpQ.tree_id_0.RHMONKEY.k = 3.294040758962568
+CtQDxkpQ.tree_id_0.RHMONKEY.t = 0.0003496236824927097
+CtQDxkpQ.tree_id_0.BABOON.k = 0.1430821835609039
+CtQDxkpQ.tree_id_0.BABOON.t = 0.006929401018013915
+CtQDxkpQ.tree_id_0.Node9.k = 0.1242304254731281
+CtQDxkpQ.tree_id_0.Node9.t = 0.09858129031361776
+CtQDxkpQ.tree_id_0.HUMAN.k = 0.9516312976310192
+CtQDxkpQ.tree_id_0.HUMAN.t = 0
+CtQDxkpQ.tree_id_0.CHIMP.k = 3.360679204020391
+CtQDxkpQ.tree_id_0.CHIMP.t = 0.0001613506164047767
+CtQDxkpQ.tree_id_0.Node12.k = 0.1803240820719757
+CtQDxkpQ.tree_id_0.Node12.t = 0.06519829316110715
+CtQDxkpQ.tree_id_0.Node8.k = 1.308678167608366
+CtQDxkpQ.tree_id_0.Node8.t = 0.1677350766402411
+CtQDxkpQ.tree_id_0.Node1.k = 0.2807485126191248
+CtQDxkpQ.tree_id_0.Node1.t = 1.207774344212604
+CtQDxkpQ.tree_id_0.RAT.k = 0.7685744943514632
+CtQDxkpQ.tree_id_0.RAT.t = 0.1555116095388084
+CtQDxkpQ.tree_id_0.MOUSE.k = 0.2927242541805604
+CtQDxkpQ.tree_id_0.MOUSE.t = 0.4468878065638997
+Optimization finished in 235 loop passes.
+36046 likelihood evaluation calls and 470600 matrix exponentiations calls were made
+
+CChi2(x,n) only makes sense for both arguments positive
+Overwritten previously defined function:'utility.Map.CB'
+Auto-benchmarked an optimal number (5) of threads.
+Optimization settings:
+	OPTIMIZATION_METHOD = hybrid
+	OPTIMIZATION_PRECISION = 0.001
+	MAXIMUM_ITERATIONS_PER_VARIABLE = 5000
+
+Initial parameter values
+
+relax.ge.bsrel_mixture_aux_0 = 0.5481278386469045
+relax.ge.omega1 = 1e-08
+relax.ge.omega2 = 3.795786278071114
+relax.ge.theta_CT = 0.981997193839492
+relax.ge.theta_CG = 0.4012562258492369
+relax.ge.theta_GT = 0.2726093343710502
+relax.ge.theta_AT = 0.209529665633088
+relax.ge.theta_AC = 0.4546177451033268
+CtQDxkpQ.tree_id_0.PIG.k = 0.9397245774885724
+CtQDxkpQ.tree_id_0.PIG.t = 0.3812915479796473
+CtQDxkpQ.tree_id_0.COW.k = 1.696056425383731
+CtQDxkpQ.tree_id_0.COW.t = 0.2799527678110069
+CtQDxkpQ.tree_id_0.Node3.t = 0.1856286953801244
+CtQDxkpQ.tree_id_0.HORSE.k = 1.146470506872732
+CtQDxkpQ.tree_id_0.HORSE.t = 0.4038615757201778
+CtQDxkpQ.tree_id_0.CAT.k = 1.376528156480146
+CtQDxkpQ.tree_id_0.CAT.t = 0.4015149441914407
+CtQDxkpQ.tree_id_0.Node2.k = 0.3480824150767076
+CtQDxkpQ.tree_id_0.Node2.t = 0.188530167849215
+CtQDxkpQ.tree_id_0.RHMONKEY.k = 3.294040758962568
+CtQDxkpQ.tree_id_0.RHMONKEY.t = 0.0003496236824927097
+CtQDxkpQ.tree_id_0.BABOON.k = 0.1430821835609039
+CtQDxkpQ.tree_id_0.BABOON.t = 0.006929401018013915
+CtQDxkpQ.tree_id_0.Node9.k = 0.1242304254731281
+CtQDxkpQ.tree_id_0.Node9.t = 0.09858129031361776
+CtQDxkpQ.tree_id_0.HUMAN.k = 0.9516312976310192
+CtQDxkpQ.tree_id_0.HUMAN.t = 0
+CtQDxkpQ.tree_id_0.CHIMP.k = 3.360679204020391
+CtQDxkpQ.tree_id_0.CHIMP.t = 0.0001613506164047767
+CtQDxkpQ.tree_id_0.Node12.k = 0.1803240820719757
+CtQDxkpQ.tree_id_0.Node12.t = 0.06519829316110715
+CtQDxkpQ.tree_id_0.Node8.k = 1.308678167608366
+CtQDxkpQ.tree_id_0.Node8.t = 0.1677350766402411
+CtQDxkpQ.tree_id_0.Node1.k = 0.2807485126191248
+CtQDxkpQ.tree_id_0.Node1.t = 1.207774344212604
+CtQDxkpQ.tree_id_0.RAT.k = 0.7685744943514632
+CtQDxkpQ.tree_id_0.RAT.t = 0.1555116095388084
+CtQDxkpQ.tree_id_0.MOUSE.k = 0.2927242541805604
+CtQDxkpQ.tree_id_0.MOUSE.t = 0.4468878065638997
+Optimization finished in 14 loop passes.
+1808 likelihood evaluation calls and 23932 matrix exponentiations calls were made
+
+Overwritten previously defined function:'utility.Map.CB'
+Auto-benchmarked an optimal number (4) of threads.
+Optimization settings:
+	OPTIMIZATION_METHOD = hybrid
+	OPTIMIZATION_PRECISION = 0.001
+	MAXIMUM_ITERATIONS_PER_VARIABLE = 5000
+
+Initial parameter values
+
+relax.ge.bsrel_mixture_aux_0 = 0.5481278386469045
+relax.ge.omega1 = 1e-08
+relax.ge.omega2 = 3.795786278071114
+relax.ge.theta_CT = 0.981997193839492
+relax.ge.theta_GT = 0.2726093343710502
+relax.ge.theta_CG = 0.4012562258492369
+relax.ge.theta_AT = 0.209529665633088
+relax.ge.theta_AC = 0.4546177451033268
+CtQDxkpQ.tree_id_0.PIG.k = 0.9397245774885724
+CtQDxkpQ.tree_id_0.PIG.t = 0.3812915479796473
+CtQDxkpQ.tree_id_0.COW.k = 1.696056425383731
+CtQDxkpQ.tree_id_0.COW.t = 0.2799527678110069
+CtQDxkpQ.tree_id_0.Node3.k = 1.175409468141817
+CtQDxkpQ.tree_id_0.Node3.t = 0.1856286953801244
+CtQDxkpQ.tree_id_0.HORSE.k = 1.146470506872732
+CtQDxkpQ.tree_id_0.HORSE.t = 0.4038615757201778
+CtQDxkpQ.tree_id_0.CAT.k = 1.376528156480146
+CtQDxkpQ.tree_id_0.CAT.t = 0.4015149441914407
+CtQDxkpQ.tree_id_0.Node2.k = 0.3480824150767076
+CtQDxkpQ.tree_id_0.Node2.t = 0.188530167849215
+CtQDxkpQ.tree_id_0.RHMONKEY.k = 3.294040758962568
+CtQDxkpQ.tree_id_0.RHMONKEY.t = 0.0003496236824927097
+CtQDxkpQ.tree_id_0.BABOON.k = 0.1430821835609039
+CtQDxkpQ.tree_id_0.BABOON.t = 0.006929401018013915
+CtQDxkpQ.tree_id_0.Node9.k = 0.1242304254731281
+CtQDxkpQ.tree_id_0.Node9.t = 0.09858129031361776
+CtQDxkpQ.tree_id_0.HUMAN.k = 0.9516312976310192
+CtQDxkpQ.tree_id_0.HUMAN.t = 0
+CtQDxkpQ.tree_id_0.CHIMP.k = 3.360679204020391
+CtQDxkpQ.tree_id_0.CHIMP.t = 0.0001613506164047767
+CtQDxkpQ.tree_id_0.Node12.k = 0.1803240820719757
+CtQDxkpQ.tree_id_0.Node12.t = 0.06519829316110715
+CtQDxkpQ.tree_id_0.Node8.t = 0.1677350766402411
+CtQDxkpQ.tree_id_0.Node1.k = 0.2807485126191248
+CtQDxkpQ.tree_id_0.Node1.t = 1.207774344212604
+CtQDxkpQ.tree_id_0.RAT.k = 0.7685744943514632
+CtQDxkpQ.tree_id_0.RAT.t = 0.1555116095388084
+CtQDxkpQ.tree_id_0.MOUSE.k = 0.2927242541805604
+CtQDxkpQ.tree_id_0.MOUSE.t = 0.4468878065638997
+Optimization finished in 27 loop passes.
+4255 likelihood evaluation calls and 56838 matrix exponentiations calls were made
+
+Overwritten previously defined function:'utility.Map.CB'
+Auto-benchmarked an optimal number (6) of threads.
+Optimization settings:
+	OPTIMIZATION_METHOD = hybrid
+	OPTIMIZATION_PRECISION = 0.001
+	MAXIMUM_ITERATIONS_PER_VARIABLE = 5000
+
+Initial parameter values
+
+relax.ge.bsrel_mixture_aux_0 = 0.5481278386469045
+relax.ge.omega1 = 1e-08
+relax.ge.omega2 = 3.795786278071114
+relax.ge.theta_CT = 0.981997193839492
+relax.ge.theta_GT = 0.2726093343710502
+relax.ge.theta_CG = 0.4012562258492369
+relax.ge.theta_AT = 0.209529665633088
+relax.ge.theta_AC = 0.4546177451033268
+CtQDxkpQ.tree_id_0.PIG.k = 0.9397245774885724
+CtQDxkpQ.tree_id_0.PIG.t = 0.3812915479796473
+CtQDxkpQ.tree_id_0.COW.k = 1.696056425383731
+CtQDxkpQ.tree_id_0.COW.t = 0.2799527678110069
+CtQDxkpQ.tree_id_0.Node3.k = 1.175409468141817
+CtQDxkpQ.tree_id_0.Node3.t = 0.1856286953801244
+CtQDxkpQ.tree_id_0.HORSE.k = 1.146470506872732
+CtQDxkpQ.tree_id_0.HORSE.t = 0.4038615757201778
+CtQDxkpQ.tree_id_0.CAT.k = 1.376528156480146
+CtQDxkpQ.tree_id_0.CAT.t = 0.4015149441914407
+CtQDxkpQ.tree_id_0.Node2.k = 0.3480824150767076
+CtQDxkpQ.tree_id_0.Node2.t = 0.188530167849215
+CtQDxkpQ.tree_id_0.RHMONKEY.k = 3.294040758962568
+CtQDxkpQ.tree_id_0.RHMONKEY.t = 0.0003496236824927097
+CtQDxkpQ.tree_id_0.BABOON.k = 0.1430821835609039
+CtQDxkpQ.tree_id_0.BABOON.t = 0.006929401018013915
+CtQDxkpQ.tree_id_0.Node9.t = 0.09858129031361776
+CtQDxkpQ.tree_id_0.HUMAN.k = 0.9516312976310192
+CtQDxkpQ.tree_id_0.HUMAN.t = 0
+CtQDxkpQ.tree_id_0.CHIMP.k = 3.360679204020391
+CtQDxkpQ.tree_id_0.CHIMP.t = 0.0001613506164047767
+CtQDxkpQ.tree_id_0.Node12.k = 0.1803240820719757
+CtQDxkpQ.tree_id_0.Node12.t = 0.06519829316110715
+CtQDxkpQ.tree_id_0.Node8.k = 1.308678167608366
+CtQDxkpQ.tree_id_0.Node8.t = 0.1677350766402411
+CtQDxkpQ.tree_id_0.Node1.k = 0.2807485126191248
+CtQDxkpQ.tree_id_0.Node1.t = 1.207774344212604
+CtQDxkpQ.tree_id_0.RAT.k = 0.7685744943514632
+CtQDxkpQ.tree_id_0.RAT.t = 0.1555116095388084
+CtQDxkpQ.tree_id_0.MOUSE.k = 0.2927242541805604
+CtQDxkpQ.tree_id_0.MOUSE.t = 0.4468878065638997
+Optimization finished in 294 loop passes.
+40398 likelihood evaluation calls and 499172 matrix exponentiations calls were made
+
+Overwritten previously defined function:'utility.Map.CB'
+Auto-benchmarked an optimal number (4) of threads.
+Optimization settings:
+	OPTIMIZATION_METHOD = hybrid
+	OPTIMIZATION_PRECISION = 0.001
+	MAXIMUM_ITERATIONS_PER_VARIABLE = 5000
+
+Initial parameter values
+
+relax.ge.bsrel_mixture_aux_0 = 0.5481278386469045
+relax.ge.omega1 = 1e-08
+relax.ge.omega2 = 3.795786278071114
+relax.ge.theta_CT = 0.981997193839492
+relax.ge.theta_GT = 0.2726093343710502
+relax.ge.theta_CG = 0.4012562258492369
+relax.ge.theta_AT = 0.209529665633088
+relax.ge.theta_AC = 0.4546177451033268
+CtQDxkpQ.tree_id_0.PIG.t = 0.3812915479796473
+CtQDxkpQ.tree_id_0.COW.k = 1.696056425383731
+CtQDxkpQ.tree_id_0.COW.t = 0.2799527678110069
+CtQDxkpQ.tree_id_0.Node3.k = 1.175409468141817
+CtQDxkpQ.tree_id_0.Node3.t = 0.1856286953801244
+CtQDxkpQ.tree_id_0.HORSE.k = 1.146470506872732
+CtQDxkpQ.tree_id_0.HORSE.t = 0.4038615757201778
+CtQDxkpQ.tree_id_0.CAT.k = 1.376528156480146
+CtQDxkpQ.tree_id_0.CAT.t = 0.4015149441914407
+CtQDxkpQ.tree_id_0.Node2.k = 0.3480824150767076
+CtQDxkpQ.tree_id_0.Node2.t = 0.188530167849215
+CtQDxkpQ.tree_id_0.RHMONKEY.k = 3.294040758962568
+CtQDxkpQ.tree_id_0.RHMONKEY.t = 0.0003496236824927097
+CtQDxkpQ.tree_id_0.BABOON.k = 0.1430821835609039
+CtQDxkpQ.tree_id_0.BABOON.t = 0.006929401018013915
+CtQDxkpQ.tree_id_0.Node9.k = 0.1242304254731281
+CtQDxkpQ.tree_id_0.Node9.t = 0.09858129031361776
+CtQDxkpQ.tree_id_0.HUMAN.k = 0.9516312976310192
+CtQDxkpQ.tree_id_0.HUMAN.t = 0
+CtQDxkpQ.tree_id_0.CHIMP.k = 3.360679204020391
+CtQDxkpQ.tree_id_0.CHIMP.t = 0.0001613506164047767
+CtQDxkpQ.tree_id_0.Node12.k = 0.1803240820719757
+CtQDxkpQ.tree_id_0.Node12.t = 0.06519829316110715
+CtQDxkpQ.tree_id_0.Node8.k = 1.308678167608366
+CtQDxkpQ.tree_id_0.Node8.t = 0.1677350766402411
+CtQDxkpQ.tree_id_0.Node1.k = 0.2807485126191248
+CtQDxkpQ.tree_id_0.Node1.t = 1.207774344212604
+CtQDxkpQ.tree_id_0.RAT.k = 0.7685744943514632
+CtQDxkpQ.tree_id_0.RAT.t = 0.1555116095388084
+CtQDxkpQ.tree_id_0.MOUSE.k = 0.2927242541805604
+CtQDxkpQ.tree_id_0.MOUSE.t = 0.4468878065638997
+Optimization finished in 44 loop passes.
+7254 likelihood evaluation calls and 96310 matrix exponentiations calls were made
+
+CChi2(x,n) only makes sense for both arguments positive
+Overwritten previously defined function:'utility.Map.CB'
+Auto-benchmarked an optimal number (3) of threads.
+Optimization settings:
+	OPTIMIZATION_METHOD = hybrid
+	OPTIMIZATION_PRECISION = 0.001
+	MAXIMUM_ITERATIONS_PER_VARIABLE = 5000
+
+Initial parameter values
+
+relax.ge.bsrel_mixture_aux_0 = 0.5481278386469045
+relax.ge.omega1 = 1e-08
+relax.ge.omega2 = 3.795786278071114
+relax.ge.theta_CT = 0.981997193839492
+relax.ge.theta_GT = 0.2726093343710502
+relax.ge.theta_CG = 0.4012562258492369
+relax.ge.theta_AT = 0.209529665633088
+relax.ge.theta_AC = 0.4546177451033268
+CtQDxkpQ.tree_id_0.PIG.k = 0.9397245774885724
+CtQDxkpQ.tree_id_0.PIG.t = 0.3812915479796473
+CtQDxkpQ.tree_id_0.COW.k = 1.696056425383731
+CtQDxkpQ.tree_id_0.COW.t = 0.2799527678110069
+CtQDxkpQ.tree_id_0.Node3.k = 1.175409468141817
+CtQDxkpQ.tree_id_0.Node3.t = 0.1856286953801244
+CtQDxkpQ.tree_id_0.HORSE.k = 1.146470506872732
+CtQDxkpQ.tree_id_0.HORSE.t = 0.4038615757201778
+CtQDxkpQ.tree_id_0.CAT.k = 1.376528156480146
+CtQDxkpQ.tree_id_0.CAT.t = 0.4015149441914407
+CtQDxkpQ.tree_id_0.Node2.k = 0.3480824150767076
+CtQDxkpQ.tree_id_0.Node2.t = 0.188530167849215
+CtQDxkpQ.tree_id_0.RHMONKEY.k = 3.294040758962568
+CtQDxkpQ.tree_id_0.RHMONKEY.t = 0.0003496236824927097
+CtQDxkpQ.tree_id_0.BABOON.k = 0.1430821835609039
+CtQDxkpQ.tree_id_0.BABOON.t = 0.006929401018013915
+CtQDxkpQ.tree_id_0.Node9.k = 0.1242304254731281
+CtQDxkpQ.tree_id_0.Node9.t = 0.09858129031361776
+CtQDxkpQ.tree_id_0.HUMAN.k = 0.9516312976310192
+CtQDxkpQ.tree_id_0.HUMAN.t = 0
+CtQDxkpQ.tree_id_0.CHIMP.k = 3.360679204020391
+CtQDxkpQ.tree_id_0.CHIMP.t = 0.0001613506164047767
+CtQDxkpQ.tree_id_0.Node12.k = 0.1803240820719757
+CtQDxkpQ.tree_id_0.Node12.t = 0.06519829316110715
+CtQDxkpQ.tree_id_0.Node8.k = 1.308678167608366
+CtQDxkpQ.tree_id_0.Node8.t = 0.1677350766402411
+CtQDxkpQ.tree_id_0.Node1.k = 0.2807485126191248
+CtQDxkpQ.tree_id_0.Node1.t = 1.207774344212604
+CtQDxkpQ.tree_id_0.RAT.t = 0.1555116095388084
+CtQDxkpQ.tree_id_0.MOUSE.k = 0.2927242541805604
+CtQDxkpQ.tree_id_0.MOUSE.t = 0.4468878065638997
+Optimization finished in 113 loop passes.
+18167 likelihood evaluation calls and 239178 matrix exponentiations calls were made
+
+CChi2(x,n) only makes sense for both arguments positive
+Overwritten previously defined function:'utility.Map.CB'
+Auto-benchmarked an optimal number (8) of threads.
+Optimization settings:
+	OPTIMIZATION_METHOD = hybrid
+	OPTIMIZATION_PRECISION = 0.001
+	MAXIMUM_ITERATIONS_PER_VARIABLE = 5000
+
+Initial parameter values
+
+relax.ge.bsrel_mixture_aux_0 = 0.5481278386469045
+relax.ge.omega1 = 1e-08
+relax.ge.omega2 = 3.795786278071114
+relax.ge.theta_CT = 0.981997193839492
+relax.ge.theta_GT = 0.2726093343710502
+relax.ge.theta_CG = 0.4012562258492369
+relax.ge.theta_AT = 0.209529665633088
+relax.ge.theta_AC = 0.4546177451033268
+CtQDxkpQ.tree_id_0.PIG.k = 0.9397245774885724
+CtQDxkpQ.tree_id_0.PIG.t = 0.3812915479796473
+CtQDxkpQ.tree_id_0.COW.k = 1.696056425383731
+CtQDxkpQ.tree_id_0.COW.t = 0.2799527678110069
+CtQDxkpQ.tree_id_0.Node3.k = 1.175409468141817
+CtQDxkpQ.tree_id_0.Node3.t = 0.1856286953801244
+CtQDxkpQ.tree_id_0.HORSE.k = 1.146470506872732
+CtQDxkpQ.tree_id_0.HORSE.t = 0.4038615757201778
+CtQDxkpQ.tree_id_0.CAT.k = 1.376528156480146
+CtQDxkpQ.tree_id_0.CAT.t = 0.4015149441914407
+CtQDxkpQ.tree_id_0.Node2.k = 0.3480824150767076
+CtQDxkpQ.tree_id_0.Node2.t = 0.188530167849215
+CtQDxkpQ.tree_id_0.RHMONKEY.t = 0.0003496236824927097
+CtQDxkpQ.tree_id_0.BABOON.k = 0.1430821835609039
+CtQDxkpQ.tree_id_0.BABOON.t = 0.006929401018013915
+CtQDxkpQ.tree_id_0.Node9.k = 0.1242304254731281
+CtQDxkpQ.tree_id_0.Node9.t = 0.09858129031361776
+CtQDxkpQ.tree_id_0.HUMAN.k = 0.9516312976310192
+CtQDxkpQ.tree_id_0.HUMAN.t = 0
+CtQDxkpQ.tree_id_0.CHIMP.k = 3.360679204020391
+CtQDxkpQ.tree_id_0.CHIMP.t = 0.0001613506164047767
+CtQDxkpQ.tree_id_0.Node12.k = 0.1803240820719757
+CtQDxkpQ.tree_id_0.Node12.t = 0.06519829316110715
+CtQDxkpQ.tree_id_0.Node8.k = 1.308678167608366
+CtQDxkpQ.tree_id_0.Node8.t = 0.1677350766402411
+CtQDxkpQ.tree_id_0.Node1.k = 0.2807485126191248
+CtQDxkpQ.tree_id_0.Node1.t = 1.207774344212604
+CtQDxkpQ.tree_id_0.RAT.k = 0.7685744943514632
+CtQDxkpQ.tree_id_0.RAT.t = 0.1555116095388084
+CtQDxkpQ.tree_id_0.MOUSE.k = 0.2927242541805604
+CtQDxkpQ.tree_id_0.MOUSE.t = 0.4468878065638997
+Optimization finished in 6 loop passes.
+796 likelihood evaluation calls and 9628 matrix exponentiations calls were made
