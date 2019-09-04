@@ -89,9 +89,18 @@ relax.display_orders = {terms.original_name: -1,
                         relax.general_descriptive_name: 2
                        };
 
-relax.table_screen_output  = {{"Branch", "k MLE", "Uncorrected p-value"}};
-relax.table_output_options = {terms.table_options.header : TRUE, terms.table_options.minimum_column_width: 12, terms.table_options.align : "center"};
+relax.table_screen_output  = {{"Branch name", "k MLE", "LRT", "Uncorrected p-value"}};
+relax.table_screen_output2  = {{"Branch name", "k MLE", "LRT", "Corrected p-value"}};
+relax.table_output_options = {terms.table_options.header : TRUE, terms.table_options.minimum_column_width: 12, terms.table_options.align : "center",
+                              terms.table_options.column_widths: {
+            "0": 40,
+            "1": 12,
+            "2": 12,
+            "3": 16
+        }};
+        
 relax.report.header_done   = False;
+
 
 /*------------------------------------------------------------------------------*/
 
@@ -117,6 +126,9 @@ KeywordArgument ("tree",      "A phylogenetic tree (optionally annotated with {}
 
 KeywordArgument ("rates", "The number omega rate classes to include in the model [2-10, default 3]", relax.rate_classes);
 
+KeywordArgument ("fast-test", "Use a faster test (could have some false positives)", "Yes");
+
+
 io.DisplayAnalysisBanner ( relax.analysis_description );
 
 selection.io.startTimer (relax.json [terms.json.timers], "Overall", 0);
@@ -131,6 +143,10 @@ namespace relax {
 
 relax.rate_classes = io.PromptUser ("The number omega rate classes to include in the model", relax.rate_classes, 2, 10, TRUE);
 
+relax.fast_test = io.SelectAnOption (
+    {"Yes" : "When scanning individual branches, fix global model parameters at their MLEs from the alternative; could create some false positives",
+    "No" : "When scanning individual branches, re-estimate global model parameters at their MLEs; slower but more accurate"}, 
+    "Use a faster test for branch scanning") == "Yes";
 
 selection.io.startTimer (relax.json [terms.json.timers], "Preliminary model fitting", 1);
 
@@ -217,8 +233,6 @@ while (1) {
     PARAMETER_GROUPING + relax.distribution["rates"];
     PARAMETER_GROUPING + relax.distribution["weights"];
 
-    VERBOSITY_LEVEL = 1;
-
     if (Type (relax.ge_guess) != "Matrix") {
         // first time in
         relax.initial.test_mean    =
@@ -300,18 +314,27 @@ while (1) {
     io.ReportProgressMessageMD("RELAX", "ge", "* " + selection.io.report_fit (relax.general_descriptive.fit, 9, relax.codon_data_info[terms.data.sample_size]));
     io.ReportProgressMessageMD("RELAX", "ge", "* The following baseline rate distribution for branch-site combinations was inferred");
     relax.inferred_ge_distribution = parameters.GetStickBreakingDistribution (models.codon.BS_REL.ExtractMixtureDistributionFromFit (relax.ge.bsrel_model, relax.general_descriptive.fit)) % 0;
-
     selection.io.report_dnds (relax.inferred_ge_distribution);
 
+ 
+
     if (relax.rate_classes > 2) {
-        if (relax.inferred_ge_distribution[0][1] < 1e-5 || relax.inferred_ge_distribution[1][1] < 1e-5) {
-            io.ReportProgressMessageMD("RELAX", "ge", "\n ### Because some of the rate classes were collapsed to 0, the model is likely overparameterized. RELAX will reduce the number of site rate classes by one and repeat the fit now.\n----\n");
+        relax.same_rate = -1;
+        for (relax.i = 1; relax.i < relax.rate_classes; relax.i += 1) {
+            if (Abs(relax.inferred_ge_distribution[relax.i][0] - relax.inferred_ge_distribution[relax.i-1][0]) < 1e-5) {
+                relax.same_rate = relax.i;
+                break;
+            }
+        }
+       
+        relax.cutoff = 0.1 / relax.codon_data.sites;
+        if (relax.same_rate >= 0 || Min (relax.inferred_ge_distribution[-1][1],0) < relax.cutoff) {
+            io.ReportProgressMessageMD("RELAX", "ge", "\n##### Because some of the rate classes were collapsed to 0, the model is likely overparameterized. RELAX will reduce the number of site rate classes by one and repeat the fit now.\n----\n");
             relax.rate_classes = relax.rate_classes - 1;
             relax.ge_guess = {relax.rate_classes, 2};
             relax.shift    = 0;
-            //console.log (relax.inferred_ge_distribution);
             for (relax.i = 0; relax.i < relax.rate_classes; relax.i += 1) {
-                if (relax.inferred_ge_distribution[relax.i][1] < 1e-5 && relax.shift == 0) {
+                if ((relax.i == relax.same_rate || relax.inferred_ge_distribution[relax.i][1] < relax.cutoff) && relax.shift == 0) {
                     relax.shift += 1;
                     continue;
                 }
@@ -358,20 +381,20 @@ while (1) {
     break;
 }
 
+selection.io.startTimer (relax.json [terms.json.timers], "Branch scan", 3);
+
 relax.branch_tests = {};
-
 relax.branch.to.constrain = "";
-
 relax.queue = mpi.CreateQueue ({terms.mpi.LikelihoodFunctions: {{relax.ge.likelihood_function}},
                                terms.mpi.Models : {{"relax.ge.bsrel_model"}},
                                terms.mpi.Headers : utility.GetListOfLoadedModules ("libv3/"),
-                               terms.mpi.Variables : {{"relax.k_estimates","relax.model_object_map","relax.general_descriptive.fit","relax.branch.to.constrain"}},
+                               terms.mpi.Variables : {{"terms.relax.k","relax.k_estimates","relax.model_object_map","relax.general_descriptive.fit","relax.branch.to.constrain","relax.fast_test"}},
                                terms.mpi.Functions : {{"relax.set.k_is_one"}}
                              });
 
 utility.ForEachPair (relax.k_estimates, "_branch_", "_estimate_",
         '
-            mpi.QueueJob (meme.queue, "relax.handle_a_branch", {
+            mpi.QueueJob (relax.queue , "relax.handle_a_branch", {
                                                                 "0" : relax.ge.likelihood_function,
                                                                 "1" : _branch_,
                                                                 "2" : _estimate_
@@ -381,13 +404,43 @@ utility.ForEachPair (relax.k_estimates, "_branch_", "_estimate_",
         '
     );
 
+
 mpi.QueueComplete (relax.queue);
 
-assert (0);
+relax.corrected_p = math.HolmBonferroniCorrection(utility.Map(relax.branch_tests,"_v_","_v_['p-value']"));
 
+utility.ForEachPair (relax.corrected_p, "_key_", "_value_", "(relax.branch_tests[_key_])['Corrected p-value']=_value_");
 
+(relax.table_output_options)[utility.getGlobalValue("terms.table_options.header")] = TRUE;
+
+console.log ("");
+
+io.ReportProgressMessageMD("RELAX", "Results", "Tests of individual branches for relaxation/intensification of selection");
+fprintf (stdout, "\n",
+    io.FormatTableRow (relax.table_screen_output2,relax.table_output_options));
+        
+(relax.table_output_options)[utility.getGlobalValue("terms.table_options.header")] = FALSE;
+
+relax.sig_count = 0;
+
+utility.ForEachPair (relax.branch_tests, "_key_", "_record_", 
+"
+    relax.padder = '';
+    if (_record_['Corrected p-value'] <= relax.p_threshold) {
+        relax.sig_count += 1;
+        relax.padder = ' (*)';
+    }
+    result = {{_key_, Format (_record_[terms.fit.MLE],8,2), Format (_record_[terms.LRT], 8,2), Format (_record_['Corrected p-value'], 8,2) + relax.padder}};
+    fprintf (stdout,io.FormatTableRow (result, relax.table_output_options));
+");
+
+selection.io.stopTimer (relax.json [terms.json.timers], "Branch scan");
+
+console.log ("\n\n## RELAX scan result\n**" + relax.sig_count + "** branches had significant relaxation/intensification of selection at significance level of " + relax.p_threshold);
 
 selection.io.stopTimer (relax.json [terms.json.timers], "Overall");
+
+relax.json [terms.json.test_results] = relax.branch_tests;
 
 io.SpoolJSON (relax.json, relax.codon_data_info [terms.json.json]);
 
@@ -447,9 +500,10 @@ lfunction relax.set.k_is_one (tree_name, node_name, model_description) {
 //----------------------------------------------------------------------------------------
 lfunction relax.handle_a_branch (lf, branch, estimate) {
     ^'relax.branch.to.constrain' = branch;
-    //console.log ("FITTING `branch`");
     save = estimators.TakeLFStateSnapshot(lf);
-    //console.log (parameters.ConstrainParameterSet (utility.Map ((^'relax.general_descriptive.fit')[^'terms.global'], "_value_", "_value_[terms.id]"), null));
+    if (^"relax.fast_test") { 
+        parameters.FixParameterSet (utility.Map ((^'relax.general_descriptive.fit')[^'terms.global'], "_value_", "_value_[terms.id]"));
+    }
     estimators.TraverseLocalParameters (lf, ^'relax.model_object_map', "relax.set.k_is_one");
     relax.general_descriptive.null = estimators.FitExistingLF (lf, ^'relax.model_object_map');
     estimators.RestoreLFStateFromSnapshot (lf, save);
@@ -462,7 +516,7 @@ lfunction relax.store_results (node, result, arguments) {
 
     if ( ^'relax.report.header_done' == FALSE) {
         io.ReportProgressMessageMD("RELAX", "Branch", "Testing individual branches for relaxation/intensification of selection");
-        fprintf (stdout,
+        fprintf (stdout, "\n",
             io.FormatTableRow (^'relax.table_screen_output',^'relax.table_output_options'));
         ^'relax.report.header_done' = TRUE;
         (^'relax.table_output_options')[utility.getGlobalValue("terms.table_options.header")] = FALSE;
@@ -472,7 +526,8 @@ lfunction relax.store_results (node, result, arguments) {
     estimate = arguments[2];
     (^'relax.branch_tests')[branch] =
         math.DoLRT (result[^'terms.fit.log_likelihood'], (^'relax.general_descriptive.fit')[^'terms.fit.log_likelihood'],1);
-    result = {{branch, Format (estimate,8,2), Format (((^'relax.branch_tests')[branch])[^'terms.p_value'], 8,4)}};
+    ((^'relax.branch_tests')[branch])[^"terms.fit.MLE"] = estimate;
+    result = {{branch, Format (estimate,8,2), Format (((^'relax.branch_tests')[branch])[^'terms.LRT'], 8,2), Format (((^'relax.branch_tests')[branch])[^'terms.p_value'], 8,4)}};
     fprintf (stdout,
                 io.FormatTableRow (result,  ^'relax.table_output_options'));
 }
