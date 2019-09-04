@@ -1,0 +1,62 @@
+populationSize  		= 128;
+	/* the number of models in a GA population;
+	   reasonable range 16-128
+	   smaller values result in faster run times,
+	   but could also cause premature termination
+	   */
+
+stoppingCriterion		= 50;
+	/* 
+	  how many generations without score improvement
+	before the GA decides it has converged;
+	   larger values = better convergence but longer
+	   runtimes
+	   
+	   reasonbale range 20-100
+	   
+	*/
+
+noMoreBPsThan 			= 3;
+
+	/* do not consider mosaics with more than this many breakpoints.
+	   Set to a small number (e.g. 2) if all that is needed is a simple
+	   recominant - or non-recombinant categorization */
+	   
+BICMinLength			= 20;
+
+	/* What is the shortest sequence fragment to be allowed in a mosaic.
+	   Set to a larger value (e.g. 200) if greater speed is desired at 
+	   the expense of a finer breakpoint resolution.
+	*/
+
+
+referenceAlignmentFileName  = "MouseIGKappa.nex";
+
+	/* the name of the reference alignment file (MUST 
+	be in the 'data' directory and have a .labels 
+	counterpart mapping taxon names to subtype labels
+		
+	The alignments can be generated using 'TopLevel/MakeReferenceAlignment.bf'	
+	or built up recursively using 'TopLevel/BuildUpReferenceAlignment.bf'
+	
+	*/
+
+frameSelectByAlignment			= 1;
+tryReverseComplement			= 1;
+useBlosum62						= 1;
+_bannedEndAdjust				= 1;
+_bannedStartAdjust				= 0;
+
+_additionalStartingBreakpoints	  = {};
+_additionalStartingBreakpoints[0] = {{"^V+","^J+","^C+"}};
+_additionalStartingBreakpoints[1] = {{"^V+","^J+"}};
+_additionalStartingBreakpoints[2] = {{"^J+","^C+"}};
+
+_validBreakpointStructure = {};
+_validBreakpointStructure [1] = {"0":"^V[^\\,]+\\,J[^\\,]+\\ inter",
+								 "1":"^J[^\\,]+\\,C\\ inter"};
+								 
+_validBreakpointStructure [2] = {"0":"^V[^\\,]+\\,J[^\\,]+\\,C inter"};								 
+
+_annotateSequenceByAlignment	  = "MapIGK";
+ExecuteAFile ("Annotators/IGK.ibf");

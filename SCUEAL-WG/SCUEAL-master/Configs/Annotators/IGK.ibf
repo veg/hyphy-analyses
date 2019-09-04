@@ -1,0 +1,85 @@
+/*
+FR1 	0-77		1
+CDR1 	78-113		2
+FR2 	114-164		3
+CDR2 	165-173		4
+FR3		174-278		5
+CDR3	279-311		6
+J		312-350		7
+C		351-668		8
+*/
+
+_extraOutputColumns = {"0": "FW1", "1": "CDR1", "2": "FW2", "3": "CDR2", "4": "FW3", "5": "CDR3", "6": "J", "7": "C"};
+
+
+breaks = {{77,113,164,173,278,311,350,668}};
+
+_IGK_nuc_annotation = {1,669};
+
+
+curID   = 0;
+curCode = 1;
+
+
+for (k = 0; k < 669; k+=1)
+{
+	_IGK_nuc_annotation [k] = curCode;
+	if (k == breaks[curID])
+	{
+		curCode += 1;
+		curID += 1;
+	}
+}
+
+LoadFunctionLibrary ("chooseGeneticCode", {"0":"Universal"});
+LoadFunctionLibrary ("GrabBag");
+
+//--------------------------------------------------------------
+
+function MapIGK (ref,qry)
+{
+	coords 	   = remapSequenceCoordinatesToReference (ref, qry);
+	_IGKReport = {};
+	//fprintf (stdout, ref, "\n", qry, "\n", coords, "\n");
+	
+	_codonMappingIGK = defineCodonToAA();
+	currentL         = 0;
+	qryNoGaps = qry ^ {{"\\-",""}};
+	
+	for (k = 1; k <= Abs (_extraOutputColumns); k+=1)
+	{
+		thisSpan = coords[coords["_IGK_nuc_annotation[_MATRIX_ELEMENT_VALUE_]==k__"]];
+		thisSpanL = Columns(thisSpan);
+		if (thisSpanL)
+		{
+			subSeq = qryNoGaps[currentL][currentL+thisSpanL-1];
+			currentL += thisSpanL;
+			//fprintf (stdout, "\n\n", subSeq, "\n", translateCodonToAA (subSeq,_codonMappingIGK,0), "\n");
+			_IGKReport [_extraOutputColumns[k-1]] = subSeq;
+		}
+		else
+		{
+			_IGKReport [_extraOutputColumns[k-1]] = "";
+		}
+	}
+	
+	for (k = 0; k < Abs (qry); k+=1)
+	{
+		if (coords[k] < 0)
+		{
+			break;
+		}
+		//fprintf (stdout, _IGK_nuc_annotation[coords[k]]);
+	}
+	
+	
+	//_IGKReport["REF_AL"] = ref;
+	//_IGKReport["QRY_AL"] = qry;
+
+	//fprintf (stdout, "\n>1\n", ref, "\n>2\n", qry, "\n");
+
+	//fprintf (stdout, "\n", _IGKReport, "\n");
+	
+	return _IGKReport;
+}
+

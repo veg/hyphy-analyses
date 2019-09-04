@@ -1,0 +1,11 @@
+NOTE: These alignments must be generated using MakeReferenceAlignment.bf or
+BuildUpReferenceAlignment.bf; see README.pdf in the root directory for 
+more information.
+
+1). pol.nex 
+An alignment of pure subtypes (A,B,C,D,F,G,H,J,K,N,O), CPZ sequences and 
+39 circulating recombinant forms covering positions 2253 to 5096 in HBX2
+coordinates (start of PR to the end of pol). 
+
+2). pol_pure.nex 
+A subset of pol.nex excluding all CRF reference sequences.

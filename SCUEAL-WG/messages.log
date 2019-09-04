@@ -1,0 +1,19 @@
+
+Row and/or column partition is empty. All the data will be used by default.
+Variable 'PROMPT_FOR_FILE' was not initialized prior to being used
+Variable 'verboseFlag' was not initialized prior to being used
+Row and/or column partition is empty. All the data will be used by default.
+Row and/or column partition is empty. All the data will be used by default.
+Row and/or column partition is empty. All the data will be used by default.
+Variable 'frameSelectByAlignment' was not initialized prior to being used
+Variable 'stillHasStops' was not initialized prior to being used
+Variable '_annotateSequenceByAlignment' was not initialized prior to being used
+Variable 'KEEP_ALL_GAPS_IN' was not initialized prior to being used
+Loaded 'PS_Plotters.bf' from '/usr/local/lib/hyphy/TemplateBatchFiles/Utility/PS_Plotters.bf'
+Loaded 'GrabBag.bf' from '/usr/local/lib/hyphy/TemplateBatchFiles/Utility/GrabBag.bf'
+Overwritten previously defined function:'nucleotideReverseComplement'
+Overwritten previously defined function:'mapStrings'
+Loaded 'ReadDelimitedFiles.bf' from '/usr/local/lib/hyphy/TemplateBatchFiles/Utility/ReadDelimitedFiles.bf'
+Overwritten previously defined function:'splitOnRegExp'
+Variable 'runInMPIMode' was not initialized prior to being used
+Variable 'MPI_NODE_COUNT' was not initialized prior to being used
