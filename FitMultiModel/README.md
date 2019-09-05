@@ -17,26 +17,34 @@ See example at the end of the document
 ### Complete options list
 
 ```
-Analysis options description
-----------------------------
+Available analysis command line options
+---------------------------------------
+Use --option VALUE syntax to invoke
+If a [reqired] option is not provided on the command line, the analysis will prompt for its value
+[conditionally required] options may or not be required based on the values of other options
+
 code
-	Which genetic code should be used
-	default value: Universal
+        Which genetic code should be used
+        defaut value: Universal
 
 alignment [required]
-	An in-frame codon alignment in one of the formats supported by HyPhy
+        An in-frame codon alignment in one of the formats supported by HyPhy
 
-tree
-	A phylogenetic tree
-	default value: null [computed at run time]
+tree [conditionally required]
+        A phylogenetic tree (optionally annotated with {})
+        applies to: Please select a tree file for the data:
 
 rates
-	The number omega rate classes to include in the model
-	default value: 3 [2 - 10 accepted]
+        The number omega rate classes to include in the model [2-10, default 3]
+        defaut value: 3 [computed at run time]
+
+triple-islands
+        Use a separate rate parameter for synonymous triple-hit substitutions
+        defaut value: No
 
 output
-	Write the resulting JSON to this file
-	default: same path as the alignment file + 'FITTER.json'
+        Write the resulting JSON to this file (default is to save to the same path as the alignment file + 'FITTER.json')
+        defaut value: fitter.codon_data_info[terms.json.json] [computed at run time]
 ```
 
 
