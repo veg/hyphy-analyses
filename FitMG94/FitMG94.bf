@@ -14,7 +14,6 @@ LoadFunctionLibrary("SelectionAnalyses/modules/selection_lib.ibf");
 
 utility.SetEnvVariable ("NORMALIZE_SEQUENCE_NAMES", TRUE);
 
-
 fitter.analysis_description = {terms.io.info : "Fit an MG94xREV model with several selectable options frequency estimator and report the fit results including dN/dS ratios, and synonymous and non-synonymous branch lengths",
                                terms.io.version : "0.1",
                                terms.io.authors : "Sergei L Kosakovsky Pond",
@@ -29,6 +28,7 @@ namespace fitter.terms {
     MG94 = "Standard MG94";
 }  
  
+KeywordArgument ("rooted", "Accept rooted trees", "No");
 KeywordArgument ("code",        "Which genetic code should be used", "Universal");  
 KeywordArgument ("alignment",   "An in-frame codon alignment in one of the formats supported by HyPhy");
 KeywordArgument ("tree",        "A phylogenetic tree", null, "Please select a tree file for the data:");
@@ -51,6 +51,12 @@ fitter.display_orders = {terms.original_name      :  -1,
 
 selection.io.startTimer (fitter.json [terms.json.timers], "Overall", 0);
 
+fitter.accept_rooted_trees = io.SelectAnOption ({"Yes" : "Accept rooted trees", 
+                                            "No" : "Automatically reroot trees"}, "Accept rooted trees if present");
+
+if (fitter.accept_rooted_trees == "Yes") {
+    utility.SetEnvVariable ("ACCEPT_ROOTED_TREES", TRUE);
+}
 
 namespace fitter {
     LoadFunctionLibrary ("SelectionAnalyses/modules/shared-load-file.bf");
@@ -63,6 +69,7 @@ fitter.model_type = io.SelectAnOption ({terms.global : "Shared dN/dS for all bra
 fitter.frequency_type = io.SelectAnOption ({"CF3x4" : terms.frequencies.CF3x4, 
                                             "F3x4" : terms.frequencies.F3x4,
                                             "F1x4" : terms.frequencies.F1x4}, "Equilibrium frequency estimator");
+
 
 
 KeywordArgument ("output", "Write the resulting JSON to this file (default is to save to the same path as the alignment file + 'MG94.json')", fitter.codon_data_info [terms.json.json]);

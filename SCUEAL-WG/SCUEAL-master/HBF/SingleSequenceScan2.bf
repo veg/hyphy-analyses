@@ -1,9 +1,9 @@
-RequireVersion			("2.0");
+RequireVersion			("2.5");
 LoadFunctionLibrary		("PS_Plotters.bf");
 LoadFunctionLibrary		("GrabBag.bf");
 LoadFunctionLibrary		("ReadDelimitedFiles.bf");
 
-verboseFlag				   = 1;
+verboseFlag				   = 0;
 timeLimit				   = 1000000;
 
 
