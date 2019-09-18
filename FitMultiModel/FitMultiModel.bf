@@ -107,8 +107,8 @@ namespace fitter {
 KeywordArgument ("output", "Write the resulting JSON to this file (default is to save to the same path as the alignment file + 'FITTER.json')", fitter.codon_data_info [terms.json.json]);
 fitter.codon_data_info [terms.json.json] = io.PromptUserForFilePath ("Save the resulting JSON file to");
 
-KeywordArgument ("save-fit", "Write model fit files (HyPhy NEXUS) to this file path with extensions .MODEL_NAME.bf; default is NOT to save, or use empty path", "");
-fitter.save_model_path = io.PromptUserForString ("Save the resulting JSON file to");
+KeywordArgument ("save-fit", "Write model fit files (HyPhy NEXUS) to this file path with extensions .MODEL_NAME.bf; default is NOT to save, or 'dev/null'", "/dev/null");
+fitter.save_model_path = io.PromptUserForString ("Save model fit files to");
 
 
 estimators.fixSubsetOfEstimates(fitter.gtr_results, fitter.gtr_results[terms.global]);
@@ -135,7 +135,7 @@ function fitter.run_model_fit (model_name, model_generator, initial_values) {
     }, initial_values);
 
 
-    if (Abs (fitter.save_model_path)) {
+    if (fitter.save_model_path != "/dev/null") {
         //^(fitter.results[terms.likelihood_function])
         io.SpoolLF(fitter.results[terms.likelihood_function], fitter.save_model_path, model_name);
     }
