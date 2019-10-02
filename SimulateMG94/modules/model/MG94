@@ -1,0 +1,27 @@
+LoadFunctionLibrary("libv3/all-terms.bf");
+LoadFunctionLibrary("libv3/UtilityFunctions.bf");
+LoadFunctionLibrary("libv3/models/parameters.bf");
+
+//----------------------------------------------------------------------------------------
+
+lfunction simulator.define_model.frequencies (type,code) {
+    model = Call ("models.codon.MG_REV.ModelDescription", type, code);
+    if (^"simulator.frequency_type" == "F3x4") {
+        model[utility.getGlobalValue("terms.model.frequency_estimator")] = "frequencies.empirical.F3x4";
+    } else {
+        if (^"simulator.frequency_type" == "F1x4") {
+            model[utility.getGlobalValue("terms.model.frequency_estimator")] = "frequencies.empirical.F1x4";
+        }
+    }
+    model [^"terms.efv_estimate"] = ^"simulator.efv";
+    return model;
+}
+
+function simulator.define_model (code) {
+    return model.generic.DefineModel ("simulator.define_model.frequencies" ,
+                                                  "simulator.substitution_model",
+                                                  {"0" : parameters.Quote(terms.local),
+                                                  "1" : code},
+                                                  null,
+                                                  null);
+}
