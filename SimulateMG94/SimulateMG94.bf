@@ -33,11 +33,6 @@ KeywordArgument ("replicates",           "How many replicates", 1);
 KeywordArgument ("base-frequencies",     "Base frequencies to use. 'equal' or 9 comma-separated values [A in first codon position, C-1, G-1, A-2, C-2, G-2...] or 12 comma-separated values [A in first codon position, C-1, G-1, T-1, A-2, C-2, G-2, T-2...] to specify positional nucleotide frequencies]", "equal");
 KeywordArgument ("frequency-estimator",  "Equilibrium frequency estimator", "CF3x4");
 KeywordArgument ("model",                "The substitution model to use", "MG94");
-KeywordArgument ("AC",                   "The AC substitution rate relative to the AG rate (=1)", "0.5");
-KeywordArgument ("AT",                   "The AT substitution rate relative to the AG rate (=1)", "0.5");
-KeywordArgument ("CG",                   "The CG substitution rate relative to the AG rate (=1)", "0.5");
-KeywordArgument ("CT",                   "The CT substitution rate relative to the AG rate (=1)", "1.0");
-KeywordArgument ("GT",                   "The GT substitution rate relative to the AG rate (=1)", "0.5");
 
 
 simulator.seed = +io.PromptUserForString ("Random generator seed (0 to use default initialization)");
@@ -108,7 +103,11 @@ ExecuteAFile (PATH_TO_CURRENT_BF + "modules/model/" + simulator.module.model);
 
 simulator.model = simulator.define_model (simulator.code[terms.code]);
 
-//simulator.model = model.generic.DefineModel ("simulator.define_model.frequencies" , "simulator.substitution_model", {"0" : parameters.Quote(terms.local), "1" : simulator.code[terms.code]}, null, null);
+KeywordArgument ("AC",                   "The AC substitution rate relative to the AG rate (=1)", "0.5");
+KeywordArgument ("AT",                   "The AT substitution rate relative to the AG rate (=1)", "0.5");
+KeywordArgument ("CG",                   "The CG substitution rate relative to the AG rate (=1)", "0.5");
+KeywordArgument ("CT",                   "The CT substitution rate relative to the AG rate (=1)", "1.0");
+KeywordArgument ("GT",                   "The GT substitution rate relative to the AG rate (=1)", "0.5");
 
 parameters.SetValue (((simulator.model [terms.parameters])[terms.global])[terms.nucleotideRateReversible("A","C")],io.PromptUser ("Relative AC rate", 0.5, 0, 1000, FALSE));
 parameters.SetValue (((simulator.model [terms.parameters])[terms.global])[terms.nucleotideRateReversible("A","T")],io.PromptUser ("Relative AT rate", 0.5, 0, 1000, FALSE));
@@ -170,12 +169,20 @@ simulator.root_freqs = simulator.model[terms.efv_estimate];
 KeywordArgument ("output",       "Write simulated alignments (as FASTA) to the following prefix path, using the syntax ${path}.replicate.index");
 simulator.path = io.PromptUserForFilePath ("Save simulator settings to this path, and replicates to ${path}.replicate.index");
 
-
-fprintf (simulator.path, CLEAR_FILE, {
-    terms.model : simulator.model,
-    terms.data.tree  : simulator.tree,
-    "simulator.site.profile" : simulator.site_profile
-});
+if (Type (simulator.report) == "AssociativeList") {
+    fprintf (simulator.path, CLEAR_FILE, {
+        terms.model : simulator.model,
+        terms.data.tree  : simulator.tree,
+        "simulator.site.profile" : simulator.site_profile,
+        "simulator.additional_settings" : simulator.report
+    });
+} else {
+    fprintf (simulator.path, CLEAR_FILE, {
+        terms.model : simulator.model,
+        terms.data.tree  : simulator.tree,
+        "simulator.site.profile" : simulator.site_profile
+    });
+}
 
 
 utility.SetEnvVariable ("DATA_FILE_PRINT_FORMAT",9);

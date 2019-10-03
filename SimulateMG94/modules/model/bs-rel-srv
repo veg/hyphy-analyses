@@ -1,0 +1,95 @@
+LoadFunctionLibrary("libv3/all-terms.bf");
+LoadFunctionLibrary("libv3/UtilityFunctions.bf");
+LoadFunctionLibrary("libv3/models/parameters.bf");
+LoadFunctionLibrary("libv3/models/codon/BS_REL.bf");
+LoadFunctionLibrary("libv3/models/rate_variation.bf");
+
+
+KeywordArgument ("omegas", "Omega value distribution, specified as a comma-separated string omega1,weight1,omega2,weight2,...,omegaN,weightN (weights will be normalized to sum to 1)", "1,1");
+simulator.bs_rel.omega  = Eval ("{{" + io.PromptUserForString ("Omega distribution specification") + "}}");
+
+simulator.omega_classes = utility.Array1D (simulator.bs_rel.omega) $ 2;
+
+if (simulator.omega_classes >= 1 && utility.Array1D (simulator.bs_rel.omega) % 2 == 0) {
+    simulator.bs_rel.omega = {simulator.omega_classes,2}["simulator.bs_rel.omega[_MATRIX_ELEMENT_ROW_* 2+_MATRIX_ELEMENT_COLUMN_]"];
+    simulator.bs_rel.norm = 1/(+simulator.bs_rel.omega[-1][1]);
+    for (simulator.i = 0; simulator.i < simulator.omega_classes; simulator.i += 1) {
+        simulator.bs_rel.omega[simulator.i][1] = simulator.bs_rel.omega[simulator.i][1] * simulator.bs_rel.norm;
+    }
+    console.log (">Omega distribution used for the simulator\n" + simulator.bs_rel.omega);
+
+ } else {
+    io.ReportAnExecutionError ("Incorrect dimensions for the omega distribution specification (even number comma separated terms with at least two terms)");
+ }
+ 
+KeywordArgument ("alphas", "Synonymous rate distribution, specified as a comma-separated string alpha1,weight1,alpha2,weight2,...,alphaN,weightN (weights will be normalized to sum to 1, distribution will be normalized to have mean 1)", "0.5,0.5,2,0.5");
+simulator.bs_rel.alpha  = Eval ("{{" + io.PromptUserForString ("Synonymous rate distribution specification") + "}}");
+
+simulator.alpha_classes = utility.Array1D (simulator.bs_rel.alpha) $ 2;
+
+if (simulator.alpha_classes >= 2 && utility.Array1D (simulator.bs_rel.alpha) % 2 == 0) {
+    simulator.bs_rel.alpha = {simulator.alpha_classes,2}["simulator.bs_rel.alpha[_MATRIX_ELEMENT_ROW_* 2+_MATRIX_ELEMENT_COLUMN_]"];
+    simulator.bs_rel.norm = 1/(+simulator.bs_rel.alpha[-1][1]);
+    for (simulator.i = 0; simulator.i < simulator.alpha_classes; simulator.i += 1) {
+        simulator.bs_rel.alpha[simulator.i][1] = simulator.bs_rel.alpha[simulator.i][1] * simulator.bs_rel.norm;
+    }
+    simulator.bs_rel.norm = 1/(+(simulator.bs_rel.alpha[-1][0]$simulator.bs_rel.alpha[-1][1]));
+    for (simulator.i = 0; simulator.i < simulator.alpha_classes; simulator.i += 1) {
+        simulator.bs_rel.alpha[simulator.i][0] = simulator.bs_rel.alpha[simulator.i][0] * simulator.bs_rel.norm;
+    }
+    console.log (">Synonymous rate distribution used for the simulator\n" + simulator.bs_rel.alpha);
+
+ } else {
+    io.ReportAnExecutionError ("Incorrect dimensions for the synonymous rate distribution specification (even number comma separated terms with at least four terms)");
+ }
+ 
+ simulator.report = {terms.parameters.omega : simulator.bs_rel.omega, 
+                     terms.parameters.synonymous_rate : simulator.bs_rel.alpha};
+              
+//----------------------------------------------------------------------------------------
+
+lfunction simulator.define_model.frequencies (type,code,rate_classes,alpha_classes) {
+    model = Call ("models.codon.BS_REL.ModelDescription", type, code,rate_classes);
+    if (^"simulator.frequency_type" == "F3x4") {
+        model[utility.getGlobalValue("terms.model.frequency_estimator")] = "frequencies.empirical.F3x4";
+    } else {
+        if (^"simulator.frequency_type" == "F1x4") {
+            model[utility.getGlobalValue("terms.model.frequency_estimator")] = "frequencies.empirical.F1x4";
+        }
+    }
+    model [utility.getGlobalValue("terms.model.rate_variation")] = rate_variation.types.GDD.factory ({utility.getGlobalValue("terms.rate_variation.bins") : alpha_classes});
+    model [^"terms.efv_estimate"] = ^"simulator.efv";
+    return model;
+}
+
+//----------------------------------------------------------------------------------------
+
+
+function simulator.define_model (code) {
+    simulation.model = model.generic.DefineMixtureModel ("simulator.define_model.frequencies" ,
+                                                  "simulator.substitution_model",
+                                                  {"0" : parameters.Quote(terms.global),
+                                                  "1" : code,
+                                                  "2" : simulator.omega_classes,
+                                                  "3" : simulator.alpha_classes},
+                                                  null,
+                                                  null);
+                   
+    simulation.model.omegas = models.codon.BS_REL.ExtractMixtureDistribution(simulation.model);
+    parameters.SetStickBreakingDistribution (simulation.model.omegas, simulator.bs_rel.omega);
+
+    simulation.srv_rate_regex  = "GDD rate category [0-9]+";
+    simulation.srv_weight_regex = "Mixture auxiliary weight for GDD category [0-9]+";
+    simulation.srv_distribution = regexp.PartitionByRegularExpressions(utility.Keys ((simulation.model[terms.parameters])[terms.global]), 
+        {"0" : simulation.srv_rate_regex, "1" : simulation.srv_weight_regex});
+
+    
+    simulation.srv_distribution = {
+        'rates' : utility.UniqueValues (utility.Map (simulation.srv_distribution [simulation.srv_rate_regex ]  , "_value_", '((simulation.model[terms.parameters])[terms.global])[_value_]')),
+        'weights' : utility.UniqueValues (utility.Map (simulation.srv_distribution [simulation.srv_weight_regex ]  , "_value_", '((simulation.model[terms.parameters])[terms.global])[_value_]'))
+    };
+        
+    parameters.SetStickBreakingDistribution (simulation.srv_distribution, simulator.bs_rel.alpha);
+    parameters.SetCategoryVariables (simulation.model);                             
+    return simulation.model;
+}

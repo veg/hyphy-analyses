@@ -3,10 +3,30 @@ LoadFunctionLibrary("libv3/UtilityFunctions.bf");
 LoadFunctionLibrary("libv3/models/parameters.bf");
 LoadFunctionLibrary("libv3/models/codon/BS_REL.bf");
 
+KeywordArgument ("omegas", "Omega value distribution, specified as a comma-separated string omega1,weight1,omega2,weight2,...,omegaN,weightN (weights will be normalized to sum to 1)", "1,1");
+simulator.bs_rel.omega  = Eval ("{{" + io.PromptUserForString ("Omega distribution specification") + "}}");
+
+
+simulator.omega_classes = utility.Array1D (simulator.bs_rel.omega) $ 2;
+
+if (simulator.omega_classes >= 1 && utility.Array1D (simulator.bs_rel.omega) % 2 == 0) {
+    simulator.bs_rel.omega = {simulator.omega_classes,2}["simulator.bs_rel.omega[_MATRIX_ELEMENT_ROW_* 2+_MATRIX_ELEMENT_COLUMN_]"];
+    simulator.bs_rel.norm = 1/(+simulator.bs_rel.omega[-1][1]);
+    for (simulator.i = 0; simulator.i < simulator.omega_classes; simulator.i += 1) {
+        simulator.bs_rel.omega[simulator.i][1] = simulator.bs_rel.omega[simulator.i][1] * simulator.bs_rel.norm;
+    }
+    console.log (">Omega distribution used for the simulator\n" + simulator.bs_rel.omega);
+
+ } else {
+    io.ReportAnExecutionError ("Incorrect dimensions for the omega distribution specification (even number comma separated terms with at least two terms)");
+ }
+ 
+ simulator.report = {terms.parameters.omega : simulator.bs_rel.omega};
+              
 //----------------------------------------------------------------------------------------
 
-lfunction simulator.define_model.frequencies (type,code,o) {
-    model = Call ("models.codon.BS_REL.ModelDescription", type, code,3);
+lfunction simulator.define_model.frequencies (type,code,rate_classes) {
+    model = Call ("models.codon.BS_REL.ModelDescription", type, code,rate_classes);
     if (^"simulator.frequency_type" == "F3x4") {
         model[utility.getGlobalValue("terms.model.frequency_estimator")] = "frequencies.empirical.F3x4";
     } else {
@@ -15,14 +35,24 @@ lfunction simulator.define_model.frequencies (type,code,o) {
         }
     }
     model [^"terms.efv_estimate"] = ^"simulator.efv";
+
     return model;
 }
 
+//----------------------------------------------------------------------------------------
+
+
 function simulator.define_model (code) {
-    return model.generic.DefineMixtureModel ("simulator.define_model.frequencies" ,
+    simulation.model = model.generic.DefineMixtureModel ("simulator.define_model.frequencies" ,
                                                   "simulator.substitution_model",
-                                                  {"0" : parameters.Quote(terms.local),
-                                                  "1" : code},
+                                                  {"0" : parameters.Quote(terms.global),
+                                                  "1" : code,
+                                                  "2" : simulator.omega_classes},
                                                   null,
                                                   null);
+                   
+    simulation.model.omegas = models.codon.BS_REL.ExtractMixtureDistribution(simulation.model);
+    parameters.SetStickBreakingDistribution (simulation.model.omegas, simulator.bs_rel.omega);
+                               
+    return simulation.model;
 }

@@ -1,0 +1,15 @@
+LoadFunctionLibrary("libv3/all-terms.bf"); 
+LoadFunctionLibrary("libv3/UtilityFunctions.bf");
+LoadFunctionLibrary("libv3/models/parameters.bf");
+
+lfunction simulator.set_branch_rates (model, tree_id, branch_id, branch_info) {
+    /** apply the same dN/dS to all branches */
+    estimators.applyBranchLength (tree_id, branch_id, model, branch_info[^"terms.branch_length"]);    
+}
+
+lfunction simulator.validate_tree (tree) {
+    if (trees.HasBranchLengths (tree)) {
+        return '';
+    }
+    return 'The input tree must have input branch lengths';
+}
