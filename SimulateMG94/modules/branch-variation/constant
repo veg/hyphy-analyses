@@ -10,8 +10,7 @@ lfunction simulator.set_branch_rates (model, tree_id, branch_id, branch_info) {
     rates = (model[^"terms.parameters"])[^"terms.local"];
     parameters.SetConstraint ("`tree_id`.`branch_id`.`rates[^'terms.parameters.nonsynonymous_rate']`", 
                               "`^'simulator.omega'`*`tree_id`.`branch_id`.`rates[^'terms.parameters.synonymous_rate']`", "");
-    estimators.applyBranchLength (tree_id, branch_id, model, branch_info[^"terms.branch_length"]);
-    
+    estimators.applyBranchLength (tree_id, branch_id, model, branch_info[^"terms.branch_length"]);    
 }
 
 lfunction simulator.validate_tree (tree) {

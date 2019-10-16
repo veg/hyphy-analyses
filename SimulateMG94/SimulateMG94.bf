@@ -192,33 +192,66 @@ utility.SetEnvVariable ("IS_TREE_PRESENT_IN_DATA",TRUE);
 simulator.rate_type   = 0;
 simulator.inverse_map = {};
 
+simulator.string_buffer = {};
+for (simulator.i = 0; simulator.i < simulator.replicates; simulator.i += 1) {
+    simulator.string_buffer[simulator.i] = {};
+} 
+
+simulator.mode = 1;
+
 utility.ForEachPair (simulator.sites_by_profile, "_rate_distribution_", "_site_counts_", '
     simulator.apply_site_distribution (simulator.model, _rate_distribution_,  "simulator.T");
 
+    io.ReportProgressBar ("SIMULATING", "Rate regime " + simulator.mode + " of " + utility.Array1D (simulator.sites_by_profile));
+    simulator.mode += 1;
+    
     utility.ForEach (_site_counts_, "_site_id_", "
         simulator.inverse_map + (\\"\\" + 3*(_site_id_) + \\"-\\" + (3*_site_id_+2));
     ");
 
-    for (simulator.i = 0; simulator.i < simulator.replicates; simulator.i += 1) {
-        DataSet simulated_data = Simulate (simulator.T, simulator.root_freqs, simulator.matrix, utility.Array1D (_site_counts_));
-        if (simulator.rate_type == 0) {
-            DataSetFilter all      = CreateFilter (simulated_data, 1);
-        } else {
-            DataSet existing_data  = ReadDataFile (simulator.path + ".replicate." + (1+simulator.i));
-            DataSet combined_data  = Concatenate (existing_data, simulated_data);
-            DataSetFilter all      = CreateFilter (combined_data, 1);
-        }
-        fprintf (simulator.path + ".replicate." + (1+simulator.i) , CLEAR_FILE, all);
+    simulator.site_block = utility.Array1D (_site_counts_);
+    DataSet simulated_data = Simulate (simulator.T, simulator.root_freqs, simulator.matrix, simulator.site_block*simulator.replicates);
+    // simulate ALL sites from one scenario here
+    if (simulator.rate_type == 0) {
+         GetString (simulator.sim_names, simulated_data, -1);
+         for (simulator.i = 0; simulator.i < simulator.replicates; simulator.i += 1) {
+            simulator.j = 0;
+            utility.ForEach (simulator.sim_names,"_value_", "
+                (simulator.string_buffer[simulator.i])+\\"\\";
+                (simulator.string_buffer[simulator.i])[simulator.j] * (simulator.sites*3);
+                simulator.j += 1;
+            ");
+         }
     }
+    
+    for (simulator.i = 0; simulator.i < simulator.replicates; simulator.i += 1) {
+        DataSetFilter all      = CreateFilter (simulated_data, 1, siteIndex>=simulator.i*3*simulator.site_block&&siteIndex<=(simulator.i+1)*3*simulator.site_block-1);
+        for (simulator.j = 0; simulator.j < all.species; simulator.j+=1) {
+            GetDataInfo (sim.string, all, simulator.j);
+            (simulator.string_buffer[simulator.i])[simulator.j] * sim.string;
+        }
+    }
+    
     simulator.rate_type += 1;
 ');
 
 
+io.ClearProgressBar ();
 
 simulator.inverse_map = Join ("," ,simulator.inverse_map);
 
 for (simulator.i = 0; simulator.i < simulator.replicates; simulator.i += 1) {
+    simulator.j = 0;
+    utility.ForEach (simulator.sim_names,"_value_", "
+                (simulator.string_buffer[simulator.i])[simulator.j] * 0;
+                (simulator.string_buffer[simulator.i])[simulator.j] = '>' + _value_ + '\n' + (simulator.string_buffer[simulator.i])[simulator.j];
+                simulator.j += 1;
+            ");
+    
+    fprintf (simulator.path + ".replicate." + (1+simulator.i) , CLEAR_FILE, Join ("\n",(simulator.string_buffer[simulator.i])));
     DataSet existing_data  = ReadDataFile (simulator.path + ".replicate." + (1+simulator.i));
+    utility.SetEnvVariable ("DATAFILE_TREE",simulator.tree[terms.trees.newick_annotated]);
+    utility.SetEnvVariable ("IS_TREE_PRESENT_IN_DATA",TRUE);
     DataSetFilter all      = CreateFilter (existing_data, 1, simulator.inverse_map);
     fprintf (simulator.path + ".replicate." + (1+simulator.i) , CLEAR_FILE, all);
 }
