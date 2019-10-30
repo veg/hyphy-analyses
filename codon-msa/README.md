@@ -7,7 +7,9 @@ This set of scripts facilitates creating in-frame multiple sequence alignments (
 3. Take the output of step 2 and run in through the general MSA program to generate a **protein** MSA
 4. Run the protein MSA and the frameshift corrected nucleotide sequences from step 2 through `post-msa.bf` to obtain a nucleotide msa. This step will also, optionally, compress all identical sequences, i.e. replace them with a single representative sequence.
 
-## Examplke
+For step 2, you can use `--E number` (where number is a small floating point value e.g. `0.05`) command line option to permit the alignment of sequences with low homology if you see warning messages about sequences that could not be aligned.
+
+## Example
 
 [1]. Coding sequences (unaligned) in `example.fas`. 
 

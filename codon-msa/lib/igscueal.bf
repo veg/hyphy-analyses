@@ -132,7 +132,7 @@ namespace IgSCUEAL.phylo {
                 //console.log (res_lf);
 
                 //assert (0);
-                
+
                 logL_by_branch [this_branch] = -2*res_lf[1][0];
                 if (logL_by_branch [this_branch] < best_AIC) {
                     best_AIC = logL_by_branch [this_branch];
@@ -153,7 +153,7 @@ namespace IgSCUEAL.phylo {
 
 
             best_type = Max (supported);
-    
+
             supported = utility.Filter (supported, "_support_", "_support_ >= 0.01");
             if (utility.Array1D (supported) == 0) {
                 // ensure that there's at least one supported assignment
@@ -341,12 +341,12 @@ namespace IgSCUEAL.phylo {
                 } else {
                     ExecuteAFile (fit_path);
                 }
-                
+
                 GetString   (fitted, LikelihoodFunction, lf_count);
                 GetString   (lf_info, ^fitted, -1);
                 ConstructCategoryMatrix (data_matrix, ^((lf_info["Trees"])[0]));
-                                
-                
+
+
                 node_count = utility.Array1D (data_matrix["Nodes"]);
                 GetDataInfo (duplicate_map, ^((lf_info["Datafilters"])[0]));
 
@@ -739,8 +739,6 @@ namespace IgSCUEAL {
 
             computed_score = (overall["SCORE"] - 30 * alignment_settings["MATCH"] * Exp (-Abs(seq)/3) ) / Abs (seq) * 3 ;
 
-
-
             /*
             console.log ("\n\n");
             console.log (">ref\n" + overall['RAW-REF']);
@@ -759,8 +757,9 @@ namespace IgSCUEAL {
 
 
                 if (alignment_settings["SEQ_ALIGN_CODON_ALIGN"] == TRUE && overall["SPAN"] <= 3) {
+                    //assert (0, "Internal error in align_sequence_to_reference_set" + overall + "\nComputed score `computed_score`; expected score " + alignment_settings["E"] + "; match score " +  alignment_settings["MATCH"] + "\nInput sequence: `seq`");
                     return None;
-                } // , "Internal error in align_sequence_to_reference_set" + overall + "\nComputed score `computed_score`; expected score " + alignment_settings["E"] + "; match score " +  alignment_settings["MATCH"] + "\nInput sequence: `seq`");
+                }
                 return overall;
             }
         }

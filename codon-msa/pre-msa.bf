@@ -23,7 +23,7 @@ filter.analysis_description = {terms.io.info :
                             terms.io.contact :          "spond@temple.edu",
                             terms.io.requirements :     "Sequences"
                           };
-                          
+
 io.DisplayAnalysisBanner (filter.analysis_description);
 
 KeywordArgument ("code", "Genetic code", "Universal");
@@ -63,22 +63,22 @@ filter.sequences_with_copies = {};
 
 alignments.GetSequenceByName ("filter.raw_data", null);
 
-utility.ForEach (filter.all_sequences , "_seq_record_", 
+utility.ForEach (filter.all_sequences , "_seq_record_",
 '
     io.ReportProgressBar ("filter","Processing sequence " + filter.seq_count);
     filter.read_to_check = alignments.Strip (alignments.StripGaps (alignments.GetSequenceByName ("filter.raw_data", _seq_record_)));
-    
-    if (filter.unique / filter.read_to_check == FALSE) {    
-        
+
+    if (filter.unique / filter.read_to_check == FALSE) {
+
         filter.RNA_reads[_seq_record_] = filter.read_to_check;
-        
+
         filter.sequences_with_copies [filter.read_to_check] = {"0" : _seq_record_};
         filter.unique [filter.read_to_check] = _seq_record_;
-    
+
         filter.sequence_info[_seq_record_] = alignments.TranslateCodonsToAminoAcidsWithAmbigsAllFrames (filter.RNA_reads[_seq_record_],
                                filter.code_info, filter.lookup_cache);
-                               
-                                                                                                 
+
+
         for (frame = 0; frame < 3; frame += 1) {
 
             if (((filter.sequence_info[_seq_record_])[frame])[terms.stop_codons] == 0) {
@@ -94,15 +94,15 @@ utility.ForEach (filter.all_sequences , "_seq_record_",
                 filter.clean_seqs [_seq_record_] = ((filter.sequence_info[_seq_record_])[frame])[terms.data.sequence];
                 break;
             }
-        }   
-                           
+        }
+
         if (frame == 3) {
             filter.frameshifted [_seq_record_] = 1;
-        }  
+        }
     } else {
         filter.sequences_with_copies [filter.read_to_check] + _seq_record_;
     }
-                           
+
     filter.seq_count += 1;
 ');
 
@@ -112,7 +112,14 @@ io.CheckAssertion ("filter.longest_seq_L>0", "There were no sequences that were 
 
 
 filter.ref_seq = {"REF" : {'stripped' : filter.longest_seq}};
-filter.options = IgSCUEAL.define_alignment_settings (filter.code_info);   
+filter.options = IgSCUEAL.define_alignment_settings (filter.code_info);
+
+KeywordArgument ("E", "Expected sequence similarity", 0);
+filter.E = io.PromptUser ("Expected sequence similarity (0 to automatically compute)", 0, 0, 1, False);
+
+if (filter.E > 0) {
+    filter.options["E"] = filter.E;
+}
 filter.options["code"] = filter.code_info;
 
 
@@ -129,17 +136,21 @@ if (Abs(filter.frameshifted)) {
     '
         io.ReportProgressBar ("filter","Processing sequence " + filter.seq_count);
         filter.cleaned = IgSCUEAL.align_sequence_to_reference_set (filter.RNA_reads[_sequence_], filter.ref_seq, filter.options);
-        
-        filtered.aa_seq = alignments.StripGaps(filter.cleaned["AA"]);
-        filtered.na_seq = IgSCUEAL.strip_in_frame_indels(filter.cleaned["QRY"]);
-                
-        (filter.sequences_with_copies[filter.RNA_reads[_sequence_]])["_write_to_file"][""];
-                
+
+        if (None == filter.cleaned) {
+            console.log ("\nWARNING: Sequence " + _sequence_ + " failed to align to any of the in-frame references. Try setting --E flag to a lower value");
+        } else {
+            filtered.aa_seq = alignments.StripGaps(filter.cleaned["AA"]);
+            filtered.na_seq = IgSCUEAL.strip_in_frame_indels(filter.cleaned["QRY"]);
+
+            (filter.sequences_with_copies[filter.RNA_reads[_sequence_]])["_write_to_file"][""];
+        }
+
         filter.seq_count += 1;
     ');
     io.ClearProgressBar ();
-    
-} 
+
+}
 
 
 
@@ -151,14 +162,17 @@ utility.ForEachPair (filter.clean_seqs, "_sequence_", "_value_",
 '
     io.ReportProgressBar ("filter","Processing sequence " + filter.seq_count);
     filter.cleaned = IgSCUEAL.align_sequence_to_reference_set (filter.RNA_reads[_sequence_], filter.ref_seq, filter.options);
-    
-    filtered.aa_seq = alignments.StripGaps(filter.cleaned["AA"]);
-    filtered.na_seq = IgSCUEAL.strip_in_frame_indels(filter.cleaned["QRY"]);
-    
-    (filter.sequences_with_copies[filter.RNA_reads[_sequence_]])["_write_to_file"][""];
- 
+
+    if (None == filter.cleaned) {
+        console.log ("\nWARNING: Sequence " + _sequence_ + " failed to align to any of the in-frame references. Try setting --E flag to a lower value");
+    } else {
+        filtered.aa_seq = alignments.StripGaps(filter.cleaned["AA"]);
+        filtered.na_seq = IgSCUEAL.strip_in_frame_indels(filter.cleaned["QRY"]);
+
+        (filter.sequences_with_copies[filter.RNA_reads[_sequence_]])["_write_to_file"][""];
+    }
     filter.seq_count += 1;
-    
+
 ');
 
 io.ClearProgressBar ();
