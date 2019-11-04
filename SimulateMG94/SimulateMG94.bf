@@ -13,6 +13,7 @@ LoadFunctionLibrary("SelectionAnalyses/modules/io_functions.ibf");
 LoadFunctionLibrary("SelectionAnalyses/modules/selection_lib.ibf");
 
 utility.SetEnvVariable ("NORMALIZE_SEQUENCE_NAMES", TRUE);
+utility.SetEnvVariable ("ACCEPT_ROOTED_TREES", TRUE);
 
 
 simulator.analysis_description = {terms.io.info         : "Simulate codon data using the MG94 model of sequence evolution",
@@ -41,7 +42,7 @@ if (simulator.seed != 0) {
 }
 
 simulator.code = alignments.LoadGeneticCode  (null);
-simulator.tree = trees.LoadAnnotatedTopology (TRUE);
+simulator.tree = trees.LoadAnnotatedTopology (FALSE);
 
 simulator.sites      = io.PromptUser ("The number of codons per alignment", 300, 1, 1e7, TRUE);
 simulator.replicates = io.PromptUser ("The number of replicate alignments to generate", 1, 1, 1e7, TRUE);
@@ -198,16 +199,21 @@ for (simulator.i = 0; simulator.i < simulator.replicates; simulator.i += 1) {
 } 
 
 simulator.mode = 1;
+simulator.counter = 0;
 
 utility.ForEachPair (simulator.sites_by_profile, "_rate_distribution_", "_site_counts_", '
     simulator.apply_site_distribution (simulator.model, _rate_distribution_,  "simulator.T");
 
     io.ReportProgressBar ("SIMULATING", "Rate regime " + simulator.mode + " of " + utility.Array1D (simulator.sites_by_profile));
-    simulator.mode += 1;
+    simulator.mode   += 1;
     
     utility.ForEach (_site_counts_, "_site_id_", "
-        simulator.inverse_map + (\\"\\" + 3*(_site_id_) + \\"-\\" + (3*_site_id_+2));
+        //simulator.inverse_map + (\\"\\" + 3*(_site_id_) + \\"-\\" + (3*_site_id_+2));
+        simulator.inverse_map [_site_id_] = (\\"\\" + 3*(simulator.counter) + \\"-\\" + (3*simulator.counter+2));
+        simulator.counter += 1;
     ");
+    
+    //console.log (simulator.inverse_map);
 
     simulator.site_block = utility.Array1D (_site_counts_);
     DataSet simulated_data = Simulate (simulator.T, simulator.root_freqs, simulator.matrix, simulator.site_block*simulator.replicates);

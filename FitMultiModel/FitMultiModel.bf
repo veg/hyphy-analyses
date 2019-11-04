@@ -41,7 +41,7 @@ KeywordArgument ("tree",      "A phylogenetic tree (optionally annotated with {}
         This allows handling some branching logic conditionals
     */
 
-KeywordArgument ("rates", "The number omega rate classes to include in the model [2-10, default 3]", 3);
+KeywordArgument ("rates", "The number omega rate classes to include in the model [1-10, default 3, 1 to turn-off rate variation]", 3);
 
 KeywordArgument ("triple-islands", "Use a separate rate parameter for synonymous triple-hit substitutions", "No");
 
@@ -92,7 +92,7 @@ namespace fitter {
     load_file ({utility.getGlobalValue("terms.prefix"): "fitter", utility.getGlobalValue("terms.settings") : {utility.getGlobalValue("terms.settings.branch_selector") : "selection.io.SelectAllBranches"}});
 }
 
-fitter.rate_classes = io.PromptUser ("The number of omega rate classes to include in the model", 3, 2, 10, TRUE);
+fitter.rate_classes = io.PromptUser ("The number of omega rate classes to include in the model", 3, 1, 10, TRUE);
 
 fitter.do_islands = io.SelectAnOption ({"Yes" : "Use a separate rate parameter for synonymous triple-hit substitutions (e.g. serine islands)",
                                     "No"  : "All triple hits have the same rate multiplier"},
@@ -108,7 +108,7 @@ KeywordArgument ("output", "Write the resulting JSON to this file (default is to
 fitter.codon_data_info [terms.json.json] = io.PromptUserForFilePath ("Save the resulting JSON file to");
 
 KeywordArgument ("save-fit", "Write model fit files (HyPhy NEXUS) to this file path with extensions .MODEL_NAME.bf; default is NOT to save, or 'dev/null'", "/dev/null");
-fitter.save_model_path = io.PromptUserForString ("Save model fit files to");
+fitter.save_model_path = io.PromptUserForFilePath ("Save model fit files to");
 
 
 estimators.fixSubsetOfEstimates(fitter.gtr_results, fitter.gtr_results[terms.global]);
@@ -141,8 +141,14 @@ function fitter.run_model_fit (model_name, model_generator, initial_values) {
     }
 
     fitter.models = fitter.results [terms.model];
-    fitter.cat_info = rate_variation.extract_category_information (fitter.models[fitter.models ["INDEXORDER"][0]]);
-    fitter.cat_info = Transpose (fitter.cat_info[fitter.cat_info["INDEXORDER"][0]])%0;
+   
+    if (^"fitter.rate_classes" > 1) {
+        fitter.cat_info = rate_variation.extract_category_information (fitter.models[fitter.models ["INDEXORDER"][0]]);
+        fitter.cat_info = Transpose (fitter.cat_info[fitter.cat_info["INDEXORDER"][0]])%0;
+    } else {
+        fitter.cat_info = {{1,1}};
+    }
+    
 
     ConstructCategoryMatrix (fitter.run_model_fit.sl, ^(fitter.results[terms.likelihood_function]), SITE_LOG_LIKELIHOODS);
     (fitter.json [fitter.terms.json.site_logl])[model_name] = fitter.run_model_fit.sl;
@@ -152,9 +158,12 @@ function fitter.run_model_fit (model_name, model_generator, initial_values) {
 
 
     utility.ForEach (fitter.global_dnds, "_value_", 'io.ReportProgressMessageMD ("fitter", model_name, "* " + _value_[terms.description] + " = " + Format (_value_[terms.fit.MLE],8,4));');
-    io.ReportProgressMessageMD("fitter", model_name, "* The following relative rate distribution (mean 1) for site-to-site **non-synonymous** rate variation was inferred");
-    selection.io.report_distribution (fitter.cat_info);
-
+   
+    if (^"fitter.rate_classes" > 1) {
+        io.ReportProgressMessageMD("fitter", model_name, "* The following relative rate distribution (mean 1) for site-to-site **non-synonymous** rate variation was inferred");
+        selection.io.report_distribution (fitter.cat_info);
+    }
+    
     fitter.cat_info = {
         terms.rate_variation.distribution : fitter.cat_info,
         terms.parameters: utility.Map (fitter.results[terms.global], "_value_", '_value_ [terms.fit.MLE]')
@@ -195,22 +204,28 @@ function fitter.modifier_omega (q_ij, from, to, namespace, cat_name) {
 
 lfunction MG_REV.model.with.GDD (type, code) {
         def = models.codon.MG_REV.ModelDescription (type, code);
-        def [utility.getGlobalValue("terms.model.rate_variation")] = rate_variation.types.GDD.factory ({utility.getGlobalValue("terms.rate_variation.bins") : utility.getGlobalValue("fitter.rate_classes")});
-        (def [utility.getGlobalValue("terms.model.rate_variation")])[utility.getGlobalValue("terms.rate_variation.rate_modifier")] = "fitter.modifier_omega";
+        if (^"fitter.rate_classes" > 1) {
+            def [utility.getGlobalValue("terms.model.rate_variation")] = rate_variation.types.GDD.factory ({utility.getGlobalValue("terms.rate_variation.bins") : utility.getGlobalValue("fitter.rate_classes")});
+            (def [utility.getGlobalValue("terms.model.rate_variation")])[utility.getGlobalValue("terms.rate_variation.rate_modifier")] = "fitter.modifier_omega";
+        }
         return def;
     }
 
 lfunction MG_REV_MH.model.with.GDD (type, code) {
         def = models.codon.MG_REV_MH.ModelDescription (type, code);
-        def [utility.getGlobalValue("terms.model.rate_variation")] = rate_variation.types.GDD.factory ({utility.getGlobalValue("terms.rate_variation.bins") : utility.getGlobalValue("fitter.rate_classes")});
-        (def [utility.getGlobalValue("terms.model.rate_variation")])[utility.getGlobalValue("terms.rate_variation.rate_modifier")] = "fitter.modifier_omega";
+        if (^"fitter.rate_classes" > 1) {
+            def [utility.getGlobalValue("terms.model.rate_variation")] = rate_variation.types.GDD.factory ({utility.getGlobalValue("terms.rate_variation.bins") : utility.getGlobalValue("fitter.rate_classes")});
+            (def [utility.getGlobalValue("terms.model.rate_variation")])[utility.getGlobalValue("terms.rate_variation.rate_modifier")] = "fitter.modifier_omega";
+        }
         return def;
     }
 
 lfunction MG_REV_TRIP.model.with.GDD (type, code) {
         def = models.codon.MG_REV_TRIP.ModelDescription (type, code);
-        def [utility.getGlobalValue("terms.model.rate_variation")] = rate_variation.types.GDD.factory ({utility.getGlobalValue("terms.rate_variation.bins") : utility.getGlobalValue("fitter.rate_classes")});
-        (def [utility.getGlobalValue("terms.model.rate_variation")])[utility.getGlobalValue("terms.rate_variation.rate_modifier")] = "fitter.modifier_omega";
+        if (^"fitter.rate_classes" > 1) {
+            def [utility.getGlobalValue("terms.model.rate_variation")] = rate_variation.types.GDD.factory ({utility.getGlobalValue("terms.rate_variation.bins") : utility.getGlobalValue("fitter.rate_classes")});
+            (def [utility.getGlobalValue("terms.model.rate_variation")])[utility.getGlobalValue("terms.rate_variation.rate_modifier")] = "fitter.modifier_omega";
+        }
         return def;
     }
 
