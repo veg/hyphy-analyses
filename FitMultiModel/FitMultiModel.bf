@@ -21,6 +21,7 @@ LoadFunctionLibrary("libv3/models/codon/BS_REL.bf");
 
 
 utility.SetEnvVariable ("NORMALIZE_SEQUENCE_NAMES", TRUE);
+//utility.SetEnvVariable ("VERBOSITY_LEVEL", 10);
 fitter.rate_classes = 3;
 
 KeywordArgument ("code",      "Which genetic code should be used", "Universal");
@@ -232,7 +233,7 @@ lfunction MG_REV_TRIP.model.with.GDD (type, code) {
 //*************** END RATE VARIATION *****
 
 
-fitter.one_hit_results = fitter.run_model_fit (fitter.terms.MG94, "MG_REV.model.with.GDD", fitter.gtr_results);
+fitter.one_hit_results = fitter.run_model_fit (fitter.terms.MG94, "MG_REV.model.with.GDD", fitter.partitioned_mg_results);
 
 utility.Extend (fitter.one_hit_results[terms.global],
                 {
