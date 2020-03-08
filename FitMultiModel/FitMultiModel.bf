@@ -289,7 +289,7 @@ selection.io.stopTimer (fitter.json [terms.json.timers], "Overall");
 
 fitter.LRT = {
     "Double-hit vs single-hit" : math.DoLRT (fitter.one_hit_results[terms.fit.log_likelihood], fitter.two_hit_results[terms.fit.log_likelihood], 1),
-    "Triple-hit vs single-hit" : math.DoLRT (fitter.one_hit_results[terms.fit.log_likelihood], fitter.three_hit_results[terms.fit.log_likelihood], 2),
+    "Triple-hit vs single-hit" : math.DoLRT (fitter.one_hit_results[terms.fit.log_likelihood], fitter.three_hit_results[terms.fit.log_likelihood], 2 + fitter.do_islands),
     "Triple-hit vs double-hit" : math.DoLRT (fitter.two_hit_results[terms.fit.log_likelihood], fitter.three_hit_results[terms.fit.log_likelihood], 1 + fitter.do_islands)
 };
 

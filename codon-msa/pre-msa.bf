@@ -17,7 +17,7 @@ filter.analysis_description = {terms.io.info :
                                 perform frameshift correction as needed, and translate to amino-acids
                                 for subsequent alignment.
                             ",
-                            terms.io.version :          "0.01",
+                            terms.io.version :          "0.02",
                             terms.io.reference :        "TBD",
                             terms.io.authors :          "Sergei L Kosakovsky Pond",
                             terms.io.contact :          "spond@temple.edu",
@@ -81,7 +81,9 @@ utility.ForEach (filter.all_sequences , "_seq_record_",
 
         for (frame = 0; frame < 3; frame += 1) {
 
-            if (((filter.sequence_info[_seq_record_])[frame])[terms.stop_codons] == 0) {
+            filter.stop_count = ((filter.sequence_info[_seq_record_])[frame])[terms.stop_codons];
+
+            if (filter.stop_count == 0) {
                 if (((filter.sequence_info[_seq_record_])[frame])[terms.sense_codons] > filter.longest_seq_L) {
                     filter.longest_seq_L = ((filter.sequence_info[_seq_record_])[frame])[terms.sense_codons];
                     filter.longest_seq = ( filter.RNA_reads[_seq_record_]) [frame][ Abs(filter.RNA_reads[_seq_record_]) - 1];
@@ -93,6 +95,20 @@ utility.ForEach (filter.all_sequences , "_seq_record_",
                 }
                 filter.clean_seqs [_seq_record_] = ((filter.sequence_info[_seq_record_])[frame])[terms.data.sequence];
                 break;
+            } else {
+                if (filter.stop_count == 1 && ((filter.sequence_info[_seq_record_])[frame])[terms.terminal_stop]) {
+                     if (((filter.sequence_info[_seq_record_])[frame])[terms.sense_codons] > filter.longest_seq_L) {
+                        filter.longest_seq_L = ((filter.sequence_info[_seq_record_])[frame])[terms.sense_codons];
+                        filter.longest_seq = ( filter.RNA_reads[_seq_record_]) [frame][ Abs(filter.RNA_reads[_seq_record_]) - 4];
+                        filter.longest_seq_NL = Abs(filter.longest_seq);
+                        if ( filter.longest_seq_NL % 3) {
+                            filter.longest_seq_NL = filter.longest_seq_NL$3*3;
+                            filter.longest_seq = filter.longest_seq[0][filter.longest_seq_NL-1];
+                        }
+                    }
+                    filter.clean_seqs [_seq_record_] = ((filter.sequence_info[_seq_record_])[frame])[terms.data.sequence];
+                    break;               
+                }
             }
         }
 
@@ -116,6 +132,14 @@ filter.options = IgSCUEAL.define_alignment_settings (filter.code_info);
 
 KeywordArgument ("E", "Expected sequence similarity", 0);
 filter.E = io.PromptUser ("Expected sequence similarity (0 to automatically compute)", 0, 0, 1, False);
+
+KeywordArgument ("skip-realignment", "Do not realign sequences to check for frameshifts", "No");
+
+filter.skip_realign =  io.SelectAnOption  (
+    {"Yes" : "Skip the re-alignment step",
+     "No" : "Perform the re-alignment step"},
+    "Do not realign sequences to check for frameshifts") == "Yes";
+
 
 if (filter.E > 0) {
     filter.options["E"] = filter.E;
@@ -158,22 +182,35 @@ io.ReportProgressMessage ("Data QC", "Checking for frame-preserving indels in ot
 
 filter.seq_count = 1;
 
-utility.ForEachPair (filter.clean_seqs, "_sequence_", "_value_",
-'
-    io.ReportProgressBar ("filter","Processing sequence " + filter.seq_count);
-    filter.cleaned = IgSCUEAL.align_sequence_to_reference_set (filter.RNA_reads[_sequence_], filter.ref_seq, filter.options);
-
-    if (None == filter.cleaned) {
-        console.log ("\nWARNING: Sequence " + _sequence_ + " failed to align to any of the in-frame references. Try setting --E flag to a lower value");
-    } else {
-        filtered.aa_seq = alignments.StripGaps(filter.cleaned["AA"]);
-        filtered.na_seq = IgSCUEAL.strip_in_frame_indels(filter.cleaned["QRY"]);
+if (filter.skip_realign) {
+   utility.ForEachPair (filter.clean_seqs, "_sequence_", "_value_",
+    '
+        io.ReportProgressBar ("filter","Processing sequence " + filter.seq_count);
+        filtered.aa_seq = _value_;
+        filtered.na_seq = filter.RNA_reads[_sequence_];
 
         (filter.sequences_with_copies[filter.RNA_reads[_sequence_]])["_write_to_file"][""];
-    }
-    filter.seq_count += 1;
+        filter.seq_count += 1;
 
-');
+    ');
+} else {
+    utility.ForEachPair (filter.clean_seqs, "_sequence_", "_value_",
+    '
+        io.ReportProgressBar ("filter","Processing sequence " + filter.seq_count);
+        filter.cleaned = IgSCUEAL.align_sequence_to_reference_set (filter.RNA_reads[_sequence_], filter.ref_seq, filter.options);
+
+        if (None == filter.cleaned) {
+            console.log ("\nWARNING: Sequence " + _sequence_ + " failed to align to any of the in-frame references. Try setting --E flag to a lower value");
+        } else {
+            filtered.aa_seq = alignments.StripGaps(filter.cleaned["AA"]);
+            filtered.na_seq = IgSCUEAL.strip_in_frame_indels(filter.cleaned["QRY"]);
+
+            (filter.sequences_with_copies[filter.RNA_reads[_sequence_]])["_write_to_file"][""];
+        }
+        filter.seq_count += 1;
+
+    ');
+}
 
 io.ClearProgressBar ();
 

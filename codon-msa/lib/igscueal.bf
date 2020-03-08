@@ -738,7 +738,7 @@ namespace IgSCUEAL {
         if (Type (overall['RAW-REF']) == "String") {
 
             computed_score = (overall["SCORE"] - 30 * alignment_settings["MATCH"] * Exp (-Abs(seq)/3) ) / Abs (seq) * 3 ;
-
+    
             /*
             console.log ("\n\n");
             console.log (">ref\n" + overall['RAW-REF']);
