@@ -5,7 +5,7 @@ This analysis fits three codon models to a codon alignment and compares the fits
 -   [MG+REV+MH](https://www.nature.com/articles/s41559-018-0584-5) which allows for two simultaneous nucleotide substitutions.
 -   MG+REV+TRIP which is introduced here and allows for three simultaneous nucleotide substitutions.
 
-## Invokation
+## Invocation
 
 This analysis has one **required** argument
 
