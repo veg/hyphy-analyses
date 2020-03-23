@@ -449,11 +449,9 @@ if (fitter.do_islands) {
 }
 
 if (utility.Array1D (fitter.callout)) {
-
     // reconstruct ancestors here
 
     fitter.site_reports = {};
-
     fitter.ancestral_cache = ancestral.build (fitter.three_hit_results[terms.likelihood_function], 0, None);
 
     io.ReportProgressMessageMD ("fitter", "sites", "" + utility.Array1D (fitter.callout) + " individual " + io.SingularOrPlural (utility.Array1D (fitter.callout) , "site", "sites") + " which showed sufficiently strong preference for multiple-hit models");
