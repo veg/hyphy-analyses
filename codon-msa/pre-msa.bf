@@ -198,24 +198,26 @@ if (filter.E > 0) {
 filter.options["code"] = filter.code_info;
 
 
+function filter.handle_return (node, result, arguments) {
+    filter.cleaned = result;
+    if (None == filter.cleaned) {
+        console.log ("\nWARNING: Sequence " + _sequence_ + " failed to align to any of the in-frame references. Try setting --E flag to a lower value");
+    } else {
+    
+        filtered.aa_seq = alignments.StripGaps(filter.cleaned["AA"]);
+        filtered.na_seq = IgSCUEAL.strip_in_frame_indels(filter.cleaned["QRY"]);
+    
 
-function _write_to_file (key, value) {
-    fprintf (filter.protein_path, ">", value, "\n",  filtered.aa_seq, "\n");
-    fprintf (filter.nuc_path, ">", value, "\n", filtered.na_seq , "\n");
+        (filter.sequences_with_copies[filter.RNA_reads[_sequence_]])["_write_to_file"][""];
+    }
+    filter.seq_count += 1;
 }
 
-if (Abs(filter.frameshifted)) {
-    io.ReportProgressMessage ("Data QC", "Correcting frame-shifts in the remaining reads");
-
-   filter.seq_count = 1;
-   utility.ForEachPair (filter.frameshifted, "_sequence_", "_value_",
-    '
-        io.ReportProgressBar ("filter","Processing sequence " + filter.seq_count);
-        filter.cleaned = IgSCUEAL.align_sequence_to_reference_set (filter.RNA_reads[_sequence_], filter.ref_seq, filter.options);
-        
-        if (None == filter.cleaned) {
+function filter.handle_return2 (node, result, arguments) {
+    filter.cleaned = result;
+    if (None == filter.cleaned) {
             console.log ("\nWARNING: Sequence " + _sequence_ + " failed to align to any of the in-frame references. Try setting --E flag to a lower value");
-        } else {
+    } else {
             filtered.aa_seq = alignments.StripGaps(filter.cleaned["AA"]);
             filtered.na_seq = IgSCUEAL.strip_in_frame_indels(filter.cleaned["QRY"]);
             if (filter.n_fraction < 1) {
@@ -230,10 +232,35 @@ if (Abs(filter.frameshifted)) {
             (filter.sequences_with_copies[filter.RNA_reads[_sequence_]])["_write_to_file"][""];
         }
 
-        filter.seq_count += 1;
-    ');
-    io.ClearProgressBar ();
+    filter.seq_count += 1;
+}
 
+function _write_to_file (key, value) {
+    fprintf (filter.protein_path, ">", value, "\n",  filtered.aa_seq, "\n");
+    fprintf (filter.nuc_path, ">", value, "\n", filtered.na_seq , "\n");
+}
+
+if (Abs(filter.frameshifted)) {
+    io.ReportProgressMessage ("Data QC", "Correcting frame-shifts in the remaining reads");
+
+    filter.queue = mpi.CreateQueue ({
+                                    terms.mpi.Headers : utility.GetListOfLoadedModules (".")
+                                  });
+
+   filter.seq_count = 1;
+   utility.ForEachPair (filter.frameshifted, "_sequence_", "_value_",
+    '
+        io.ReportProgressBar ("filter","Processing sequence " + filter.seq_count);
+        
+        mpi.QueueJob (filter.queue, "IgSCUEAL.align_sequence_to_reference_set", {"0" : filter.RNA_reads[_sequence_],
+                                                                 "1" : filter.ref_seq,
+                                                                 "2" : filter.options
+                                                                    },
+                                                                    "filter.handle_return2");
+        
+    ');
+    mpi.QueueComplete (filter.queue);
+    io.ClearProgressBar ();
 }
 
 
@@ -241,6 +268,7 @@ if (Abs(filter.frameshifted)) {
 io.ReportProgressMessage ("Data QC", "Checking for frame-preserving indels in other reads");
 
 filter.seq_count = 1;
+
 
 
 
@@ -256,24 +284,26 @@ if (filter.skip_realign) {
 
     ');
 } else {
+
+    filter.queue = mpi.CreateQueue ({
+                                    terms.mpi.Headers : utility.GetListOfLoadedModules (".")
+                                   });
+                                  
     utility.ForEachPair (filter.clean_seqs, "_sequence_", "_value_",
     '
         io.ReportProgressBar ("filter","Processing sequence " + filter.seq_count);
         filter.cleaned = IgSCUEAL.align_sequence_to_reference_set (filter.RNA_reads[_sequence_], filter.ref_seq, filter.options);
 
-        if (None == filter.cleaned) {
-            console.log ("\nWARNING: Sequence " + _sequence_ + " failed to align to any of the in-frame references. Try setting --E flag to a lower value");
-        } else {
-        
-            filtered.aa_seq = alignments.StripGaps(filter.cleaned["AA"]);
-            filtered.na_seq = IgSCUEAL.strip_in_frame_indels(filter.cleaned["QRY"]);
-        
-
-            (filter.sequences_with_copies[filter.RNA_reads[_sequence_]])["_write_to_file"][""];
-        }
-        filter.seq_count += 1;
+        mpi.QueueJob (filter.queue, "IgSCUEAL.align_sequence_to_reference_set", {"0" : filter.RNA_reads[_sequence_],
+                                                                 "1" : filter.ref_seq,
+                                                                 "2" : filter.options
+                                                                    },
+                                                                    "filter.handle_return");
 
     ');
+    
+    mpi.QueueComplete (filter.queue);
+
 }
 
 io.ClearProgressBar ();
