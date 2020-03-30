@@ -88,6 +88,10 @@ frequencies
 	Equilibrium frequency estimator
 	defaut value: CF3x4
 
+ci
+	Compute profile confidence intervals
+	default value: No
+	
 output
 	Write the resulting JSON to this file (default is to save to 
 	the same path as the alignment file + 'MG94.json')
@@ -103,7 +107,7 @@ save-fit
 
 
 ```
-HYPHYMP MultipleSynClasses.bf --alignment adh.nex --classes codons.tsv --neutral NEUTRAL
+HYPHYMP MultipleSynClasses.bf --alignment adh.nex --classes codons.tsv --neutral NEUTRAL --ci Yes
 ```
 
 ---
@@ -114,7 +118,8 @@ Fit an MG94xREV model where synonymous substitutions are partitioned
 into several classes and within- and between-class rates are estimated.
 There are several selectable options for the frequency estimators and
 report the fit results including dN/dS ratios, and synonymous and
-non-synonymous branch lengths
+non-synonymous branch lengths. v0.2 adds the ability to compute
+confidence intervals
 
 - __Requirements__: in-frame codon alignment and a phylogenetic tree, and a TSV file with
 codon class partitioning
@@ -146,10 +151,10 @@ codon class partitioning
 * Log(L) = -5137.11, AIC-c = 10376.52 (51 estimated parameters)
 
 ### Fitting MG94 with multiple classes of synonymous substitutions
-* Log(L) = -4685.53, AIC-c =  9492.34 (60 estimated parameters)
-* non-synonymous/synonymous rate ratio =   0.0789
-* synonymous rate between codon classes NEUTRAL and SELECTED =   0.8355
-* synonymous rate within codon class SELECTED =   0.8253
+* Log(L) = -4685.54, AIC-c =  9492.34 (60 estimated parameters)
+* non-synonymous/synonymous rate ratio =   0.0793 (95% profile CI   0.0697-  0.0895)
+* synonymous rate between codon classes NEUTRAL and SELECTED =   0.8395 (95% profile CI   0.7206-  0.9727)
+* synonymous rate within codon class SELECTED =   0.8298 (95% profile CI   0.7256-  0.9438)
 
 ### **Synonymous tree** 
 ((((YAK:0.01991098348831301,(MEL:0.008737313343428603,(SIM:0.00115800211749067,MA:0.009363889194226845)Node7:0.002830832078527877)Node5:0.01026265900442833)Node3:0.01005223647747053,ERE:0.01475390925283582)Node2:0.06608609536439869,((((PSE:0.006194011946607071,PS:0)Node14:0.002056542136941789,PER:0.001012340881462104)Node13:0.005218962073655949,MIR:0.005329521652100825)Node12:0.02123137422148275,(SUB:0.04844573622631574,AMB:0.04104433512857298)Node19:0.01305359234869906)Node11:0.03554321874784543)Node1:0.0724923496394842,(MET:0.07340774741650495,(CRA:0.1331290565207244,(NIG:0.03328724078545436,(MIM:0.01809211497090321,(ADI:0.02423594093834776,(PIC:0.02413529390977663,(((SIL:0.001212075571806737,HET:0.0006404690372100284)Node36:0.004940060050832476,(PLA:0,DIF:0.00369271512384738)Node39:0.001876907364173814)Node35:0.008049856513402936,AFF:0.01400627884493204)Node34:0.003982039851475526)Node32:0.007013058944921452)Node30:0.005659775889049311)Node28:0.01219861408601335)Node26:0.03841424975855891)Node24:0.03650346975555927)Node22:0.08609632984879025,LEB:0.1110680623916397)

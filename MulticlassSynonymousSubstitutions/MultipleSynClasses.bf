@@ -15,8 +15,9 @@ LoadFunctionLibrary("SelectionAnalyses/modules/selection_lib.ibf");
 utility.SetEnvVariable ("NORMALIZE_SEQUENCE_NAMES", TRUE);
 
 
-fitter.analysis_description = {terms.io.info : "Fit an MG94xREV model where synonymous substitutions are partitioned into several classes and within- and between-class rates are estimated. There are several selectable options for the frequency estimators and report the fit results including dN/dS ratios, and synonymous and non-synonymous branch lengths",
-                               terms.io.version : "0.1",
+fitter.analysis_description = {terms.io.info : "Fit an MG94xREV model where synonymous substitutions are partitioned into several classes and within- and between-class rates are estimated. There are several selectable options for the frequency 
+estimators and report the fit results including dN/dS ratios, and synonymous and non-synonymous branch lengths. v0.2 adds the ability to compute confidence intervals",
+                               terms.io.version : "0.2",
                                terms.io.authors : "Sergei L Kosakovsky Pond",
                                terms.io.contact : "spond@temple.edu",
                                terms.io.requirements : "in-frame codon alignment and a phylogenetic tree, and a TSV file with codon class partitioning"
@@ -36,6 +37,7 @@ KeywordArgument ("classes",     "A TSV file with three columns (AA, Codon, Class
 KeywordArgument ("neutral",     "Neutral reference class");
 KeywordArgument ("type",        "Model type: global (single dN/dS for all branches) or local (separate dN/dS)", terms.global, "Model Type");
 KeywordArgument ("frequencies", "Equilibrium frequency estimator", "CF3x4");
+KeywordArgument ("ci", "Compute profile confidence intervals", "No");
 
 fitter.json    = {
                     terms.json.analysis: fitter.analysis_description,
@@ -50,6 +52,8 @@ fitter.display_orders = {terms.original_name      :  -1,
                          fitter.terms.dS          : 2,
                          fitter.terms.dN          : 3
                         };
+                        
+terms.fitter.ci = "Confidence Intervals";
 
 
 selection.io.startTimer (fitter.json [terms.json.timers], "Overall", 0);
@@ -89,6 +93,9 @@ fitter.frequency_type = io.SelectAnOption ({"CF3x4" : terms.frequencies.CF3x4,
                                             "F3x4" : terms.frequencies.F3x4,
                                             "F1x4" : terms.frequencies.F1x4}, "Equilibrium frequency estimator");
 
+fitter.compute_ci = io.SelectAnOption ({"No"  : "Do not compute profile confidence intervals for substitution rates",
+                                        "Yes" : "Compute profile confidence intervals for substitution rates"}, "Compute profile confidence intervals") != "No";
+
 
 KeywordArgument ("output", "Write the resulting JSON to this file (default is to save to the same path as the alignment file + 'MG94.json')", fitter.codon_data_info [terms.json.json]);
 fitter.codon_data_info [terms.json.json] = io.PromptUserForFilePath ("Save the resulting JSON file to");
@@ -112,7 +119,6 @@ fitter.results =  estimators.FitCodonModel (fitter.filter_names, fitter.trees, "
 io.ReportProgressMessageMD("fitter", fitter.terms.MG94 , "* " + selection.io.report_fit (fitter.results, 0, fitter.codon_data_info[terms.data.sample_size]));
 fitter.global_dnds = selection.io.extract_global_MLE_re (fitter.results, terms.parameters.omega_ratio + "|" + terms.parameters.synonymous_rate);
 
-utility.ForEach (fitter.global_dnds, "_value_", 'io.ReportProgressMessageMD ("fitter", fitter.terms.MG94 , "* " + _value_[terms.description] + " = " + Format (_value_[terms.fit.MLE],8,4));');
 
 selection.io.json_store_lf (fitter.json,
                             fitter.terms.MG94 ,
@@ -121,6 +127,30 @@ selection.io.json_store_lf (fitter.json,
                             fitter.sample_size,
                             utility.Map (fitter.results[terms.global], "_value_", '_value_ [terms.fit.MLE]'),
                             fitter.display_orders[fitter.terms.MG94 ]);
+
+
+if (fitter.compute_ci) {
+    utility.ForEach (fitter.global_dnds, "_value_", 
+    '
+        
+        fitter.omega_parameters = ((fitter.results[terms.global])[_value_[terms.description]])[terms.id];
+        fitter.omega.CI = parameters.GetProfileCI(fitter.omega_parameters,fitter.results[terms.likelihood_function], 0.95);
+        io.ReportProgressMessageMD ("fitter", fitter.terms.MG94, "* " + _value_[utility.getGlobalValue("terms.description")] + " = " + Format (_value_[utility.getGlobalValue("terms.fit.MLE")],8,4) + 
+                        " (95% profile CI " + Format ((fitter.omega.CI )[terms.lower_bound],8,4) + "-" + Format ((fitter.omega.CI )[terms.upper_bound],8,4) + ")");
+        
+        utility.EnsureKey(((fitter.json[terms.json.fits])[fitter.terms.MG94]), terms.fitter.ci);
+        (((((fitter.json[terms.json.fits])[fitter.terms.MG94]))[ terms.fitter.ci]))[ _value_[utility.getGlobalValue("terms.description")]] = 
+            {
+                terms.lower_bound : (fitter.omega.CI )[terms.lower_bound],
+                terms.upper_bound : (fitter.omega.CI )[terms.upper_bound]
+            };
+    ');
+
+} else {
+    utility.ForEach (fitter.global_dnds, "_value_", 'io.ReportProgressMessageMD ("fitter", fitter.terms.MG94 , "* " + _value_[terms.description] + " = " + Format (_value_[terms.fit.MLE],8,4));');
+}
+
+
 
 
 utility.ForEachPair (fitter.filter_specification, "_key_", "_value_",
