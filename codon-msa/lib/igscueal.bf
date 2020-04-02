@@ -700,7 +700,7 @@ namespace IgSCUEAL {
 
     // ---------------------------------------------------------------------------------------------------------
 
-    lfunction align_sequence_to_reference_set (seq, references, alignment_settings) {
+    lfunction align_sequence_to_reference_set (seq, references, alignment_settings, seq_name) {
 
         ref_names = utility.Keys (references);
         ref_count = utility.Array1D (references);

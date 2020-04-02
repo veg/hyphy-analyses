@@ -199,37 +199,39 @@ filter.options["code"] = filter.code_info;
 
 
 function filter.handle_return (node, result, arguments) {
+    seq_id = arguments[3];
     filter.cleaned = result;
     if (None == filter.cleaned) {
-        console.log ("\nWARNING: Sequence " + _sequence_ + " failed to align to any of the in-frame references. Try setting --E flag to a lower value");
+        console.log ("\nWARNING: Sequence " + seq_id + " failed to align to any of the in-frame references. Try setting --E flag to a lower value");
     } else {
     
         filtered.aa_seq = alignments.StripGaps(filter.cleaned["AA"]);
         filtered.na_seq = IgSCUEAL.strip_in_frame_indels(filter.cleaned["QRY"]);
     
 
-        (filter.sequences_with_copies[filter.RNA_reads[_sequence_]])["_write_to_file"][""];
+        (filter.sequences_with_copies[filter.RNA_reads[seq_id]])["_write_to_file"][""];
     }
     filter.seq_count += 1;
 }
 
 function filter.handle_return2 (node, result, arguments) {
+     seq_id = arguments[3];
     filter.cleaned = result;
     if (None == filter.cleaned) {
-            console.log ("\nWARNING: Sequence " + _sequence_ + " failed to align to any of the in-frame references. Try setting --E flag to a lower value");
+            console.log ("\nWARNING: Sequence " + seq_id + " failed to align to any of the in-frame references. Try setting --E flag to a lower value");
     } else {
             filtered.aa_seq = alignments.StripGaps(filter.cleaned["AA"]);
             filtered.na_seq = IgSCUEAL.strip_in_frame_indels(filter.cleaned["QRY"]);
             if (filter.n_fraction < 1) {
                 filter.non_n = filtered.na_seq ^ {{"[^ACGT]"}{""}};
                 if (Abs (filter.non_n) / Abs (filtered.na_seq) <= 1-filter.n_fraction) {
-                     console.log ("\nWARNING: Sequence " + _sequence_ + " has too many ambiguous nucleotides; try settings --N-fraction flag to a lower value");
+                     console.log ("\nWARNING: Sequence " + seq_id + " has too many ambiguous nucleotides; try settings --N-fraction flag to a lower value");
                      return;
                 }
                 
             }
  
-            (filter.sequences_with_copies[filter.RNA_reads[_sequence_]])["_write_to_file"][""];
+            (filter.sequences_with_copies[filter.RNA_reads[seq_id]])["_write_to_file"][""];
         }
 
     filter.seq_count += 1;
@@ -254,7 +256,8 @@ if (Abs(filter.frameshifted)) {
         
         mpi.QueueJob (filter.queue, "IgSCUEAL.align_sequence_to_reference_set", {"0" : filter.RNA_reads[_sequence_],
                                                                  "1" : filter.ref_seq,
-                                                                 "2" : filter.options
+                                                                 "2" : filter.options,
+                                                                 "3" : _sequence_,
                                                                     },
                                                                     "filter.handle_return2");
         
@@ -296,7 +299,8 @@ if (filter.skip_realign) {
 
         mpi.QueueJob (filter.queue, "IgSCUEAL.align_sequence_to_reference_set", {"0" : filter.RNA_reads[_sequence_],
                                                                  "1" : filter.ref_seq,
-                                                                 "2" : filter.options
+                                                                 "2" : filter.options,
+                                                                 "3" : _sequence_
                                                                     },
                                                                     "filter.handle_return");
 

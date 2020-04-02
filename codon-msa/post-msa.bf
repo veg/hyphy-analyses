@@ -73,7 +73,12 @@ filter.tags = {};
 for (filter.id = 0; filter.id < filter.protein[terms.data.sequences]; filter.id += 1) {
     //filter.nuc_seq  = alignments.GetSequenceByName ("filter.nuc_data", _sequence_);
     filter.prot_seq = alignments.GetIthSequence ("filter.protein_data", filter.id);
-    filter.nuc_seq = alignments.GetSequenceByName ("filter.nuc_data", filter.prot_seq[terms.id]);    
+    filter.nuc_seq = alignments.GetSequenceByName ("filter.nuc_data", filter.prot_seq[terms.id]); 
+    /*console.log (filter.prot_seq[terms.id]);
+    console.log ( filter.nuc_seq);
+    console.log ( filter.prot_seq[terms.data.sequence]); 
+    console.log (alignment.MapCodonsToAA(filter.nuc_seq, filter.prot_seq[terms.data.sequence] , 1, filter.code_info[terms.code.mapping]));
+    console.log ("\n\n");*/
     filter.seq_tag = filter.prot_seq[terms.id];
     
        
