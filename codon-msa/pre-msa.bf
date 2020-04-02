@@ -201,22 +201,21 @@ filter.options["code"] = filter.code_info;
 function filter.handle_return (node, result, arguments) {
     seq_id = arguments[3];
     filter.cleaned = result;
+    filter.seq_count += 1;
     if (None == filter.cleaned) {
         console.log ("\nWARNING: Sequence " + seq_id + " failed to align to any of the in-frame references. Try setting --E flag to a lower value");
     } else {
     
         filtered.aa_seq = alignments.StripGaps(filter.cleaned["AA"]);
         filtered.na_seq = IgSCUEAL.strip_in_frame_indels(filter.cleaned["QRY"]);
-    
-
         (filter.sequences_with_copies[filter.RNA_reads[seq_id]])["_write_to_file"][""];
     }
-    filter.seq_count += 1;
 }
 
 function filter.handle_return2 (node, result, arguments) {
-     seq_id = arguments[3];
+    seq_id = arguments[3];
     filter.cleaned = result;
+    filter.seq_count += 1;
     if (None == filter.cleaned) {
             console.log ("\nWARNING: Sequence " + seq_id + " failed to align to any of the in-frame references. Try setting --E flag to a lower value");
     } else {
@@ -225,7 +224,7 @@ function filter.handle_return2 (node, result, arguments) {
             if (filter.n_fraction < 1) {
                 filter.non_n = filtered.na_seq ^ {{"[^ACGT]"}{""}};
                 if (Abs (filter.non_n) / Abs (filtered.na_seq) <= 1-filter.n_fraction) {
-                     console.log ("\nWARNING: Sequence " + seq_id + " has too many ambiguous nucleotides; try settings --N-fraction flag to a lower value");
+                     console.log ("\nWARNING: Sequence " + seq_id + " has too many ambiguous nucleotides; try setting --N-fraction flag to a higher value");
                      return;
                 }
                 
@@ -234,7 +233,6 @@ function filter.handle_return2 (node, result, arguments) {
             (filter.sequences_with_copies[filter.RNA_reads[seq_id]])["_write_to_file"][""];
         }
 
-    filter.seq_count += 1;
 }
 
 function _write_to_file (key, value) {
