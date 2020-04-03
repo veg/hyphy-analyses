@@ -236,7 +236,7 @@ function filter.handle_return2 (node, result, arguments) {
 }
 
 function _write_to_file (key, value) {
-    fprintf (filter.protein_path, ">", value, "\n",  filtered.aa_seq, "\n");
+    fprintf (filter.protein_path, ">", value, "\n",  filtered.aa_seq ^ {{"\\?","X"}}, "\n");
     fprintf (filter.nuc_path, ">", value, "\n", filtered.na_seq , "\n");
 }
 
@@ -293,7 +293,7 @@ if (filter.skip_realign) {
     utility.ForEachPair (filter.clean_seqs, "_sequence_", "_value_",
     '
         io.ReportProgressBar ("filter","Processing sequence " + filter.seq_count);
-        filter.cleaned = IgSCUEAL.align_sequence_to_reference_set (filter.RNA_reads[_sequence_], filter.ref_seq, filter.options);
+        //filter.cleaned = IgSCUEAL.align_sequence_to_reference_set (filter.RNA_reads[_sequence_], filter.ref_seq, filter.options);
 
         mpi.QueueJob (filter.queue, "IgSCUEAL.align_sequence_to_reference_set", {"0" : filter.RNA_reads[_sequence_],
                                                                  "1" : filter.ref_seq,
