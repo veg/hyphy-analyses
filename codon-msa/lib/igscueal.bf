@@ -739,16 +739,17 @@ namespace IgSCUEAL {
 
             computed_score = (overall["SCORE"] - 30 * alignment_settings["MATCH"] * Exp (-Abs(seq)/3) ) / Abs (seq) * 3 ;
     
-            /*
-            console.log ("\n\n");
+            
+            /*console.log ("\n\n");
             console.log (">ref\n" + overall['RAW-REF']);
             console.log (">qry\n" + overall['RAW-QRY']);
             console.log ("Input: `seq`");
             console.log ("Score :" + overall['SCORE']);
             console.log ("Computed : " + computed_score);
             console.log ("E :" + alignment_settings["E"]);
-            console.log (overall);
-            */
+            console.log ("MATCH :" + alignment_settings["MATCH"]);
+            console.log (overall);*/
+            
 
 
 
@@ -1097,7 +1098,7 @@ lfunction cSM2partialSMs(_cdnScoreMatrix, penalties) {
                 if ( _aa1 != _aa2 ) {
                     meanScore += ( 1 - _expectedIdentity ) * _cdnaln_scorematrix[_aa1][_aa2] * _cdnaln_base_freqs[_aa1] * _cdnaln_base_freqs[_aa2];
                 } else {
-                    meanScore += _expectedIdentity * _cdnaln_scorematrix[_aa1][_aa1] * _cdnaln_base_freqs[_aa1];
+                    meanScore += _expectedIdentity * _cdnaln_scorematrix[_aa1][_aa1] * _cdnaln_base_freqs[_aa1] * _cdnaln_base_freqs[_aa1];
                 }
             }
         }

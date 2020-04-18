@@ -33,10 +33,15 @@ filter.nuc_data = alignments.ReadNucleotideDataSet ("filter.raw_data", None);
 
 io.ReportProgressMessage ("Data QC", "Loaded `filter.nuc_data[terms.data.sequences]` sequences on `filter.nuc_data[terms.data.sites]` sites from **`filter.nuc_data[terms.data.file]`**");
 
-filter.all_sequences = alignments.GetSequenceNames ("filter.raw_data");
 
 KeywordArgument ("reference", "A FASTA file with REFERENCE sequences", "/dev/null");
 filter.reference_path   = io.PromptUserForString ("Load reference sequences from");
+
+filter.keep_reference = FALSE;
+
+
+filter.all_sequences = alignments.GetSequenceNames ("filter.raw_data");
+
 
 KeywordArgument ("N-fraction", "Maximum acceptable fraction of N's", "1.0");
 filter.n_fraction = io.PromptUser("Maximum acceptable fraction of N's", 0.05, 0, 1, FALSE);
@@ -48,7 +53,14 @@ if (filter.reference_path != "/dev/null") {
     filter.trim_from = io.PromptUser("Trim non-reference sequences from this position", 0, 0, 10000000, TRUE);
     KeywordArgument ("trim-to", "Trim non-reference sequences to", "-1");
     filter.trim_to = io.PromptUser("Trim non-reference sequences to this position", -1, -1, 10000000, TRUE);
-
+    
+    KeywordArgument ("keep-reference", "Retain reference sequence in the alignment", "No");
+    filter.keep_reference = io.SelectAnOption ({
+                                        "Yes" : "Replace identical sequences with a single copy; append copy number as :N", 
+                                        "No"  : "Retain all sequences",
+                                      }, 
+                                      "Only retain one copy of identical (at the nucleotide level sequences)") != "No";
+                                      
 } else {
     filter.reference_sequences = None;
 }
@@ -80,9 +92,9 @@ fprintf (filter.protein_path, CLEAR_FILE, KEEP_OPEN);
 fprintf (filter.nuc_path, CLEAR_FILE, KEEP_OPEN);
 filter.sequences_with_copies = {};
 
-alignments.GetSequenceByName ("filter.raw_data", null);
 
 if (None == filter.reference_sequences) {
+    alignments.GetSequenceByName ("filter.raw_data", null);
     utility.ForEach (filter.all_sequences , "_seq_record_",
     '
         io.ReportProgressBar ("filter","Processing sequence " + filter.seq_count);
@@ -143,29 +155,56 @@ if (None == filter.reference_sequences) {
     ');
 } else {
 
+    if (filter.keep_reference) {
+        alignments.GetSequenceByName ("filter.raw_reference", null);
+        
+        utility.ForEach (alignments.GetSequenceNames ("filter.raw_reference") , "_seq_record_",
+        '
+            io.ReportProgressBar ("filter","Processing sequence " + filter.seq_count);
+            filter.read_to_check = alignments.Strip (alignments.StripGaps (alignments.GetSequenceByName ("filter.raw_reference", _seq_record_)));
+
+            if (filter.unique / filter.read_to_check == FALSE) {
+
+                filter.RNA_reads[_seq_record_] = filter.read_to_check;
+                filter.sequences_with_copies [filter.read_to_check] = {"0" : _seq_record_};
+                filter.unique [filter.read_to_check] = _seq_record_;
+
+ 
+                filter.frameshifted [_seq_record_] = 1;
+            } else {
+                filter.sequences_with_copies [filter.read_to_check] + _seq_record_;
+            }
+
+            filter.seq_count += 1;
+        ');    
+    }
+    
+    alignments.GetSequenceByName ("filter.raw_data", null);
+
     utility.ForEach (filter.all_sequences , "_seq_record_",
     '
         io.ReportProgressBar ("filter","Processing sequence " + filter.seq_count);
         filter.read_to_check = alignments.Strip (alignments.StripGaps (alignments.GetSequenceByName ("filter.raw_data", _seq_record_)));
         if (filter.trim_from < filter.trim_to) {
                filter.read_to_check = filter.read_to_check[Max (0, filter.trim_from)][Min (filter.trim_to, Abs (filter.read_to_check))];
-            
         } 
+        if (Abs (filter.read_to_check) > 1) {
+            if (filter.unique / filter.read_to_check == FALSE) {
 
-        if (filter.unique / filter.read_to_check == FALSE) {
-
-            filter.RNA_reads[_seq_record_] = filter.read_to_check;
-            filter.sequences_with_copies [filter.read_to_check] = {"0" : _seq_record_};
-            filter.unique [filter.read_to_check] = _seq_record_;
+                filter.RNA_reads[_seq_record_] = filter.read_to_check;
+                filter.sequences_with_copies [filter.read_to_check] = {"0" : _seq_record_};
+                filter.unique [filter.read_to_check] = _seq_record_;
 
  
-            filter.frameshifted [_seq_record_] = 1;
+                filter.frameshifted [_seq_record_] = 1;
+            }
         } else {
             filter.sequences_with_copies [filter.read_to_check] + _seq_record_;
         }
 
         filter.seq_count += 1;
-    ');
+    ');  
+
     
     alignments.GetSequenceByName ("filter.raw_reference", null);
     filter.longest_seq = alignments.GetSequenceByName ("filter.raw_reference", filter.reference_sequences[0]);
