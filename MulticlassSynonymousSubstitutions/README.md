@@ -59,47 +59,53 @@ See example at the end of the document
 ### Complete options list 
 
 ```
-Analysis options description
-----------------------------
+Available analysis command line options
+---------------------------------------
+Use --option VALUE syntax to invoke
+If a [reqired] option is not provided on the command line, the analysis will prompt for its value
+[conditionally required] options may or not be required based on the values of other options
+
 code
 	Which genetic code should be used
-	defaut value: Universal
+	default value: Universal
 
 alignment [required]
 	An in-frame codon alignment in one of the formats supported by HyPhy
 
-tree
+tree [conditionally required]
 	A phylogenetic tree
-	defaut value: null [computed at run time]
+	applies to: Please select a tree file for the data:
 
 classes [required]
-	A TSV file with three columns (AA, Codon, Class) which is used to 
-	partition synonymous substitutions into groups
+	A TSV file with three columns (AA, Codon, Class) which is used to partition synonymous substitutions into groups
 
 neutral [required]
 	Neutral reference class
 
 type
-	Model type: global (rates shared by all branches) or 
-                local (separate rates for each branch)
-	defaut value: terms.global [computed at run time]
+	Model type: global (single dN/dS for all branches) or local (separate dN/dS)
+	default value: terms.global [computed at run time]
+	applies to: Model Type
 
 frequencies
 	Equilibrium frequency estimator
-	defaut value: CF3x4
+	default value: CF3x4
 
 ci
 	Compute profile confidence intervals
 	default value: No
-	
+
+lrt
+	Perform LRT to test which rates are different from the neutral rate
+	default value: No
+
 output
-	Write the resulting JSON to this file (default is to save to 
-	the same path as the alignment file + 'MG94.json')
-	defaut value: fitter.codon_data_info[terms.json.json] [computed at run time]
+	Write the resulting JSON to this file (default is to save to the same path as the alignment file + 'MG94.json')
+	default value: fitter.codon_data_info[terms.json.json] [computed at run time]
 
 save-fit
 	Save MG94 model fit to this file (default is not to save)
-	defaut value: /dev/null
+	default value: /dev/null
 ```
  
 
@@ -107,11 +113,11 @@ save-fit
 
 
 ```
-HYPHYMP MultipleSynClasses.bf --alignment adh.nex --classes codons.tsv --neutral NEUTRAL --ci Yes
+HYPHYMP MultipleSynClasses.bf --alignment adh.nex --classes codons.tsv --neutral NEUTRAL \
+--ci Yes --LRT Yes
 ```
 
 ---
-
 Analysis Description
 --------------------
 Fit an MG94xREV model where synonymous substitutions are partitioned
@@ -119,7 +125,7 @@ into several classes and within- and between-class rates are estimated.
 There are several selectable options for the frequency estimators and
 report the fit results including dN/dS ratios, and synonymous and
 non-synonymous branch lengths. v0.2 adds the ability to compute
-confidence intervals
+confidence intervals. v0.3 adds the ability to perform LRTs.
 
 - __Requirements__: in-frame codon alignment and a phylogenetic tree, and a TSV file with
 codon class partitioning
@@ -128,15 +134,11 @@ codon class partitioning
 
 - __Contact Information__: spond@temple.edu
 
-- __Analysis Version__: 0.1
+- __Analysis Version__: 0.3
 
 
 >code –> Universal
-
->alignment –> adh.nex
 >Loaded a multiple sequence alignment with **23** sequences, **254** codons, and **1** partitions from `/Users/sergei/Development/hyphy-analyses/MulticlassSynonymousSubstitutions/adh.nex`
-
->classes –> codons.tsv
 
 >neutral –> NEUTRAL
 
@@ -144,25 +146,45 @@ codon class partitioning
 
 >frequencies –> CF3x4
 
->output –> /Users/sergei/Development/hyphy-analyses/MulticlassSynonymousSubstitutions/adh.nex.FITTER.json
+>ci –> Yes
+
+>lrt –> Yes
 
 
 ### Obtaining branch lengths and nucleotide substitution biases under the nucleotide GTR model
-* Log(L) = -5137.11, AIC-c = 10376.52 (51 estimated parameters)
+
+>kill-zero-lengths –> Yes
+* Log(L) = -5137.00, AIC-c = 10376.30 (51 estimated parameters)
 
 ### Fitting MG94 with multiple classes of synonymous substitutions
 * Log(L) = -4685.54, AIC-c =  9492.34 (60 estimated parameters)
-* non-synonymous/synonymous rate ratio =   0.0793 (95% profile CI   0.0697-  0.0895)
-* synonymous rate between codon classes NEUTRAL and SELECTED =   0.8395 (95% profile CI   0.7206-  0.9727)
-* synonymous rate within codon class SELECTED =   0.8298 (95% profile CI   0.7256-  0.9438)
+* non-synonymous/synonymous rate ratio =   0.0792 (95% profile CI   0.0696-  0.0894)
+* synonymous rate between codon classes NEUTRAL and SELECTED =   0.8389 (95% profile CI   0.7198-  0.9716)
+* synonymous rate within codon class SELECTED =   0.8284 (95% profile CI   0.7246-  0.9425)
 
 ### **Synonymous tree** 
-((((YAK:0.01991098348831301,(MEL:0.008737313343428603,(SIM:0.00115800211749067,MA:0.009363889194226845)Node7:0.002830832078527877)Node5:0.01026265900442833)Node3:0.01005223647747053,ERE:0.01475390925283582)Node2:0.06608609536439869,((((PSE:0.006194011946607071,PS:0)Node14:0.002056542136941789,PER:0.001012340881462104)Node13:0.005218962073655949,MIR:0.005329521652100825)Node12:0.02123137422148275,(SUB:0.04844573622631574,AMB:0.04104433512857298)Node19:0.01305359234869906)Node11:0.03554321874784543)Node1:0.0724923496394842,(MET:0.07340774741650495,(CRA:0.1331290565207244,(NIG:0.03328724078545436,(MIM:0.01809211497090321,(ADI:0.02423594093834776,(PIC:0.02413529390977663,(((SIL:0.001212075571806737,HET:0.0006404690372100284)Node36:0.004940060050832476,(PLA:0,DIF:0.00369271512384738)Node39:0.001876907364173814)Node35:0.008049856513402936,AFF:0.01400627884493204)Node34:0.003982039851475526)Node32:0.007013058944921452)Node30:0.005659775889049311)Node28:0.01219861408601335)Node26:0.03841424975855891)Node24:0.03650346975555927)Node22:0.08609632984879025,LEB:0.1110680623916397)
+((((YAK:0.01989871958581278,(MEL:0.008738330348007717,(SIM:0.001157539284531204,MA:0.009358742393211925)Node7:0.002829554607199886)Node5:0.01025974609139345)Node3:0.01004509523547339,ERE:0.01474045858146464)Node2:0.06615206004117313,((((PSE:0.006193346202900719,PS:0)Node14:0.002056057770263325,PER:0.001011948524134472)Node13:0.005218714281742668,MIR:0.005328680474428641)Node12:0.0212174039667197,(SUB:0.04843722966640891,AMB:0.04102008182477609)Node19:0.01305501221123294)Node11:0.03548937481000465)Node1:0.07247275764812215,(MET:0.07344089154937126,(CRA:0.1330869758937619,(NIG:0.03326708268926625,(MIM:0.0180932566199034,(ADI:0.02424174598060548,(PIC:0.02411941936502098,(((SIL:0.001212563642176521,HET:0.0006400592349326339)Node36:0.004939716366866063,(PLA:0,DIF:0.003693210307501258)Node39:0.001878529644238937)Node35:0.008049306700026453,AFF:0.01400823181115291)Node34:0.003983057682403317)Node32:0.007010584781876435)Node30:0.005654878108566886)Node28:0.01220119070150073)Node26:0.03840466078404714)Node24:0.03652063406404995)Node22:0.0860041888844728,LEB:0.111098748076788)
 
 ### **Non-synonymous tree** 
-((((YAK:0.006666178593080257,(MEL:0.002925244310768755,(SIM:0.0003876980225958669,MA:0.00313502131781534)Node7:0.0009477599242430161)Node5:0.003435928607120699)Node3:0.003365479342495905,ERE:0.004939594976974992)Node2:0.02212556273159468,((((PSE:0.00207374938902397,PS:0)Node14:0.0006885283781735687,PER:0.0003389307774206013)Node13:0.001747303606269564,MIR:0.001784318849415227)Node12:0.007108244171866166,(SUB:0.01621958704086302,AMB:0.01374160489670956)Node19:0.004370330472564053)Node11:0.01189983629312581)Node1:0.02427037065308534,(MET:0.02457684497008286,(CRA:0.0445714832326756,(NIG:0.01114453698768573,(MIM:0.006057223119760644,(ADI:0.008114170290041252,(PIC:0.008080473759294198,(((SIL:0.0004058017643737288,HET:0.0002144284328238349)Node36:0.001653927470670641,(PLA:0,DIF:0.001236317559269934)Node39:0.0006283868247690583)Node35:0.002695084408990231,AFF:0.004689289017772657)Node34:0.001333183206659759)Node32:0.002347965555698744)Node30:0.001894887658128883)Node28:0.004084084552285427)Node26:0.01286105478215332)Node24:0.01222132742968185)Node22:0.02882497046505308,LEB:0.03718548309402383)
+((((YAK:0.00666376047233357,(MEL:0.002926325993797264,(SIM:0.0003876412497883467,MA:0.003134091988265523)Node7:0.0009475722326983959)Node5:0.003435823604889195)Node3:0.003363940492869647,ERE:0.004936342000078596)Node2:0.02215325870414798,((((PSE:0.002074051822298759,PS:0)Node14:0.0006885406088180433,PER:0.0003388852506857493)Node13:0.0017476633005007,MIR:0.001784489206054756)Node12:0.007105366617647384,(SUB:0.01622084752983242,AMB:0.01373696426330471)Node19:0.004371913175814156)Node11:0.01188481962504523)Node1:0.02426995845908043,(MET:0.02459417089874263,(CRA:0.0445686832018864,(NIG:0.01114060981152972,(MIM:0.006059140024540202,(ADI:0.008118170013365289,(PIC:0.008077204801401233,(((SIL:0.0004060680203104981,HET:0.0002143455216453786)Node36:0.001654231395548195,(PLA:0,DIF:0.001236796606787126)Node39:0.0006290893007161771)Node35:0.00269558307940421,AFF:0.004691131056341968)Node34:0.001333861821036342)Node32:0.002347731850581946)Node30:0.00189372753624807)Node28:0.004085982113644806)Node26:0.01286110191072674)Node24:0.01223017172793807)Node22:0.02880141668773867,LEB:0.03720518010051679)
 
->save-fit –> /dev/null
+### Running likelihood ratio tests to compare all rates to the neutral rate (=1)
+
+>Testing _non-synonymous/synonymous rate ratio_ == 1
+
+Likelihood ratio test for _non-synonymous/synonymous rate ratio == 1_, uncorrected **p =   0.0000**.
+
+>Testing _synonymous rate between codon classes NEUTRAL and SELECTED_ == 1
+
+Likelihood ratio test for _synonymous rate between codon classes NEUTRAL and SELECTED == 1_, uncorrected **p =   0.3166**.
+
+>Testing _synonymous rate within codon class SELECTED_ == 1
+
+Likelihood ratio test for _synonymous rate within codon class SELECTED == 1_, uncorrected **p =   0.2698**.
+#### Holm-Bonferroni Corrected p-values
+- Likelihood ratio test for _non-synonymous/synonymous rate ratio_ == 1, corrected **p =   0.0000**.
+- Likelihood ratio test for _synonymous rate between codon classes NEUTRAL and SELECTED_ == 1, corrected **p =   0.3166**.
+- Likelihood ratio test for _synonymous rate within codon class SELECTED_ == 1, corrected **p =   0.5395**.
 
 ### Writing detailed analysis report to `/Users/sergei/Development/hyphy-analyses/MulticlassSynonymousSubstitutions/adh.nex.FITTER.json'
 

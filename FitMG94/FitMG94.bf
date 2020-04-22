@@ -14,8 +14,9 @@ LoadFunctionLibrary("SelectionAnalyses/modules/selection_lib.ibf");
 
 utility.SetEnvVariable ("NORMALIZE_SEQUENCE_NAMES", TRUE);
 
-fitter.analysis_description = {terms.io.info : "Fit an MG94xREV model with several selectable options frequency estimator and report the fit results including dN/dS ratios, and synonymous and non-synonymous branch lengths",
-                               terms.io.version : "0.1",
+fitter.analysis_description = {terms.io.info : "Fit an MG94xREV model with several selectable options frequency estimator and 
+report the fit results including dN/dS ratios, and synonymous and non-synonymous branch lengths. v0.2 adds LRT test for dN/dS != 1",
+                               terms.io.version : "0.2",
                                terms.io.authors : "Sergei L Kosakovsky Pond",
                                terms.io.contact : "spond@temple.edu",
                                terms.io.requirements : "in-frame codon alignment and a phylogenetic tree"
@@ -26,6 +27,7 @@ io.DisplayAnalysisBanner (fitter.analysis_description);
   
 namespace fitter.terms {
     MG94 = "Standard MG94";
+    LRT = "LRT";
 }  
  
 KeywordArgument ("rooted", "Accept rooted trees", "No");
@@ -45,7 +47,8 @@ fitter.display_orders = {terms.original_name      :  -1,
                          terms.json.nucleotide_gtr: 0,
                          fitter.terms.MG94        : 1,
                          fitter.terms.dS          : 2,
-                         fitter.terms.dN          : 3
+                         fitter.terms.dN          : 3,
+                         fitter.terms.LRT         : 2
                         };
 
 
@@ -57,6 +60,8 @@ fitter.accept_rooted_trees = io.SelectAnOption ({"Yes" : "Accept rooted trees",
 if (fitter.accept_rooted_trees == "Yes") {
     utility.SetEnvVariable ("ACCEPT_ROOTED_TREES", TRUE);
 }
+
+
 
 namespace fitter {
     LoadFunctionLibrary ("SelectionAnalyses/modules/shared-load-file.bf");
@@ -70,7 +75,11 @@ fitter.frequency_type = io.SelectAnOption ({"CF3x4" : terms.frequencies.CF3x4,
                                             "F3x4" : terms.frequencies.F3x4,
                                             "F1x4" : terms.frequencies.F1x4}, "Equilibrium frequency estimator");
 
-
+if (fitter.model_type == terms.global) {
+    KeywordArgument ("lrt",         "Perform LRT to test which for dN/dS == 1 (global model only)", "No");
+    fitter.compute_lrt = io.SelectAnOption ({"No"  : "Do not perform LRT",
+                                            "Yes" : "Perform LRT to test omega == 1"}, "Perform LRT to test omega != 1") != "No";
+}
 
 KeywordArgument ("output", "Write the resulting JSON to this file (default is to save to the same path as the alignment file + 'MG94.json')", fitter.codon_data_info [terms.json.json]);
 fitter.codon_data_info [terms.json.json] = io.PromptUserForFilePath ("Save the resulting JSON file to");
@@ -109,7 +118,6 @@ fitter.global_dnds = selection.io.extract_global_MLE_re (fitter.results, terms.p
 
 utility.ForEach (fitter.global_dnds, "_value_", 
 '
-    //io.ReportProgressMessageMD ("fitter", fitter.terms.MG94 , "* " + _value_[terms.description] + " = " + Format (_value_[terms.fit.MLE],8,4));
     fitter.omega_parameters = ((fitter.results[terms.global])[_value_[terms.description]])[terms.id];
     fitter.omega.CI = parameters.GetProfileCI(fitter.omega_parameters,fitter.results[terms.likelihood_function], 0.95);
     io.ReportProgressMessageMD ("fitter", fitter.terms.MG94, "* " + _value_[utility.getGlobalValue("terms.description")] + " = " + Format (_value_[utility.getGlobalValue("terms.fit.MLE")],8,4) + 
@@ -125,6 +133,39 @@ selection.io.json_store_lf (fitter.json,
                             utility.Map (fitter.results[terms.global], "_value_", '_value_ [terms.fit.MLE]'),
                             fitter.display_orders[fitter.terms.MG94 ]);
 
+if (fitter.compute_lrt) {
+    selection.io.startTimer (fitter.json [terms.json.timers], fitter.terms.LRT , fitter.display_orders [fitter.terms.LRT ]);
+    io.ReportProgressMessageMD("fitter", "LRT", "Running the likelihood ratio tests for dN/dS=1");
+
+    fitter.LRTs = {};
+    
+    function fitter.SetToOne (set) {
+        if (set) {
+            fitter.SetToOne.stash = Eval (fitter.parameter_id);
+            parameters.SetConstraint (fitter.parameter_id, "1", "");
+        } else {
+            parameters.SetValue (fitter.parameter_id, fitter.SetToOne.stash);
+        }
+        return 1;
+    }
+    
+    fitter.pvalues = {};
+
+    for (parameter; in; fitter.global_dnds) {
+        
+        fitter.parameter_id = ((fitter.results[terms.global])[parameter[terms.description]])[terms.id];
+        fitter.parameter_desc = parameter[terms.description];
+        io.ReportProgressMessageMD("fitter", "LRT", "\n>Testing _`fitter.parameter_desc`_ == 1");
+        fitter.LRTs     [fitter.parameter_desc] = (estimators.ConstrainAndRunLRT (fitter.results[terms.likelihood_function], "fitter.SetToOne"));
+        io.ReportProgressMessageMD("fitter", "LRT", "\nLikelihood ratio test for _`fitter.parameter_desc` == 1_, **p = " + Format ((fitter.LRTs[fitter.parameter_desc])[terms.p_value], 8, 4) + "**.");
+        fitter.pvalues  [fitter.parameter_desc] =  (fitter.LRTs     [fitter.parameter_desc])[terms.p_value];
+    }
+    
+    
+    fitter.json [terms.json.test_results] = fitter.LRTs;
+    selection.io.stopTimer (fitter.json [terms.json.timers], fitter.terms.LRT);
+
+}
 
 utility.ForEachPair (fitter.filter_specification, "_key_", "_value_",
     'selection.io.json_store_branch_attribute(fitter.json, fitter.terms.MG94 , terms.branch_length, fitter.display_orders[fitter.terms.MG94 ],

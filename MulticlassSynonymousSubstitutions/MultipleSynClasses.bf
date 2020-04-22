@@ -16,8 +16,8 @@ utility.SetEnvVariable ("NORMALIZE_SEQUENCE_NAMES", TRUE);
 
 
 fitter.analysis_description = {terms.io.info : "Fit an MG94xREV model where synonymous substitutions are partitioned into several classes and within- and between-class rates are estimated. There are several selectable options for the frequency 
-estimators and report the fit results including dN/dS ratios, and synonymous and non-synonymous branch lengths. v0.2 adds the ability to compute confidence intervals",
-                               terms.io.version : "0.2",
+estimators and report the fit results including dN/dS ratios, and synonymous and non-synonymous branch lengths. v0.2 adds the ability to compute confidence intervals. v0.3 adds the ability to perform LRTs.",
+                               terms.io.version : "0.3",
                                terms.io.authors : "Sergei L Kosakovsky Pond",
                                terms.io.contact : "spond@temple.edu",
                                terms.io.requirements : "in-frame codon alignment and a phylogenetic tree, and a TSV file with codon class partitioning"
@@ -28,6 +28,7 @@ io.DisplayAnalysisBanner (fitter.analysis_description);
 
 namespace fitter.terms {
     MG94 = "MG94 with multiple classes of synonymous substitutions";
+    LRT = "LRT testing;"
 }
 
 KeywordArgument ("code",        "Which genetic code should be used", "Universal");
@@ -37,7 +38,8 @@ KeywordArgument ("classes",     "A TSV file with three columns (AA, Codon, Class
 KeywordArgument ("neutral",     "Neutral reference class");
 KeywordArgument ("type",        "Model type: global (single dN/dS for all branches) or local (separate dN/dS)", terms.global, "Model Type");
 KeywordArgument ("frequencies", "Equilibrium frequency estimator", "CF3x4");
-KeywordArgument ("ci", "Compute profile confidence intervals", "No");
+KeywordArgument ("ci",          "Compute profile confidence intervals", "No");
+KeywordArgument ("lrt",         "Perform LRT to test which rates are different from the neutral rate", "No");
 
 fitter.json    = {
                     terms.json.analysis: fitter.analysis_description,
@@ -50,7 +52,8 @@ fitter.display_orders = {terms.original_name      :  -1,
                          terms.json.nucleotide_gtr: 0,
                          fitter.terms.MG94        : 1,
                          fitter.terms.dS          : 2,
-                         fitter.terms.dN          : 3
+                         fitter.terms.dN          : 3,
+                         fitter.terms.LRT: 2,
                         };
                         
 terms.fitter.ci = "Confidence Intervals";
@@ -96,6 +99,9 @@ fitter.frequency_type = io.SelectAnOption ({"CF3x4" : terms.frequencies.CF3x4,
 fitter.compute_ci = io.SelectAnOption ({"No"  : "Do not compute profile confidence intervals for substitution rates",
                                         "Yes" : "Compute profile confidence intervals for substitution rates"}, "Compute profile confidence intervals") != "No";
 
+fitter.compute_lrt = io.SelectAnOption ({"No"  : "Do not perform LRT",
+                                        "Yes" : "Perform LRT to compare synonymous rates and omega == 1"}, "Perform LRT to test rate equality and omega != 1") != "No";
+
 
 KeywordArgument ("output", "Write the resulting JSON to this file (default is to save to the same path as the alignment file + 'MG94.json')", fitter.codon_data_info [terms.json.json]);
 fitter.codon_data_info [terms.json.json] = io.PromptUserForFilePath ("Save the resulting JSON file to");
@@ -105,7 +111,7 @@ namespace fitter {
 }
 
 io.ReportProgressMessageMD ("fitter", fitter.terms.MG94,  "Fitting `fitter.terms.MG94`");
-selection.io.startTimer (fitter.json [terms.json.timers], fitter.terms.MG94 , fitter.display_order [fitter.terms.MG94 ]);
+selection.io.startTimer (fitter.json [terms.json.timers], fitter.terms.MG94 , fitter.display_orders [fitter.terms.MG94 ]);
 
 fitter.results =  estimators.FitCodonModel (fitter.filter_names, fitter.trees, "fitter.defineMG", fitter.codon_data_info [utility.getGlobalValue("terms.code")],
     {
@@ -181,8 +187,52 @@ io.ReportProgressMessageMD ("fitter", fitter.terms.MG94 + terms.genetic_code.non
 KeywordArgument ("save-fit", "Save MG94 model fit to this file (default is not to save)", "/dev/null");
 io.SpoolLFToPath(fitter.results[terms.likelihood_function], io.PromptUserForFilePath ("Save MG94 model fit to this file ['/dev/null' to skip]"));
 
-
 selection.io.stopTimer (fitter.json [terms.json.timers], fitter.terms.MG94);
+
+if (fitter.compute_lrt) {
+    selection.io.startTimer (fitter.json [terms.json.timers], fitter.terms.LRT , fitter.display_orders [fitter.terms.LRT ]);
+
+    io.ReportProgressMessageMD("fitter", "LRT", "Running likelihood ratio tests to compare all rates to the neutral rate (=1)");
+
+    fitter.LRTs = {};
+    
+    function fitter.SetToOne (set) {
+        if (set) {
+            fitter.SetToOne.stash = Eval (fitter.parameter_id);
+            parameters.SetConstraint (fitter.parameter_id, "1", "");
+        } else {
+            parameters.SetValue (fitter.parameter_id, fitter.SetToOne.stash);
+        }
+        return 1;
+    }
+    
+    fitter.pvalues = {};
+
+    for (parameter; in; fitter.global_dnds) {
+        
+        fitter.parameter_id = ((fitter.results[terms.global])[parameter[terms.description]])[terms.id];
+        fitter.parameter_desc = parameter[terms.description];
+        io.ReportProgressMessageMD("fitter", "LRT", "\n>Testing _`fitter.parameter_desc`_ == 1");
+        fitter.LRTs     [fitter.parameter_desc] = (estimators.ConstrainAndRunLRT (fitter.results[terms.likelihood_function], "fitter.SetToOne"));
+        io.ReportProgressMessageMD("fitter", "LRT", "\nLikelihood ratio test for _`fitter.parameter_desc` == 1_, uncorrected **p = " + Format ((fitter.LRTs[fitter.parameter_desc])[terms.p_value], 8, 4) + "**.");
+        fitter.pvalues  [fitter.parameter_desc] =  (fitter.LRTs     [fitter.parameter_desc])[terms.p_value];
+    }
+    
+    fitter.corrected = math.HolmBonferroniCorrection (fitter.pvalues);
+    
+    io.ReportProgressMessageMD("fitter", "LRT", "#### Holm-Bonferroni Corrected p-values");
+    
+    for (parameter, info; in; fitter.LRTs) {
+        (fitter.LRTs[parameter])[terms.json.corrected_pvalue] = fitter.corrected[parameter];
+        (fitter.LRTs[parameter])[terms.json.uncorrected_pvalue] = (fitter.LRTs[parameter])[terms.p_value];
+        (fitter.LRTs[parameter]) - terms.p_value;
+        io.ReportProgressMessageMD("fitter", "LRT", "- Likelihood ratio test for _`parameter`_ == 1, corrected **p = " + Format ((fitter.LRTs[parameter])[terms.json.corrected_pvalue], 8, 4) + "**.");
+    }
+    
+    fitter.json [terms.json.test_results] = fitter.LRTs;
+    selection.io.stopTimer (fitter.json [terms.json.timers], fitter.terms.LRT);
+
+}
 
 selection.io.stopTimer (fitter.json [terms.json.timers], "Overall");
 io.ReportProgressMessageMD ("fitter", "writing", "Writing detailed analysis report to \`" + fitter.codon_data_info [terms.json.json] + "\'");

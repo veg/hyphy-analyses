@@ -14,34 +14,47 @@ See example at the end of the document
 ### Complete options list 
 
 ```
-Analysis options description
-----------------------------
+Available analysis command line options
+---------------------------------------
+Use --option VALUE syntax to invoke
+If a [reqired] option is not provided on the command line, the analysis will prompt for its value
+[conditionally required] options may or not be required based on the values of other options
+
+rooted
+	Accept rooted trees
+	default value: No
+
 code
 	Which genetic code should be used
-	defaut value: Universal
+	default value: Universal
 
 alignment [required]
 	An in-frame codon alignment in one of the formats supported by HyPhy
 
-tree
+tree [conditionally required]
 	A phylogenetic tree
-	defaut value: null [computed at run time]
+	applies to: Please select a tree file for the data:
 
 type
 	Model type: global (single dN/dS for all branches) or local (separate dN/dS)
-	defaut value: terms.global [computed at run time]
+	default value: terms.global [computed at run time]
+	applies to: Model Type
 
 frequencies
 	Equilibrium frequency estimator
-	defaut value: CF3x4
+	default value: CF3x4
+
+lrt
+	Perform LRT to test which for dN/dS == 1 (global model only)
+	default value: No
 
 output
 	Write the resulting JSON to this file (default is to save to the same path as the alignment file + 'MG94.json')
-	defaut value: fitter.codon_data_info[terms.json.json] [computed at run time]
+	default value: fitter.codon_data_info[terms.json.json] [computed at run time]
 
 save-fit
 	Save MG94 model fit to this file (default is not to save)
-	defaut value: /dev/null
+	default value: /dev/null
 ```
 
 ### Model type
@@ -62,7 +75,7 @@ See [this paper](https://journals.plos.org/plosone/article?id=10.1371/journal.po
 
 
 ```
-HYPHYMP FitMG94.bf --alignment CD2.nex 
+HYPHYMP FitMG94.bf --alignment CD2.nex --lrt Yes
 ```
 
 --- 
@@ -100,6 +113,12 @@ synonymous and non-synonymous branch lengths
 ### Fitting Standard MG94
 * Log(L) = -3467.00, AIC-c =  6997.08 (31 estimated parameters)
 * non-synonymous/synonymous rate ratio =   0.9946
+
+### Running the likelihood ratio tests for dN/dS=1
+
+>Testing _non-synonymous/synonymous rate ratio_ == 1
+
+Likelihood ratio test for _non-synonymous/synonymous rate ratio == 1_, **p =   0.9441**.
 
 ### **Synonymous tree** 
 ((((PIG:0.04984627036053099,COW:0.06403799551220878)Node3:0.02628206419849433,HORSE:0.05462441699415268,CAT:0.07072042159004242)Node2:0.01660606657724141,((RHMONKEY:0.0009603406563057343,BABOON:0.0004580422901830288)Node9:0.006698871580291192,(HUMAN:0,CHIMP:0.0004723658790532533)Node12:0.004621767454293861)Node8:0.02833161659368989)Node1:0.07347572784488095,RAT:0.01731155959494845,MOUSE:0.03105524853252499)
