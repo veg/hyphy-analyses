@@ -197,10 +197,10 @@ if (None == filter.reference_sequences) {
 
  
                 filter.frameshifted [_seq_record_] = 1;
+            }  else {
+                filter.sequences_with_copies [filter.read_to_check] + _seq_record_;
             }
-        } else {
-            filter.sequences_with_copies [filter.read_to_check] + _seq_record_;
-        }
+        } 
 
         filter.seq_count += 1;
     ');  
@@ -211,6 +211,13 @@ if (None == filter.reference_sequences) {
     filter.longest_seq_L = Abs (filter.longest_seq ) $ 3;
 
  }
+ 
+console.log ("\n" + Abs(filter.frameshifted));
+console.log (Abs(filter.sequences_with_copies));
+
+for (i, s; in; filter.sequences_with_copies) {
+    console.log (Abs(s));
+}
 
 io.ClearProgressBar ();
 io.ReportProgressMessage ("Data QC", "Found `Abs(filter.clean_seqs)` unique sequences that were in frame");

@@ -39,12 +39,15 @@ filter.tree = io.PromptUserForString ("An optional tree file to trim");
 if (filter.tree != "None") {
     fscanf (filter.tree, "Raw", filter.tree_string);   
     filter.tree  = trees.LoadAnnotatedTopology (filter.tree_string);
+    
     Topology T = filter.tree[terms.trees.newick_with_lengths];
     
     filter.valid_names = {};
     for (n; in; alignments.GetSequenceNames ("filter.datafilter.unique")) {
         filter.valid_names [n] = TRUE;
     }
+    
+    
     filter.delete_leaves = {};
     for (k, s; in; filter.tree[terms.trees.partitioned]) {
         if (s == terms.tree_attributes.leaf) {

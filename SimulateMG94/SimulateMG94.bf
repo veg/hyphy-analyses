@@ -31,6 +31,7 @@ KeywordArgument ("code",                 "Which genetic code should be used", "U
 KeywordArgument ("tree",                 "A phylogenetic tree with branch lengths or annotations");
 KeywordArgument ("sites",                "How many codon sites to simulate", 500);
 KeywordArgument ("replicates",           "How many replicates", 1);
+KeywordArgument ("root-seq",             "Use a specific root sequence to simulate from (overrides --sites)", "None");
 KeywordArgument ("base-frequencies",     "Base frequencies to use. 'equal' or 9 comma-separated values [A in first codon position, C-1, G-1, A-2, C-2, G-2...] or 12 comma-separated values [A in first codon position, C-1, G-1, T-1, A-2, C-2, G-2, T-2...] to specify positional nucleotide frequencies]", "equal");
 KeywordArgument ("frequency-estimator",  "Equilibrium frequency estimator", "CF3x4");
 KeywordArgument ("model",                "The substitution model to use", "MG94");
@@ -47,6 +48,15 @@ simulator.tree = trees.LoadAnnotatedTopology (FALSE);
 simulator.sites      = io.PromptUser ("The number of codons per alignment", 300, 1, 1e7, TRUE);
 simulator.replicates = io.PromptUser ("The number of replicate alignments to generate", 1, 1, 1e7, TRUE);
 
+simulator.root_seq     = io.PromptUserForString ("Use a specific root sequence to simulate from (overrides --sites)");
+
+if (simulator.root_seq != "None") {
+    io.CheckAssertion ("Abs(simulator.root_seq)>=3 && Abs(simulator.root_seq) % 3 == 0", "The length of the root string must be at least 3 and divisible by 3, had " + Abs(simulator.root_seq));
+    simulator.sites = Abs (simulator.root_seq) $ 3;
+} else {
+    simulator.root_seq = null;
+}
+
 simulator.efv        = io.PromptUserForString ("Base frequencies specification");
 
 if (simulator.efv  == "equal") {
@@ -60,31 +70,36 @@ if (simulator.efv  == "equal") {
             {0.18, 0.28, 0.33}
         };
      } else {
-         simulator.efv = Eval ("{{" +  simulator.efv + "}}");
-         if (utility.Array1D (simulator.efv) == 9) {
-                //simulator.t   = {3,3}["simulator.efv[_MATRIX_ELEMENT_COLUMN_*4+_MATRIX_ELEMENT_ROW_]"];
-                simulator.efv4 = {4,3};
-                for (simulator.c = 0; simulator.c < 3; simulator.c += 1) {
-                    for (simulator.r = 0; simulator.r < 3; simulator.r += 1) {
-                        simulator.efv4[simulator.r][simulator.c] =  simulator.efv [simulator.c * 3 + simulator.r];
+        if (io.FileExists (simulator.efv)) {
+            DataSet ds = ReadDataFile (simulator.efv);
+            HarvestFrequencies (simulator.efv, ds, 3, 1, 1);
+        } else {
+             simulator.efv = Eval ("{{" +  simulator.efv + "}}");
+             if (utility.Array1D (simulator.efv) == 9) {
+                    //simulator.t   = {3,3}["simulator.efv[_MATRIX_ELEMENT_COLUMN_*4+_MATRIX_ELEMENT_ROW_]"];
+                    simulator.efv4 = {4,3};
+                    for (simulator.c = 0; simulator.c < 3; simulator.c += 1) {
+                        for (simulator.r = 0; simulator.r < 3; simulator.r += 1) {
+                            simulator.efv4[simulator.r][simulator.c] =  simulator.efv [simulator.c * 3 + simulator.r];
+                        }
+                        simulator.efv4[3][simulator.c] = 1 - (+simulator.efv4[-1][simulator.c]);
                     }
-                    simulator.efv4[3][simulator.c] = 1 - (+simulator.efv4[-1][simulator.c]);
-                }
 
-                simulator.efv = simulator.efv4 $ Eval({{1/(+simulator.efv4[-1][0]),
-                                                        1/(+simulator.efv4[-1][1]),
-                                                        1/(+simulator.efv4[-1][2])}});
+                    simulator.efv = simulator.efv4 $ Eval({{1/(+simulator.efv4[-1][0]),
+                                                            1/(+simulator.efv4[-1][1]),
+                                                            1/(+simulator.efv4[-1][2])}});
 
-         } else {
-             if (utility.Array1D (simulator.efv) == 12) {
-                simulator.efv = {4,3}["simulator.efv[_MATRIX_ELEMENT_COLUMN_*4+_MATRIX_ELEMENT_ROW_]"];
-                simulator.efv = simulator.efv $ Eval({{1/(+simulator.efv[-1][0]),
-                                                  1/(+simulator.efv[-1][1]),
-                                                  1/(+simulator.efv[-1][2])}});
              } else {
-                io.ReportAnExecutionError ("Incorrect dimensions for the base frequency argument (9 or 12 comma separated terms)");
+                 if (utility.Array1D (simulator.efv) == 12) {
+                    simulator.efv = {4,3}["simulator.efv[_MATRIX_ELEMENT_COLUMN_*4+_MATRIX_ELEMENT_ROW_]"];
+                    simulator.efv = simulator.efv $ Eval({{1/(+simulator.efv[-1][0]),
+                                                      1/(+simulator.efv[-1][1]),
+                                                      1/(+simulator.efv[-1][2])}});
+                 } else {
+                    io.ReportAnExecutionError ("Incorrect dimensions for the base frequency argument (9 or 12 comma separated terms)");
+                 }
              }
-         }
+        }
     }
 }
 
@@ -213,10 +228,28 @@ utility.ForEachPair (simulator.sites_by_profile, "_rate_distribution_", "_site_c
         simulator.counter += 1;
     ");
     
-    //console.log (simulator.inverse_map);
 
     simulator.site_block = utility.Array1D (_site_counts_);
-    DataSet simulated_data = Simulate (simulator.T, simulator.root_freqs, simulator.matrix, simulator.site_block*simulator.replicates);
+    if (None != simulator.root_seq) {
+        simulator.template = {utility.Array1D (_site_counts_), 1};
+        simulator.template[0] = "";
+        for (k, vl; in; _site_counts_) {
+             simulator.template[vl] = simulator.root_seq[vl*3][vl*3+2];
+        }
+        simulator.start_from_seq_seed = Join ("", simulator.template);
+        
+        simulator.start_from_seq = "";  simulator.start_from_seq * (Abs (simulator.start_from_seq_seed) * simulator.replicates);
+        for (i = 0; i < simulator.replicates; i+=1) {
+            simulator.start_from_seq * simulator.start_from_seq_seed;
+        }
+        
+        simulator.start_from_seq * 0;
+        //console.log (simulator.start_from_seq);
+        DataSet simulated_data = Simulate (simulator.T, simulator.root_freqs, simulator.matrix, simulator.start_from_seq);
+        
+    } else {
+        DataSet simulated_data = Simulate (simulator.T, simulator.root_freqs, simulator.matrix, simulator.site_block*simulator.replicates);
+    }
     // simulate ALL sites from one scenario here
     if (simulator.rate_type == 0) {
          GetString (simulator.sim_names, simulated_data, -1);
