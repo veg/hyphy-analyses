@@ -212,8 +212,8 @@ if (None == filter.reference_sequences) {
 
  }
  
-console.log ("\n" + Abs(filter.frameshifted));
-console.log (Abs(filter.sequences_with_copies));
+//console.log ("\n" + Abs(filter.frameshifted));
+//console.log (Abs(filter.sequences_with_copies));
 
 for (i, s; in; filter.sequences_with_copies) {
     console.log (Abs(s));
