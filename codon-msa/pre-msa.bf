@@ -215,9 +215,9 @@ if (None == filter.reference_sequences) {
 //console.log ("\n" + Abs(filter.frameshifted));
 //console.log (Abs(filter.sequences_with_copies));
 
-for (i, s; in; filter.sequences_with_copies) {
+/*for (i, s; in; filter.sequences_with_copies) {
     console.log (Abs(s));
-}
+}*/
 
 io.ClearProgressBar ();
 io.ReportProgressMessage ("Data QC", "Found `Abs(filter.clean_seqs)` unique sequences that were in frame");
@@ -236,6 +236,14 @@ filter.skip_realign =  io.SelectAnOption  (
     {"Yes" : "Skip the re-alignment step",
      "No" : "Perform the re-alignment step"},
     "Do not realign sequences to check for frameshifts") == "Yes";
+
+
+KeywordArgument ("remove-stop-codons", "Remove sequences with stop codons", "No");
+
+filter.skip_stop_codons =  io.SelectAnOption  (
+    {"Yes" : "Remove sequences that include stop codons",
+     "No" :  "Permit sequences that include stop codons"},
+    "Remove sequences with stop codons") == "Yes";
 
 
 if (filter.E > 0) {
@@ -282,6 +290,14 @@ function filter.handle_return2 (node, result, arguments) {
 }
 
 function _write_to_file (key, value) {
+    if (filter.skip_stop_codons) {
+        DataSet _ds = ReadFromString (">COVFEFE\n" + filtered.na_seq);
+        DataSetFilter _dsf = CreateFilter (_ds, 3, "" ,"" , filter.code_info[terms.code.stops]);
+        if (_dsf.sites*3 != Abs (filtered.na_seq)) {
+            console.log ("\nWARNING: Sequence " + value + " was excluded due to the presence of stop codons");
+            return 0;
+        }
+    } 
     fprintf (filter.protein_path, ">", value, "\n",  filtered.aa_seq ^ {{"\\?","X"}}, "\n");
     fprintf (filter.nuc_path, ">", value, "\n", filtered.na_seq , "\n");
 }
