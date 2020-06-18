@@ -234,7 +234,7 @@ utility.ForEachPair (simulator.sites_by_profile, "_rate_distribution_", "_site_c
         simulator.template = {utility.Array1D (_site_counts_), 1};
         simulator.template[0] = "";
         for (k, vl; in; _site_counts_) {
-             simulator.template[k] = simulator.root_seq[vl*3][vl*3+2];
+             simulator.template[+k] = simulator.root_seq[vl*3][vl*3+2];
         }
         simulator.start_from_seq_seed = Join ("", simulator.template);
         

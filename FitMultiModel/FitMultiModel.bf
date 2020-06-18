@@ -397,20 +397,20 @@ fprintf(stdout, io.FormatTableRow(
 
 
 
-(fitter.json [fitter.terms.json.evidence_ratios])["Two-hit"] =
+(fitter.json [fitter.terms.json.evidence_ratios])["Double-hit vs Single-hit"] =
         fitter.EvidenceRatios ((fitter.json[fitter.terms.json.site_logl])[fitter.terms.MG94x2],
                                (fitter.json[fitter.terms.json.site_logl])[fitter.terms.MG94]);
 
-(fitter.json [fitter.terms.json.evidence_ratios])["Three-hit"] =
+(fitter.json [fitter.terms.json.evidence_ratios])["Triple-hit vs Double-hit"] =
         fitter.EvidenceRatios ((fitter.json[fitter.terms.json.site_logl])[fitter.terms.MG94x3],
                                (fitter.json[fitter.terms.json.site_logl])[fitter.terms.MG94x2]);
 
 if (fitter.do_islands) {
-    (fitter.json [fitter.terms.json.evidence_ratios])["Three-hit islands vs 2-hit"] =
+    (fitter.json [fitter.terms.json.evidence_ratios])["Triple-hit islands vs Double-hit"] =
         fitter.EvidenceRatios ((fitter.json[fitter.terms.json.site_logl])[fitter.terms.MG94x3xS],
                                (fitter.json[fitter.terms.json.site_logl])[fitter.terms.MG94x2]);
 
-    (fitter.json [fitter.terms.json.evidence_ratios])["Three-hit vs three-hit islands"] =
+    (fitter.json [fitter.terms.json.evidence_ratios])["Triple-hit vs Triple-hit islands"] =
         fitter.EvidenceRatios ((fitter.json[fitter.terms.json.site_logl])[fitter.terms.MG94x3],
                                (fitter.json[fitter.terms.json.site_logl])[fitter.terms.MG94x3xS]);
 
@@ -419,14 +419,14 @@ if (fitter.do_islands) {
 
 fitter.callout = {};
 
-utility.ForEachPair ((fitter.json [fitter.terms.json.evidence_ratios])["Two-hit"], "_index_", "_value_",
+utility.ForEachPair ((fitter.json [fitter.terms.json.evidence_ratios])["Double-hit vs Single-hit"], "_index_", "_value_",
 '
     if (Log (_value_) > 2) {
         fitter.callout [_index_[1]] = 1;
     }
 ');
 
-utility.ForEachPair ((fitter.json [fitter.terms.json.evidence_ratios])["Three-hit"], "_index_", "_value_",
+utility.ForEachPair ((fitter.json [fitter.terms.json.evidence_ratios])["Triple-hit vs Double-hit"], "_index_", "_value_",
 '
     if (Log (_value_) > 2) {
         fitter.callout [_index_[1]] = 1;
@@ -434,13 +434,13 @@ utility.ForEachPair ((fitter.json [fitter.terms.json.evidence_ratios])["Three-hi
 ');
 
 if (fitter.do_islands) {
-    utility.ForEachPair ((fitter.json [fitter.terms.json.evidence_ratios])["Three-hit islands vs 2-hit"], "_index_", "_value_",
+    utility.ForEachPair ((fitter.json [fitter.terms.json.evidence_ratios])["Triple-hit islands vs Double-hit"], "_index_", "_value_",
     '
         if (Log (_value_) > 2) {
             fitter.callout [_index_[1]] = 1;
         }
     ');
-    utility.ForEachPair ((fitter.json [fitter.terms.json.evidence_ratios])["Three-hit vs three-hit islands"], "_index_", "_value_",
+    utility.ForEachPair ((fitter.json [fitter.terms.json.evidence_ratios])["Triple-hit vs Triple-hit islands"], "_index_", "_value_",
     '
         if (Log (_value_) > 2) {
             fitter.callout [_index_[1]] = 1;
@@ -496,10 +496,10 @@ if (utility.Array1D (fitter.callout)) {
                     {
                         {
                             '' + (+_site_ + 1),
-                            Format (((fitter.json [fitter.terms.json.evidence_ratios])['Two-hit'])[+_site_], 10, 4),
-                            Format (((fitter.json [fitter.terms.json.evidence_ratios])['Three-hit'])[+_site_], 10, 4),
-                            Format (((fitter.json [fitter.terms.json.evidence_ratios])['Three-hit islands vs 2-hit'])[+_site_], 10, 4),
-                            Format (((fitter.json [fitter.terms.json.evidence_ratios])['Three-hit vs three-hit islands'])[+_site_], 10, 4),
+                            Format (((fitter.json [fitter.terms.json.evidence_ratios])['Double-hit vs Single-hit'])[+_site_], 10, 4),
+                            Format (((fitter.json [fitter.terms.json.evidence_ratios])['Triple-hit vs Double-hit'])[+_site_], 10, 4),
+                            Format (((fitter.json [fitter.terms.json.evidence_ratios])['Triple-hit islands vs Double-hit'])[+_site_], 10, 4),
+                            Format (((fitter.json [fitter.terms.json.evidence_ratios])['Triple-hit vs Triple-hit islands'])[+_site_], 10, 4),
                             fitter.SubstitutionHistory (fitter.site_reports [_site_])
                         }
                     }
@@ -510,8 +510,8 @@ if (utility.Array1D (fitter.callout)) {
                     {
                         {
                             '' + (+_site_ + 1),
-                            Format (((fitter.json [fitter.terms.json.evidence_ratios])['Two-hit'])[+_site_], 10, 4),
-                            Format (((fitter.json [fitter.terms.json.evidence_ratios])['Three-hit'])[+_site_], 10, 4),
+                            Format (((fitter.json [fitter.terms.json.evidence_ratios])['Double-hit vs Single-hit'])[+_site_], 10, 4),
+                            Format (((fitter.json [fitter.terms.json.evidence_ratios])['Triple-hit vs Double-hit'])[+_site_], 10, 4),
                             fitter.SubstitutionHistory (fitter.site_reports [_site_])
                         }
                     }
