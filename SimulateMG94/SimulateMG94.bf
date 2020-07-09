@@ -32,7 +32,7 @@ KeywordArgument ("tree",                 "A phylogenetic tree with branch length
 KeywordArgument ("sites",                "How many codon sites to simulate", 500);
 KeywordArgument ("replicates",           "How many replicates", 1);
 KeywordArgument ("root-seq",             "Use a specific root sequence to simulate from (overrides --sites)", "None");
-KeywordArgument ("base-frequencies",     "Base frequencies to use. 'equal' or 9 comma-separated values [A in first codon position, C-1, G-1, A-2, C-2, G-2...] or 12 comma-separated values [A in first codon position, C-1, G-1, T-1, A-2, C-2, G-2, T-2...] to specify positional nucleotide frequencies]", "equal");
+KeywordArgument ("base-frequencies",     "Base frequencies to use. 'equal' or 9 comma-separated values [A in first codon position, C-1, G-1, A-2, C-2, G-2...] or 12 comma-separated values [A in first codon position, C-1, G-1, T-1, A-2, C-2, G-2, T-2...] to specify positional nucleotide frequencies], or the name of a file to compute frequencies from", "equal");
 KeywordArgument ("frequency-estimator",  "Equilibrium frequency estimator", "CF3x4");
 KeywordArgument ("model",                "The substitution model to use", "MG94");
 

@@ -1,0 +1,108 @@
+LoadFunctionLibrary("libv3/all-terms.bf"); 
+LoadFunctionLibrary("libv3/UtilityFunctions.bf");
+LoadFunctionLibrary("libv3/models/parameters.bf");
+LoadFunctionLibrary("libv3/convenience/random.bf");
+
+global simulator.site.alpha = 1;
+
+simulator.site_variables = {};
+
+lfunction simulator.prepare_site_distribution (model, site_count, tree, tree_info) {
+ 
+    rates = (model[^"terms.parameters"])[^"terms.local"];
+    class_count = utility.Array1D (model [^"terms.model.residue_properties"]);    
+    re_m = "^" +  terms.propertyImportance("");
+    
+    
+    
+    simulator.site_variables = {1, 2+class_count};
+    simulator.site_variables[0] = "";
+    simulator.site_lambdas = {};
+    
+    for (i, v; in; rates) {
+        if (regexp.Find (i, re_m)) {
+            simulator.site_lambdas [rates[i]] = "simulator.lambda." + rates[i];
+            simulator.site_variables[2 + class_counter] = simulator.site_lambdas [rates[i]];
+            parameters.DeclareGlobalWithRanges (simulator.site_lambdas [rates[i]], 0, -10, 10);
+            class_counter += 1;
+        } else {
+            if (i == ^"terms.parameters.synonymous_rate") {
+                local_alpha  = v;
+                global_alpha = "simulator.alpha";
+                parameters.DeclareGlobalWithRanges (global_alpha, 1, 0, 10000);
+                simulator.site_variables[0] = global_alpha;
+
+            } else {
+                local_beta  = v;
+                global_beta= "simulator.beta";
+                parameters.DeclareGlobalWithRanges (global_beta, 1, 0, 10000);
+                simulator.site_variables[1] = global_beta;
+            }
+        }
+    }
+    
+     
+    for (_node_; in; ^tree) {
+         parameters.SetConstraint ("`tree`.`_node_`.`local_alpha`",global_alpha,"");
+         parameters.SetConstraint ("`tree`.`_node_`.`local_beta`",global_beta,"");
+         for (r,p; in; simulator.site_lambdas) {
+            parameters.SetConstraint ("`tree`.`_node_`.`r`",p,"");
+         }
+             
+    }
+         
+    KeywordArgument   ("gamma-shape-srv", "The shape of the gamma parameter for synonymous rates (unit mean)", "1.");            
+    alpha_srv = io.PromptUser ("The shape of the gamma parameter for SRV (unit mean)", 1.0, 1e-6, 20, FALSE);
+    KeywordArgument   ("gamma-shape", "The shape of the gamma parameter for omegas (rate = beta = 1)", "0.5");            
+    alpha = io.PromptUser ("The shape of the gamma parameter for omegas (rate = beta = 1)", 1.0, 1e-6, 20, FALSE);
+    KeywordArgument   ("fraction-same", "The fraction of sites where there is no property effect", "0.8");            
+    fraction_same = io.PromptUser ("The fraction of sites where omegas are the same ", 0.8, 0, 1, FALSE);
+    KeywordArgument   ("effect-mean", "The mean property effect", "0.0");            
+    mean_effect = io.PromptUser ("Mean property effect ", 0.0, -5, 5, FALSE);
+    KeywordArgument   ("effect-variance", "The variance for the property effect", "1.0");            
+    variance_effect = Sqrt (io.PromptUser ("Mean property effect variance ", 1.0, 0, 10, FALSE));
+
+    site_profile = {site_count, 2 + class_count};
+    
+    for (i = 0; i < site_count; i+=1) {
+          site_profile[i][0] = (random.gamma (alpha_srv,alpha_srv) * 100 $ 1)/100;  
+          site_profile[i][1] = (random.gamma_fast (alpha) * 100 $ 1)/100;  
+          
+          if (Random (0,1) < fraction_same) {
+               for (j = 0; j < class_count; j+=1) {
+                site_profile[i][j+2] =  0;
+              }
+         
+          } else {
+               for (j = 0; j < class_count; j+=1) {
+                site_profile[i][j+2] =  random.normal.standard () * variance_effect + mean_effect;
+              }
+          }
+    }
+    
+    ^"simulator.site_variables" = simulator.site_variables;
+    
+    return {
+        "variables" : simulator.site_variables,
+        "rates"     : site_profile
+    } ;
+    
+} 
+
+lfunction simulator.apply_site_distribution (model, site, tree) {
+    site = Eval (site);
+    
+    for (i, k; in; ^"simulator.site_variables") {
+        parameters.SetValue (k, site[i]);
+    }
+    
+ }
+
+lfunction simulator.set_site_omega (model, site_id, branch_info) {
+/**
+    no site-to-site rate variation
+*/
+
+    return ((^"simulator.site_profile")["rates"])[site_id][-1];
+
+}

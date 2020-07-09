@@ -1,0 +1,51 @@
+LoadFunctionLibrary("libv3/all-terms.bf");
+LoadFunctionLibrary("libv3/UtilityFunctions.bf");
+LoadFunctionLibrary("libv3/models/parameters.bf");
+LoadFunctionLibrary("libv3/models/codon/MG_REV_PROPERTIES.bf");
+
+
+KeywordArgument ("property-set", "Which property set to use for simulations", "Atchley");
+
+simulator.property_set = io.SelectAnOption (
+            {
+                "Atchley":"Use the five properties derived from a factor analysis of 500 amino-acid properties [Table 2 in PNAS (2005) 102(18) 6395-6400 doi: 10.1073/pnas.0408677102]",
+                "LCAP":"Use the five properties defined in the Conant and Stadler LCAP model [Mol Biol Evol (2009) 26 (5): 1155-1161. doi: 10.1093/molbev/msp031]",
+            }, 
+            "The set of properties to use in the model");
+
+ 
+simulator.report = {"Property Set" : simulator.property_set};
+
+              
+//----------------------------------------------------------------------------------------
+
+lfunction simulator.define_model.frequencies (type,code,prop_set) {
+    model = Call ("models.codon.MG_REV_PROP.ModelDescription", type, code, prop_set);
+    if (^"simulator.frequency_type" == "F3x4") {
+        model[utility.getGlobalValue("terms.model.frequency_estimator")] = "frequencies.empirical.F3x4";
+    } else {
+        if (^"simulator.frequency_type" == "F1x4") {
+            model[utility.getGlobalValue("terms.model.frequency_estimator")] = "frequencies.empirical.F1x4";
+        }
+    }
+    model [^"terms.efv_estimate"] = ^"simulator.efv";
+
+    return model;
+}
+
+//----------------------------------------------------------------------------------------
+
+
+function simulator.define_model (code) {
+
+    simulation.model =  model.generic.DefineModel("simulator.define_model.frequencies",
+        "simulator.substitution_model", {
+            "0": parameters.Quote(terms.local),
+            "1": code,
+            "2": parameters.Quote (simulator.property_set) // property set to use
+        },
+        null,
+        null);
+                     
+    return simulation.model;
+}
