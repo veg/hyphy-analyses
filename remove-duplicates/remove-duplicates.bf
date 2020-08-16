@@ -31,23 +31,23 @@ console.log ("\nThere are **`filter.unique_count`** unique sequences in alignmen
 
 if (filter.unique_count == filter.input.species) {
     console.log ("### No duplicate sequences found");
-} 
+}
 
 KeywordArgument     ("tree", "An optional tree file to trim", "None");
 filter.tree = io.PromptUserForString ("An optional tree file to trim");
 
 if (filter.tree != "None") {
-    fscanf (filter.tree, "Raw", filter.tree_string);   
+    fscanf (filter.tree, "Raw", filter.tree_string);
     filter.tree  = trees.LoadAnnotatedTopology (filter.tree_string);
-    
+
     Topology T = filter.tree[terms.trees.newick_with_lengths];
-    
+
     filter.valid_names = {};
     for (n; in; alignments.GetSequenceNames ("filter.datafilter.unique")) {
         filter.valid_names [n] = TRUE;
     }
-    
-    
+
+
     filter.delete_leaves = {};
     for (k, s; in; filter.tree[terms.trees.partitioned]) {
         if (s == terms.tree_attributes.leaf) {
@@ -56,7 +56,7 @@ if (filter.tree != "None") {
             }
         }
     }
-    
+
     T - utility.Keys(filter.delete_leaves);
     utility.SetEnvVariable ("DATAFILE_TREE", Format (T,1,1));
     utility.SetEnvVariable ("IS_TREE_PRESENT_IN_DATA", TRUE);
@@ -66,7 +66,3 @@ if (filter.tree != "None") {
 KeywordArgument ("output", "Write de-duplicated MSA to");
 filter.path = io.PromptUserForFilePath ("Write de-duplicated MSA to");
 fprintf (filter.path, CLEAR_FILE, filter.datafilter.unique);
-
-
-
-

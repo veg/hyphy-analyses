@@ -163,8 +163,6 @@ ExecuteAFile (PATH_TO_CURRENT_BF + "modules/site-variation/"   + simulator.modul
 
 simulator.site_profile = simulator.prepare_site_distribution (simulator.model, simulator.sites, "simulator.T", simulator.tree);
 
-//console.log (simulator.site_profile);
-
 simulator.sites_by_profile = {
 };
 
@@ -211,7 +209,7 @@ simulator.inverse_map = {};
 simulator.string_buffer = {};
 for (simulator.i = 0; simulator.i < simulator.replicates; simulator.i += 1) {
     simulator.string_buffer[simulator.i] = {};
-} 
+}
 
 simulator.mode = 1;
 simulator.counter = 0;
@@ -221,13 +219,13 @@ utility.ForEachPair (simulator.sites_by_profile, "_rate_distribution_", "_site_c
 
     io.ReportProgressBar ("SIMULATING", "Rate regime " + simulator.mode + " of " + utility.Array1D (simulator.sites_by_profile));
     simulator.mode   += 1;
-    
+
     utility.ForEach (_site_counts_, "_site_id_", "
         //simulator.inverse_map + (\\"\\" + 3*(_site_id_) + \\"-\\" + (3*_site_id_+2));
         simulator.inverse_map [_site_id_] = (\\"\\" + 3*(simulator.counter) + \\"-\\" + (3*simulator.counter+2));
         simulator.counter += 1;
     ");
-    
+
 
     simulator.site_block = utility.Array1D (_site_counts_);
     if (None != simulator.root_seq) {
@@ -237,16 +235,16 @@ utility.ForEachPair (simulator.sites_by_profile, "_rate_distribution_", "_site_c
              simulator.template[+k] = simulator.root_seq[vl*3][vl*3+2];
         }
         simulator.start_from_seq_seed = Join ("", simulator.template);
-        
+
         simulator.start_from_seq = "";  simulator.start_from_seq * (Abs (simulator.start_from_seq_seed) * simulator.replicates);
         for (i = 0; i < simulator.replicates; i+=1) {
             simulator.start_from_seq * simulator.start_from_seq_seed;
         }
-        
+
         simulator.start_from_seq * 0;
         //console.log (simulator.start_from_seq);
         DataSet simulated_data = Simulate (simulator.T, simulator.root_freqs, simulator.matrix, simulator.start_from_seq);
-        
+
     } else {
         DataSet simulated_data = Simulate (simulator.T, simulator.root_freqs, simulator.matrix, simulator.site_block*simulator.replicates);
     }
@@ -262,7 +260,7 @@ utility.ForEachPair (simulator.sites_by_profile, "_rate_distribution_", "_site_c
             ");
          }
     }
-    
+
     for (simulator.i = 0; simulator.i < simulator.replicates; simulator.i += 1) {
         DataSetFilter all      = CreateFilter (simulated_data, 1, siteIndex>=simulator.i*3*simulator.site_block&&siteIndex<=(simulator.i+1)*3*simulator.site_block-1);
         for (simulator.j = 0; simulator.j < all.species; simulator.j+=1) {
@@ -270,7 +268,7 @@ utility.ForEachPair (simulator.sites_by_profile, "_rate_distribution_", "_site_c
             (simulator.string_buffer[simulator.i])[simulator.j] * sim.string;
         }
     }
-    
+
     simulator.rate_type += 1;
 ');
 
@@ -286,7 +284,7 @@ for (simulator.i = 0; simulator.i < simulator.replicates; simulator.i += 1) {
                 (simulator.string_buffer[simulator.i])[simulator.j] = '>' + _value_ + '\n' + (simulator.string_buffer[simulator.i])[simulator.j];
                 simulator.j += 1;
             ");
-    
+
     fprintf (simulator.path + ".replicate." + (1+simulator.i) , CLEAR_FILE, Join ("\n",(simulator.string_buffer[simulator.i])));
     DataSet existing_data  = ReadDataFile (simulator.path + ".replicate." + (1+simulator.i));
     utility.SetEnvVariable ("DATAFILE_TREE",simulator.tree[terms.trees.newick_annotated]);
@@ -294,7 +292,3 @@ for (simulator.i = 0; simulator.i < simulator.replicates; simulator.i += 1) {
     DataSetFilter all      = CreateFilter (existing_data, 1, simulator.inverse_map);
     fprintf (simulator.path + ".replicate." + (1+simulator.i) , CLEAR_FILE, all);
 }
-
-
-
-
