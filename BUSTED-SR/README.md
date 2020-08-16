@@ -1,8 +1,50 @@
 ## A test for episodic conservation
 
-> Analysis suggested by Sammy Cheng (scheng25@u.rochester.edu)
+This analysis is a modification of [BUSTED[S]](https://academic.oup.com/mbe/article/37/8/2430/5739973) where **test** and **background** branches have independent synonymous rate distributions. Unless there are two branch classes (test and background) and the `SRV` option is set to `Yes` (also default), the analysis will be identical to BUSTED[S]. Can be used to examine, e.g., the effects of heterotachy (not selective pressure) affecting subtrees. For instance, on the example dataset, there is no benefit of adding a separate distribution of synonymous rates (higher c-AIC), and the p-value for the selection test is largely unaffected.
 
-This analysis is a modification of [BUSTED[S]](https://academic.oup.com/mbe/article/37/8/2430/5739973) where **test** and **background** branches have independent synonymous rate distributions. Unless there are two branch classes (test and background) and the `SRV` option is set to `Yes` (also default), the analysis will be identical to BUSTED[S].
+
+#### Performing the full (dN/dS > 1 allowed) branch-site model fit
+* Log(L) = -3416.83, AIC-c =  6919.64 (42 estimated parameters)
+
+...
+
+* The following rate distribution for site-to-site **synonymous** rate variation was inferred along **background** branches
+
+|               Rate                | Proportion, % |               Notes               |
+|-----------------------------------|---------------|-----------------------------------|
+|               0.497               |    62.677     |                                   |
+|               1.845               |    37.323     |                                   |
+
+* The following rate distribution for site-to-site **synonymous** rate variation was inferred
+
+|               Rate                | Proportion, % |               Notes               |
+|-----------------------------------|---------------|-----------------------------------|
+|               0.466               |    72.967     |                                   |
+|               2.441               |    27.033     |                                   |
+
+...
+
+Likelihood ratio test for episodic diversifying positive selection, **p =   0.3763**.
+
+**whereas starndard BUSTED[S]** has
+
+## Performing the full (dN/dS > 1 allowed) branch-site model fit
+* Log(L) = -3416.44, AIC-c =  6912.59 (39 estimated parameters)
+
+...
+
+* The following rate distribution for site-to-site **synonymous** rate variation was inferred
+
+|               Rate                | Proportion, % |               Notes               |
+|-----------------------------------|---------------|-----------------------------------|
+|               0.417               |    44.192     |                                   |
+|               1.462               |    55.808     |                                   |
+
+...
+
+Likelihood ratio test for episodic diversifying positive selection, **p =   0.2835**.
+
+---
 
 ## Invokation
 
@@ -10,7 +52,7 @@ This analysis has one **required** argument
 
 - `--alignment` the alignment file and tree
 HyPhy will write Markdown output to the screen and a JSON file with detailed fit results.
-See example at the end of the document
+See example at the end of the document.
 
 ### Complete options list
 
@@ -65,7 +107,6 @@ save-fit
 	default value: /dev/null
 
 ```
-
 
 ##Example run
 
@@ -186,5 +227,4 @@ The number of initial random guesses to 'seed' rate values optimization (permiss
 ----
 ## Branch-site unrestricted statistical test of episodic diversification [BUSTED]
 Likelihood ratio test for episodic diversifying positive selection, **p =   0.3763**.
-
 ---
