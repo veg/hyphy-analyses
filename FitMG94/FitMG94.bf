@@ -29,6 +29,9 @@ namespace fitter.terms {
     MG94 = "Standard MG94";
     LRT = "LRT";
 }  
+
+terms.fitter.ci = "Confidence Intervals";
+
  
 KeywordArgument ("rooted", "Accept rooted trees", "No");
 KeywordArgument ("code",        "Which genetic code should be used", "Universal");  
@@ -81,6 +84,7 @@ if (fitter.model_type == terms.global) {
                                             "Yes" : "Perform LRT to test omega == 1"}, "Perform LRT to test omega != 1") != "No";
 }
 
+
 KeywordArgument ("output", "Write the resulting JSON to this file (default is to save to the same path as the alignment file + 'MG94.json')", fitter.codon_data_info [terms.json.json]);
 fitter.codon_data_info [terms.json.json] = io.PromptUserForFilePath ("Save the resulting JSON file to");
 
@@ -112,18 +116,9 @@ fitter.results =  estimators.FitCodonModel (fitter.filter_names, fitter.trees, "
     fitter.gtr_results);
 
 
+
 io.ReportProgressMessageMD("fitter", fitter.terms.MG94 , "* " + selection.io.report_fit (fitter.results, 0, fitter.codon_data_info[terms.data.sample_size]));
 fitter.global_dnds = selection.io.extract_global_MLE_re (fitter.results, terms.parameters.omega_ratio);
-
-
-utility.ForEach (fitter.global_dnds, "_value_", 
-'
-    fitter.omega_parameters = ((fitter.results[terms.global])[_value_[terms.description]])[terms.id];
-    fitter.omega.CI = parameters.GetProfileCI(fitter.omega_parameters,fitter.results[terms.likelihood_function], 0.95);
-    io.ReportProgressMessageMD ("fitter", fitter.terms.MG94, "* " + _value_[utility.getGlobalValue("terms.description")] + " = " + Format (_value_[utility.getGlobalValue("terms.fit.MLE")],8,4) + 
-                    " (95% profile CI " + Format ((fitter.omega.CI )[terms.lower_bound],8,4) + "-" + Format ((fitter.omega.CI )[terms.upper_bound],8,4) + ")");
-
-');
 
 selection.io.json_store_lf (fitter.json,
                             fitter.terms.MG94 ,
@@ -132,6 +127,50 @@ selection.io.json_store_lf (fitter.json,
                             fitter.sample_size,
                             utility.Map (fitter.results[terms.global], "_value_", '_value_ [terms.fit.MLE]'),
                             fitter.display_orders[fitter.terms.MG94 ]);
+
+
+for (_value_; in; fitter.global_dnds) {
+    fitter.omega_parameters = ((fitter.results[terms.global])[_value_[terms.description]])[terms.id];
+    fitter.omega.CI = parameters.GetProfileCI(fitter.omega_parameters,fitter.results[terms.likelihood_function], 0.95);
+    io.ReportProgressMessageMD ("fitter", fitter.terms.MG94, "* " + _value_[utility.getGlobalValue("terms.description")] + " = " + Format (_value_[utility.getGlobalValue("terms.fit.MLE")],8,4) + 
+                    " (95% profile CI " + Format ((fitter.omega.CI )[terms.lower_bound],8,4) + "-" + Format ((fitter.omega.CI )[terms.upper_bound],8,4) + ")");
+                    
+    utility.EnsureKey(((fitter.json[terms.json.fits])[fitter.terms.MG94]), terms.fitter.ci);
+    (((((fitter.json[terms.json.fits])[fitter.terms.MG94]))[ terms.fitter.ci]))[ _value_[utility.getGlobalValue("terms.description")]] = 
+        {
+            terms.lower_bound : (fitter.omega.CI )[terms.lower_bound],
+            terms.upper_bound : (fitter.omega.CI )[terms.upper_bound]
+        };
+}
+
+if (fitter.model_type == terms.local) {
+    fitter.ci = {};
+    lfunction profile_ci (tree_name, node_name, model_description) {
+        omega = 1;
+        omega :> 0;
+        omega :< 10000;
+        
+        alphaName = tree_name + "." + node_name + "." + (model_description [utility.getGlobalValue ("terms.local")])[utility.getGlobalValue ("terms.parameters.synonymous_rate")];
+        betaName = tree_name + "." + node_name + "." + (model_description [utility.getGlobalValue ("terms.local")])[utility.getGlobalValue ("terms.parameters.nonsynonymous_rate")];
+        saveAlpha = ^alphaName;
+        saveBeta = ^betaName;
+        
+        omega = saveBeta/Max (saveAlpha, 1e-6);
+        
+        ^betaName := omega * ^alphaName;
+        ci_spec = {&omega : 1};
+    
+        (^"fitter.ci")[node_name] = parameters.GetProfileCI(ci_spec,(^"fitter.results")[^"terms.likelihood_function"], 0.95);
+        
+        ^alphaName = saveAlpha;
+        ^betaName = saveBeta;         
+    }
+    estimators.TraverseLocalParameters (fitter.results[terms.likelihood_function], fitter.results[utility.getGlobalValue("terms.model")], "profile_ci");
+    selection.io.json_store_branch_attribute(fitter.json, terms.fitter.ci , terms.json.branch_attributes, fitter.display_orders[fitter.terms.MG94 ] + 3,
+                                             "0",
+                                             fitter.ci);
+}
+
 
 if (fitter.compute_lrt) {
     selection.io.startTimer (fitter.json [terms.json.timers], fitter.terms.LRT , fitter.display_orders [fitter.terms.LRT ]);
