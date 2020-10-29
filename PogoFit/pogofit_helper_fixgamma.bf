@@ -106,7 +106,7 @@ function pogofit.fitBaselineTogether () {
         file_info = alignments.EnsureMapping(dataset_name, file_info);
 
         utility.ToggleEnvVariable ("GLOBAL_FPRINTF_REDIRECT", "/dev/null");
-        ExecuteCommands ('partitions_and_trees = trees.LoadAnnotatedTreeTopology.match_partitions (file_info[terms.data.partitions], name_mapping)',
+        ExecuteCommands ('partitions_and_trees = trees.LoadAnnotatedTreeTopology.match_partitions (file_info[terms.data.partitions], pogofit.name_mapping)',
                          {"0" : "Y"});
         utility.ToggleEnvVariable ("GLOBAL_FPRINTF_REDIRECT", None);
 
