@@ -145,11 +145,12 @@ for (_value_; in; fitter.global_dnds) {
 
 if (fitter.model_type == terms.local) {
     fitter.ci = {};
-    lfunction profile_ci (tree_name, node_name, model_description) {
+    lfunction profile_ci (tree_name, node_name, model_description, ignore) {
         omega = 1;
         omega :> 0;
         omega :< 10000;
         
+         
         alphaName = tree_name + "." + node_name + "." + (model_description [utility.getGlobalValue ("terms.local")])[utility.getGlobalValue ("terms.parameters.synonymous_rate")];
         betaName = tree_name + "." + node_name + "." + (model_description [utility.getGlobalValue ("terms.local")])[utility.getGlobalValue ("terms.parameters.nonsynonymous_rate")];
         saveAlpha = ^alphaName;
@@ -165,6 +166,7 @@ if (fitter.model_type == terms.local) {
         ^alphaName = saveAlpha;
         ^betaName = saveBeta;         
     }
+    
     estimators.TraverseLocalParameters (fitter.results[terms.likelihood_function], fitter.results[utility.getGlobalValue("terms.model")], "profile_ci");
     selection.io.json_store_branch_attribute(fitter.json, terms.fitter.ci , terms.json.branch_attributes, fitter.display_orders[fitter.terms.MG94 ] + 3,
                                              "0",
