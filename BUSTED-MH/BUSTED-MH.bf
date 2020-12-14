@@ -1,4 +1,4 @@
-RequireVersion ("2.4.0");
+RequireVersion ("2.5.23");
 
 
 LoadFunctionLibrary("libv3/all-terms.bf"); // must be loaded before CF3x4
@@ -703,7 +703,7 @@ function busted.init_delta  (lf_id, components, data_filter, tree, model_map, in
 
 //------------------------------------------------------------------------------
 
-lfunction busted.set.delta (tree_name, node_name, model_description) {
+lfunction busted.set.delta (tree_name, node_name, model_description, unused) {
     if (utility.Has (model_description [utility.getGlobalValue ("terms.local")], utility.getGlobalValue ("terms.parameters.multiple_hit_rate"), "String")) {
         k = (model_description [utility.getGlobalValue ("terms.local")])[utility.getGlobalValue ("terms.parameters.multiple_hit_rate")];
         //console.log (k);
@@ -713,7 +713,7 @@ lfunction busted.set.delta (tree_name, node_name, model_description) {
     return "";
 }
 
-lfunction busted.set.psi (tree_name, node_name, model_description) {
+lfunction busted.set.psi (tree_name, node_name, model_description, unused) {
     if (utility.Has (model_description [utility.getGlobalValue ("terms.local")], utility.getGlobalValue ("terms.parameters.triple_hit_rate"), "String")) {
         k = (model_description [utility.getGlobalValue ("terms.local")])[utility.getGlobalValue ("terms.parameters.triple_hit_rate")];
         //console.log (k);
@@ -723,7 +723,7 @@ lfunction busted.set.psi (tree_name, node_name, model_description) {
     return "";
 }
 
-lfunction busted.set.psi_islands (tree_name, node_name, model_description) {
+lfunction busted.set.psi_islands (tree_name, node_name, model_description, unused) {
     if (utility.Has (model_description [utility.getGlobalValue ("terms.local")], utility.getGlobalValue ("terms.parameters.triple_hit_rate_syn"), "String")) {
         k = (model_description [utility.getGlobalValue ("terms.local")])[utility.getGlobalValue ("terms.parameters.triple_hit_rate_syn")];
         //console.log (k);
