@@ -218,16 +218,47 @@ fitter.ESEN_trees = estimators.FitMGREVExtractComponentBranchLengths (fitter.cod
 fitter.stree_info  = trees.ExtractTreeInfo ((fitter.ESEN_trees [terms.fit.synonymous_trees])[0]);
 fitter.nstree_info = trees.ExtractTreeInfo ((fitter.ESEN_trees [terms.fit.nonsynonymous_trees])[0]);
 
+fitter.codon_counts = genetic_code.ComputePairwiseDifferencesAndExpectedSites (fitter.codon_data_info[terms.code],{});
+
+fitter.efv = (fitter.results[terms.efv_estimate])[utility.Keys(fitter.results[terms.efv_estimate])[0]];
+
+
+
+fitter.S = +(fitter.efv $ fitter.codon_counts[terms.genetic_code.SS]); 
+fitter.NS = +(fitter.efv $ fitter.codon_counts[terms.genetic_code.NS]); 
+
 
 utility.ForEachPair (fitter.filter_specification, "_key_", "_value_",
     'selection.io.json_store_branch_attribute(fitter.json, terms.genetic_code.synonymous , terms.branch_length, fitter.display_orders[fitter.terms.MG94 ] + 1,
                                              _key_,
                                              fitter.stree_info[terms.branch_length])');
+                                   
 
 utility.ForEachPair (fitter.filter_specification, "_key_", "_value_",
     'selection.io.json_store_branch_attribute(fitter.json, terms.genetic_code.nonsynonymous , terms.branch_length, fitter.display_orders[fitter.terms.MG94 ] +2,
                                              _key_,
                                              fitter.nstree_info[terms.branch_length])');
+
+fitter.dS =  fitter.stree_info;                                     
+for (fitter.n, fitter.b; in; fitter.stree_info[terms.branch_length]) {
+    (fitter.dS [terms.branch_length])[fitter.n] = fitter.b * (fitter.S+fitter.NS)/fitter.S;
+}
+
+fitter.dN =  fitter.nstree_info;                                     
+for (fitter.n, fitter.b; in; fitter.nstree_info[terms.branch_length]) {
+    (fitter.dN [terms.branch_length])[fitter.n] = fitter.b * (fitter.S+fitter.NS)/fitter.NS;
+}
+
+
+utility.ForEachPair (fitter.filter_specification, "_key_", "_value_",
+    'selection.io.json_store_branch_attribute(fitter.json, terms.json.dS , terms.branch_length, fitter.display_orders[fitter.terms.MG94 ] + 1,
+                                             _key_,
+                                             fitter.dS[terms.branch_length])');
+                                             
+utility.ForEachPair (fitter.filter_specification, "_key_", "_value_",
+    'selection.io.json_store_branch_attribute(fitter.json, terms.json.dN, terms.branch_length, fitter.display_orders[fitter.terms.MG94 ] + 1,
+                                             _key_,
+                                             fitter.dN[terms.branch_length])');
 
 
 io.ReportProgressMessageMD ("fitter", fitter.terms.MG94 + terms.genetic_code.synonymous, "**Synonymous tree** \n" + (fitter.ESEN_trees [terms.fit.synonymous_trees])[0]);
