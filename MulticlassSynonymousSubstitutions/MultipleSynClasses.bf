@@ -41,6 +41,7 @@ KeywordArgument ("type",        "Model type: global (single dN/dS for all branch
 KeywordArgument ("frequencies", "Equilibrium frequency estimator", "CF3x4");
 KeywordArgument ("ci",          "Compute profile confidence intervals", "No");
 KeywordArgument ("lrt",         "Perform LRT to test which rates are different from the neutral rate", "No");
+KeywordArgument ("F81",         "Use the F81 nucleotide component to look for the effect of nucleotide biases on rate estimates", "No");
 
 fitter.json    = {
                     terms.json.analysis: fitter.analysis_description,
@@ -81,12 +82,20 @@ fitter.compute_ci = io.SelectAnOption ({"No"  : "Do not compute profile confiden
 fitter.compute_lrt = io.SelectAnOption ({"No"  : "Do not perform LRT",
                                         "Yes" : "Perform LRT to compare synonymous rates and omega == 1"}, "Perform LRT to test rate equality and omega != 1") != "No";
 
+fitter.useF81 = io.SelectAnOption ({"No"  : "Use GTR (all nucleotide rates are different)",
+                                        "Yes" : "Use F81 (all nucleotide rates are the same)"}, "Use the F81 nucleotide component to look for the effect of nucleotide biases on rate estimates") != "No";
+
+
 
 KeywordArgument ("output", "Write the resulting JSON to this file (default is to save to the same path as the alignment file + 'MG94.json')", fitter.codon_data_info [terms.json.json]);
 fitter.codon_data_info [terms.json.json] = io.PromptUserForFilePath ("Save the resulting JSON file to");
 
 namespace fitter {
     doGTR ("fitter");
+}
+
+if (fitter.useF81) {
+    estimators.fixSubsetOfEstimates(busted.gtr_results, busted.gtr_results[terms.global]);
 }
 
 io.ReportProgressMessageMD ("fitter", fitter.terms.MG94,  "Fitting `fitter.terms.MG94`");
@@ -96,12 +105,19 @@ function fitter.defineMG (type,code) {
     return models.codon.MSS.ModelDescription (type,code,fitter.codons_by_class);
 }
 
-fitter.results =  estimators.FitCodonModel (fitter.filter_names, fitter.trees, "fitter.defineMG", fitter.codon_data_info [utility.getGlobalValue("terms.code")],
-    {
+fitter.opt.options = {
         terms.run_options.model_type: fitter.model_type,
         terms.run_options.retain_lf_object: TRUE,
         terms.run_options.retain_model_object : TRUE
-    },
+        
+    };
+
+if (fitter.useF81) {
+    fitter.opt.options [terms.run_options.apply_user_constraints] = "fitter.fix_to_F81";
+}
+
+fitter.results =  estimators.FitCodonModel (fitter.filter_names, fitter.trees, "fitter.defineMG", fitter.codon_data_info [utility.getGlobalValue("terms.code")],
+    fitter.opt.options,
     fitter.gtr_results);
 
 
@@ -223,5 +239,18 @@ io.SpoolJSON (fitter.json, fitter.codon_data_info [terms.json.json]);
 
 return fitter.results;
 
+lfunction fitter.fix_to_F81 (lf_id, components, data_filter, tree, model_map, initial_values, model_objects) {
+    c = 0;
+    re = terms.nucleotideRate("[ACGT]","[ACGT]");
+    for (m; in; model_objects) {
+        for (d, p; in; (m[^"terms.parameters"])[^"terms.global"]) {
+            if (regexp.Find (d, re)) {
+                parameters.SetConstraint (p, "1", "global");
+                c+=1;
+            }
+        }
+    }
+    return c;
+}
 
 
