@@ -90,7 +90,7 @@ filter.nuc_path = io.PromptUserForFilePath ("Save reduced RNA sequences file to"
 KeywordArgument ("filter", "Filtered data", filter.nuc_data[terms.data.file] + "_filtered.json");
 filter.filtered_path = io.PromptUserForFilePath ("Save filtered sequences file to");
 
-KeywordArgument ("filter", "Copies data", filter.nuc_data[terms.data.file] + "_copies.json");
+KeywordArgument ("copies", "Copies data", filter.nuc_data[terms.data.file] + "_copies.json");
 filter.copies_path = io.PromptUserForFilePath ("Save sequence copies file to");
 
 
