@@ -1,13 +1,14 @@
-RequireVersion ("2.4.0");
+RequireVersion ("2.5.28");
 
 
 LoadFunctionLibrary("libv3/all-terms.bf");
+LoadFunctionLibrary("lib/mss.bf");
 LoadFunctionLibrary("libv3/UtilityFunctions.bf");
 LoadFunctionLibrary("libv3/IOFunctions.bf");
 LoadFunctionLibrary("libv3/tasks/estimators.bf");
 LoadFunctionLibrary("libv3/tasks/alignments.bf");
 LoadFunctionLibrary("libv3/tasks/trees.bf");
-LoadFunctionLibrary("libv3/models/codon/MG_REV.bf");
+LoadFunctionLibrary("libv3/models/codon/MSS.bf");
 
 LoadFunctionLibrary("SelectionAnalyses/modules/io_functions.ibf");
 LoadFunctionLibrary("SelectionAnalyses/modules/selection_lib.ibf");
@@ -40,6 +41,7 @@ KeywordArgument ("type",        "Model type: global (single dN/dS for all branch
 KeywordArgument ("frequencies", "Equilibrium frequency estimator", "CF3x4");
 KeywordArgument ("ci",          "Compute profile confidence intervals", "No");
 KeywordArgument ("lrt",         "Perform LRT to test which rates are different from the neutral rate", "No");
+KeywordArgument ("F81",         "Use the F81 nucleotide component to look for the effect of nucleotide biases on rate estimates", "No");
 
 fitter.json    = {
                     terms.json.analysis: fitter.analysis_description,
@@ -68,29 +70,7 @@ namespace fitter {
                 utility.getGlobalValue("terms.settings") : {utility.getGlobalValue("terms.settings.branch_selector") : "selection.io.SelectAllBranches"}});
 }
 
-SetDialogPrompt ("A TSV file with three columns (AA, Codon, Class) which is used to partition synonymous substitutions into groups");
-fitter.classes = io.ReadDelimitedFile (null, "\t", TRUE);
-
-io.CheckAssertion("utility.Array1D(fitter.classes[terms.io.header])==3", "Expected a TSV file with 3 columns");
-
-fitter.codons_by_class = {};
-utility.ForEach (fitter.classes[terms.io.rows], "_record_",
-'
-    fitter.codons_by_class[_record_[1]] = _record_[2];
-');
-
-fitter.classes = utility.Values(fitter.codons_by_class);
-fitter.class_count = utility.Array1D(fitter.classes);
-io.CheckAssertion("fitter.class_count>=2", "Expected at least 2 codon classes");
-
-fitter.choices = {fitter.class_count,2};
-for (i = 0; i < fitter.class_count; i += 1) {
-    fitter.choices[i][0] = fitter.classes[i];
-    fitter.choices[i][1] = "Codon class " + fitter.classes[i];
-}
-
-fitter.neutral_reference = io.SelectAnOption  (fitter.choices, "Select the codon class which will serve as the neutral rate reference (relative rate = 1)");
-
+fitter.codons_by_class =  mss.LoadClasses (null);
 fitter.model_type = io.SelectAnOption ({terms.global : "rates shared by all branches", terms.local : "separate rates for each branch"}, "Model Type");
 fitter.frequency_type = io.SelectAnOption ({"CF3x4" : terms.frequencies.CF3x4,
                                             "F3x4" : terms.frequencies.F3x4,
@@ -102,6 +82,10 @@ fitter.compute_ci = io.SelectAnOption ({"No"  : "Do not compute profile confiden
 fitter.compute_lrt = io.SelectAnOption ({"No"  : "Do not perform LRT",
                                         "Yes" : "Perform LRT to compare synonymous rates and omega == 1"}, "Perform LRT to test rate equality and omega != 1") != "No";
 
+fitter.useF81 = io.SelectAnOption ({"No"  : "Use GTR (all nucleotide rates are different)",
+                                        "Yes" : "Use F81 (all nucleotide rates are the same)"}, "Use the F81 nucleotide component to look for the effect of nucleotide biases on rate estimates") != "No";
+
+
 
 KeywordArgument ("output", "Write the resulting JSON to this file (default is to save to the same path as the alignment file + 'MG94.json')", fitter.codon_data_info [terms.json.json]);
 fitter.codon_data_info [terms.json.json] = io.PromptUserForFilePath ("Save the resulting JSON file to");
@@ -110,15 +94,30 @@ namespace fitter {
     doGTR ("fitter");
 }
 
+if (fitter.useF81) {
+    estimators.fixSubsetOfEstimates(busted.gtr_results, busted.gtr_results[terms.global]);
+}
+
 io.ReportProgressMessageMD ("fitter", fitter.terms.MG94,  "Fitting `fitter.terms.MG94`");
 selection.io.startTimer (fitter.json [terms.json.timers], fitter.terms.MG94 , fitter.display_orders [fitter.terms.MG94 ]);
 
-fitter.results =  estimators.FitCodonModel (fitter.filter_names, fitter.trees, "fitter.defineMG", fitter.codon_data_info [utility.getGlobalValue("terms.code")],
-    {
+function fitter.defineMG (type,code) {
+    return models.codon.MSS.ModelDescription (type,code,fitter.codons_by_class);
+}
+
+fitter.opt.options = {
         terms.run_options.model_type: fitter.model_type,
         terms.run_options.retain_lf_object: TRUE,
         terms.run_options.retain_model_object : TRUE
-    },
+        
+    };
+
+if (fitter.useF81) {
+    fitter.opt.options [terms.run_options.apply_user_constraints] = "fitter.fix_to_F81";
+}
+
+fitter.results =  estimators.FitCodonModel (fitter.filter_names, fitter.trees, "fitter.defineMG", fitter.codon_data_info [utility.getGlobalValue("terms.code")],
+    fitter.opt.options,
     fitter.gtr_results);
 
 
@@ -240,122 +239,18 @@ io.SpoolJSON (fitter.json, fitter.codon_data_info [terms.json.json]);
 
 return fitter.results;
 
-//----------------------------------------------------------------------------------------------------------------
-
-lfunction fitter.defineMG (type, code) {
-    m = Call ("models.codon.MG_REV.ModelDescription", type, code);
-    if (^"fitter.frequency_type" == "F3x4") {
-        m[utility.getGlobalValue("terms.model.frequency_estimator")] = "frequencies.empirical.F3x4";
-    } else {
-        if (^"fitter.frequency_type" == "F1x4") {
-            m[utility.getGlobalValue("terms.model.frequency_estimator")] = "frequencies.empirical.F1x4";
-        }
-    }
-    m[utility.getGlobalValue("terms.description")] = "The Muse-Gaut 94 codon-substitution model coupled with the general time reversible (GTR) model of nucleotide substitution, which allows multiple classes of synonymous substitution rates";
-    m[utility.getGlobalValue("terms.model.q_ij")] = "fitter.codon.MG_REV_MC._GenerateRate";
-    return m;
-}
-
-lfunction models.codon.MG_REV_MH.ModelDescription(type, code) {
-
-    // piggy-back on the standard MG_REV model for most of the code
-
-    mg_base = models.codon.MG_REV.ModelDescription (type, code);
-    mg_base[utility.getGlobalValue("terms.description")] = "The Muse-Gaut 94 codon-substitution model coupled with the general time reversible (GTR) model of nucleotide substitution, which allows for two-hit substitutions";
-    mg_base[utility.getGlobalValue("terms.model.q_ij")] = "models.codon.MG_REV_MH._GenerateRate";
-
-    return mg_base;
-}
-
-
-lfunction fitter.codon.MG_REV_MC._GenerateRate (fromChar, toChar, namespace, model_type, model) {
-
-    _GenerateRate.p = {};
-    _GenerateRate.diff = models.codon.diff.complete(fromChar, toChar);
-    diff_count = utility.Array1D (_GenerateRate.diff);
-
-    omega_term = utility.getGlobalValue ("terms.parameters.omega_ratio");
-    alpha_term = utility.getGlobalValue ("terms.parameters.synonymous_rate");
-    beta_term  = utility.getGlobalValue ("terms.parameters.nonsynonymous_rate");
-    omega      = "omega";
-    alpha      = "alpha";
-    beta       = "beta";
-
-    _tt = model[utility.getGlobalValue("terms.translation_table")];
-
-    if (diff_count == 1) {
-
-        _GenerateRate.p[model_type] = {};
-        _GenerateRate.p[utility.getGlobalValue("terms.global")] = {};
-
-        nuc_rate = "";
-
-        for (i = 0; i < diff_count; i += 1) {
-            if ((_GenerateRate.diff[i])[utility.getGlobalValue("terms.diff.from")] > (_GenerateRate.diff[i])[utility.getGlobalValue("terms.diff.to")]) {
-                nuc_p = "theta_" + (_GenerateRate.diff[i])[utility.getGlobalValue("terms.diff.to")] + (_GenerateRate.diff[i])[utility.getGlobalValue("terms.diff.from")];
-            } else {
-                nuc_p = "theta_" + (_GenerateRate.diff[i])[utility.getGlobalValue("terms.diff.from")] +(_GenerateRate.diff[i])[utility.getGlobalValue("terms.diff.to")];
-            }
-            nuc_p = parameters.ApplyNameSpace(nuc_p, namespace);
-            (_GenerateRate.p[utility.getGlobalValue("terms.global")])[terms.nucleotideRateReversible((_GenerateRate.diff[i])[utility.getGlobalValue("terms.diff.from")], (_GenerateRate.diff[i])[utility.getGlobalValue("terms.diff.to")])] = nuc_p;
-
-            nuc_rate = parameters.AppendMultiplicativeTerm (nuc_rate, nuc_p);
-       }
-
-
-        rate_entry = nuc_rate;
-
-        if (_tt[fromChar] != _tt[toChar]) {
-
-            if (model_type == utility.getGlobalValue("terms.global")) {
-                aa_rate = parameters.ApplyNameSpace(omega, namespace);
-                (_GenerateRate.p[model_type])[omega_term] = aa_rate;
-            } else {
-                aa_rate = beta;
-                (_GenerateRate.p[model_type])[beta_term] = aa_rate;
-            }
-            rate_entry += "*" + aa_rate;
-        } else {
-
-            class_from = (^"fitter.codons_by_class")[fromChar];
-            class_to   = (^"fitter.codons_by_class")[toChar];
-
-            if (class_from == class_to) {
-                if (class_from == ^"fitter.neutral_reference") {
-                    if (model_type == utility.getGlobalValue("terms.local")) {
-                        codon_rate = alpha + "_" + class_from;
-                        (_GenerateRate.p[model_type])[alpha_term + " within codon class " + class_from] = codon_rate;
-                        rate_entry += "*" + codon_rate;
-                    } else {
-                        rate_entry = nuc_rate;
-                    }
-                } else {
-                    if (model_type == utility.getGlobalValue("terms.local")) {
-                        codon_rate = alpha + "_" + class_from;
-                    } else {
-                        codon_rate = parameters.ApplyNameSpace(alpha + "_" + class_from, namespace);
-                    }
-                    (_GenerateRate.p[model_type])[alpha_term + " within codon class " + class_from] = codon_rate;
-                    rate_entry += "*" + codon_rate;
-                }
-            } else {
-                if (class_from > class_to) {
-                    class_from = (^"fitter.codons_by_class")[toChar];
-                    class_to   = (^"fitter.codons_by_class")[fromChar];
-                }
-                if (model_type == utility.getGlobalValue("terms.local")) {
-                        codon_rate = alpha + "_" + class_from + "_" + class_to;
-                } else {
-                    codon_rate = parameters.ApplyNameSpace(alpha + "_" + class_from + "_" + class_to, namespace);
-                }
-                (_GenerateRate.p[model_type])[alpha_term + " between codon classes " + class_from + " and "  + class_to] = codon_rate;
-                rate_entry += "*" + codon_rate;
+lfunction fitter.fix_to_F81 (lf_id, components, data_filter, tree, model_map, initial_values, model_objects) {
+    c = 0;
+    re = terms.nucleotideRate("[ACGT]","[ACGT]");
+    for (m; in; model_objects) {
+        for (d, p; in; (m[^"terms.parameters"])[^"terms.global"]) {
+            if (regexp.Find (d, re)) {
+                parameters.SetConstraint (p, "1", "global");
+                c+=1;
             }
         }
-
-        _GenerateRate.p[utility.getGlobalValue("terms.model.rate_entry")] = rate_entry;
     }
-
-    return _GenerateRate.p;
+    return c;
 }
+
 
