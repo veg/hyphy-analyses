@@ -738,20 +738,6 @@ namespace IgSCUEAL {
         if (Type (overall['RAW-REF']) == "String") {
 
             computed_score = (overall["SCORE"] - 30 * alignment_settings["MATCH"] * Exp (-Abs(seq)/3) ) / Abs (seq) * 3 ;
-    
-            
-            /*console.log ("\n\n");
-            console.log (">ref\n" + overall['RAW-REF']);
-            console.log (">qry\n" + overall['RAW-QRY']);
-            console.log ("Input: `seq`");
-            console.log ("Score :" + overall['SCORE']);
-            console.log ("Computed : " + computed_score);
-            console.log ("E :" + alignment_settings["E"]);
-            console.log ("MATCH :" + alignment_settings["MATCH"]);
-            console.log (overall);*/
-            
-
-
 
             if (alignment_settings["E"] <= computed_score) {
                 utility.Extend (overall, correctReadUsingCodonAlignedData (overall['RAW-REF'], overall['RAW-QRY'], alignment_settings["code"]));
@@ -1189,6 +1175,9 @@ lfunction cSM2partialSMs(_cdnScoreMatrix, penalties) {
         too_long  = 0;
         span      = 0; // how many nucleotides in the reference were covered by non-gaps
         _seqL     = Abs (reference);
+
+        //console.log("\nSEQL");
+        //console.log(_seqL);
 
         ref_cleaned = ""; ref_cleaned * 128;
         qry_cleaned = ""; qry_cleaned * 128;
