@@ -46,6 +46,10 @@ filter.all_sequences = alignments.GetSequenceNames ("filter.raw_data");
 KeywordArgument ("N-fraction", "Maximum acceptable fraction of N's", "1.0");
 filter.n_fraction = io.PromptUser("Maximum acceptable fraction of N's", 0.05, 0, 1, FALSE);
 
+//KeywordArgument ("length fraction", "Minimimum fraction of sequence", "1.0");
+//filter.n_fraction = io.PromptUser("Maximum acceptable fraction of N's", 0.05, 0, 1, FALSE);
+
+
 if (filter.reference_path != "/dev/null") {
     filter.reference_data = alignments.ReadNucleotideDataSet ("filter.raw_reference", filter.reference_path);
     filter.reference_sequences = alignments.GetSequenceNames ("filter.raw_reference");
@@ -77,21 +81,27 @@ filter.clean_seqs   = {};
 filter.frameshifted = {};
 filter.unique       = {};
 
-
-
-
 KeywordArgument ("protein", "Translated sequences", filter.nuc_data[terms.data.file] + "_protein.fas");
 filter.protein_path = io.PromptUserForFilePath ("Save translated RNA sequences file to");
 
 KeywordArgument ("rna", "Corrected nucleotide sequences", filter.nuc_data[terms.data.file] + "_nuc.fas");
 filter.nuc_path = io.PromptUserForFilePath ("Save reduced RNA sequences file to");
 
+KeywordArgument ("filter", "Filtered data", filter.nuc_data[terms.data.file] + "_filtered.json");
+filter.filtered_path = io.PromptUserForFilePath ("Save filtered sequences file to");
+
+KeywordArgument ("copies", "Copies data", filter.nuc_data[terms.data.file] + "_copies.json");
+filter.copies_path = io.PromptUserForFilePath ("Save sequence copies file to");
+
+
 io.ReportProgressMessage ("Data QC", "Will write unaligned protein sequences for MSA to **`filter.protein_path`**, and the corresponding nucleotide sequences to **`filter.nuc_path`**");
 
 fprintf (filter.protein_path, CLEAR_FILE, KEEP_OPEN);
 fprintf (filter.nuc_path, CLEAR_FILE, KEEP_OPEN);
-filter.sequences_with_copies = {};
+fprintf (filter.filtered_path, CLEAR_FILE, KEEP_OPEN);
 
+filter.sequences_with_copies = {};
+filter.filtered_sequences = {};
 
 if (None == filter.reference_sequences) {
     alignments.GetSequenceByName ("filter.raw_data", null);
@@ -205,7 +215,6 @@ if (None == filter.reference_sequences) {
         filter.seq_count += 1;
     ');  
 
-    
     alignments.GetSequenceByName ("filter.raw_reference", null);
     filter.longest_seq = alignments.GetSequenceByName ("filter.raw_reference", filter.reference_sequences[0]);
     filter.longest_seq_L = Abs (filter.longest_seq ) $ 3;
@@ -215,9 +224,16 @@ if (None == filter.reference_sequences) {
 //console.log ("\n" + Abs(filter.frameshifted));
 //console.log (Abs(filter.sequences_with_copies));
 
-/*for (i, s; in; filter.sequences_with_copies) {
-    console.log (Abs(s));
-}*/
+// Transform sequence_with_copies
+filter.copies_by_reference = {};
+for (i, s; in; filter.sequences_with_copies) {
+    //console.log(s);
+    filter.copies_by_reference[s["0"]] = s;
+}
+
+io.SpoolJSON(filter.copies_by_reference, filter.copies_path);
+fprintf (filter.copies_path, CLOSE_FILE);
+
 
 io.ClearProgressBar ();
 io.ReportProgressMessage ("Data QC", "Found `Abs(filter.clean_seqs)` unique sequences that were in frame");
@@ -257,11 +273,21 @@ function filter.handle_return (node, result, arguments) {
     filter.cleaned = result;
     filter.seq_count += 1;
     if (None == filter.cleaned) {
-        console.log ("\nWARNING: Sequence " + seq_id + " failed to align to any of the in-frame references. Try setting --E flag to a lower value");
+        reason = "WARNING: Sequence " + seq_id + " failed to align to any of the in-frame references. Try setting --E flag to a lower value";
+        console.log ("\n" + reason);
+        filter.filtered_sequences[seq_id] = reason;
+
     } else {
-    
+
         filtered.aa_seq = alignments.StripGaps(filter.cleaned["AA"]);
         filtered.na_seq = IgSCUEAL.strip_in_frame_indels(filter.cleaned["QRY"]);
+
+        //console.log("START");
+        //console.log(filtered.cleaned);
+        //console.log(filtered.aa_seq);
+        //console.log(filtered.na_seq);
+        //console.log("END");
+
         (filter.sequences_with_copies[filter.RNA_reads[seq_id]])["_write_to_file"][""];
     }
 }
@@ -270,20 +296,35 @@ function filter.handle_return2 (node, result, arguments) {
     seq_id = arguments[3];
     filter.cleaned = result;
     filter.seq_count += 1;
+    // Account for length of sequence relative to reference
     if (None == filter.cleaned) {
-            console.log ("\nWARNING: Sequence " + seq_id + " failed to align to any of the in-frame references. Try setting --E flag to a lower value");
+            reason = "WARNING: Sequence " + seq_id + " failed to align to any of the in-frame references. Try setting --E flag to a lower value";
+            console.log ("\n" + reason);
+            filter.filtered_sequences[seq_id] = reason;
     } else {
+
+
             filtered.aa_seq = alignments.StripGaps(filter.cleaned["AA"]);
             filtered.na_seq = IgSCUEAL.strip_in_frame_indels(filter.cleaned["QRY"]);
             if (filter.n_fraction < 1) {
                 filter.non_n = filtered.na_seq ^ {{"[^ACGT]"}{""}};
                 if (Abs (filter.non_n) / Abs (filtered.na_seq) <= 1-filter.n_fraction) {
-                     console.log ("\nWARNING: Sequence " + seq_id + " has too many ambiguous nucleotides; try setting --N-fraction flag to a higher value");
+                     reason = "WARNING: Sequence " + seq_id + " has too many ambiguous nucleotides; try setting --N-fraction flag to a higher value";
+                     console.log ("\n" + reason );
+                     filter.filtered_sequences[seq_id] = reason;
+
                      return;
                 }
                 
             }
  
+            //console.log("\nSTART");
+            //console.log(result);
+            //console.log(filtered.cleaned);
+            //console.log(filtered.aa_seq);
+            //console.log(filtered.na_seq);
+            //console.log("END");
+
             (filter.sequences_with_copies[filter.RNA_reads[seq_id]])["_write_to_file"][""];
         }
 
@@ -294,7 +335,9 @@ function _write_to_file (key, value) {
         DataSet _ds = ReadFromString (">COVFEFE\n" + filtered.na_seq);
         DataSetFilter _dsf = CreateFilter (_ds, 3, "" ,"" , filter.code_info[terms.code.stops]);
         if (_dsf.sites*3 != Abs (filtered.na_seq)) {
-            console.log ("\nWARNING: Sequence " + value + " was excluded due to the presence of stop codons");
+            reason = "WARNING: Sequence " + value + " was excluded due to the presence of stop codons";
+            console.log ("\n" + reason);
+            filter.filtered_sequences[seq_id] = reason;
             return 0;
         }
     } 
@@ -310,9 +353,11 @@ if (Abs(filter.frameshifted)) {
                                   });
 
    filter.seq_count = 1;
+
    utility.ForEachPair (filter.frameshifted, "_sequence_", "_value_",
     '
         io.ReportProgressBar ("filter","Processing sequence " + filter.seq_count);
+
         
         mpi.QueueJob (filter.queue, "IgSCUEAL.align_sequence_to_reference_set", {"0" : filter.RNA_reads[_sequence_],
                                                                  "1" : filter.ref_seq,
@@ -357,6 +402,7 @@ if (filter.skip_realign) {
         io.ReportProgressBar ("filter","Processing sequence " + filter.seq_count);
         //filter.cleaned = IgSCUEAL.align_sequence_to_reference_set (filter.RNA_reads[_sequence_], filter.ref_seq, filter.options);
 
+
         mpi.QueueJob (filter.queue, "IgSCUEAL.align_sequence_to_reference_set", {"0" : filter.RNA_reads[_sequence_],
                                                                  "1" : filter.ref_seq,
                                                                  "2" : filter.options,
@@ -372,6 +418,8 @@ if (filter.skip_realign) {
 
 io.ClearProgressBar ();
 
+fprintf (filter.filtered_path,  filter.filtered_sequences);
+fprintf (filter.filtered_path,  CLOSE_FILE);
 fprintf (filter.protein_path, CLOSE_FILE);
 fprintf (filter.nuc_path, CLOSE_FILE);
 
