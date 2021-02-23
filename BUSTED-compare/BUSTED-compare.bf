@@ -109,7 +109,6 @@ for (i, d; in; distribution1["weights"]) {
 io.ReportProgressMessageMD("BUSTED", "optimize", "- Degrees of freedom = " + df);
 
 
-VERBOSITY_LEVEL = 1;
 Optimize (null_MLE, composite);
 
 io.ReportProgressMessageMD("BUSTED", "results", "Model fit results");
