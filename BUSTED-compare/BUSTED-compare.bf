@@ -2,9 +2,11 @@ RequireVersion ("2.5.28");
 
 LoadFunctionLibrary     ("libv3/convenience/regexp.bf");
 LoadFunctionLibrary     ("libv3/convenience/math.bf");
+LoadFunctionLibrary     ("libv3/convenience/random.bf");
 LoadFunctionLibrary     ("libv3/UtilityFunctions.bf");
 LoadFunctionLibrary     ("libv3/IOFunctions.bf");
 LoadFunctionLibrary     ("libv3/models/parameters.bf");
+LoadFunctionLibrary     ("libv3/tasks/estimators.bf");
 LoadFunctionLibrary     ("SelectionAnalyses/modules/io_functions.ibf");
 
 
@@ -41,6 +43,8 @@ second.path = ^"LAST_FILE_PATH";
 KeywordArgument ("output", "Write comparison JSON to");
 json.path = io.PromptUserForFilePath ("Save the resulting JSON file to");
 
+KeywordArgument ("grid-size", "The number of points in the initial distributional guess for likelihood fitting", 250);
+initial_grid.N = io.PromptUser ("The number of points in the initial distributional guess for likelihood fitting", 250, 1, 10000, TRUE);
 
 lfSpec1 = _extractLFInfo (0);
 lfSpec2 = _extractLFInfo (1);
@@ -96,17 +100,80 @@ io.ReportProgressMessageMD("BUSTED", "optimize", "\n- Independent model likeliho
 utility.SetEnvVariable ("USE_LAST_RESULTS", TRUE);
 df = 0;
 
+initial_grid         = estimators.LHC (_init_grid_setup (distribution1,distribution2),initial_grid.N$2);
+
+
+
+for (p = 0; p < initial_grid.N$2; p+=1) {
+    if (Random (0,1) < 0.5) {
+        _d1 = distribution1;
+    } else {
+        _d1 = distribution2;
+    }
+    point = {};
+    for (i, d; in; distribution1["rates"]) {
+        _r1 = Eval ((_d1["rates"])[i]);        
+        if (Random (0,1) < 0.5) {
+            _var = _r1 * 0.1;
+        } else {
+            _var = 0;
+        }
+        point[d] = {terms.id: d, terms.fit.MLE : _r1 + random.normal.standard () * _var};
+    }
+    for (i, d; in; distribution1["weights"]) {
+        _r1 = Eval ((_d1["weights"])[i]);        
+        if (Random (0,1) < 0.5) {
+            _var = _r1 * 0.1;
+        } else {
+            _var = 0;
+        }
+        point[d] = {terms.id: d, terms.fit.MLE : _r1 + random.normal.standard () * _var};
+    }
+    initial_grid + point;
+    
+}
+
+extra_grid_points = {
+    "1" : {},
+    "2" : {},
+    "3" : {}
+};
+
 for (i, d; in; distribution1["rates"]) {
+    (extra_grid_points [1])[d] = {terms.id: (distribution1["rates"])[i], terms.fit.MLE : Eval ((distribution1["rates"])[i])};
+    (extra_grid_points [2])[d] = {terms.id: (distribution1["rates"])[i], terms.fit.MLE : Eval ((distribution2["rates"])[i])};
+    (extra_grid_points [3])[d]= {terms.id: (distribution1["rates"])[i], terms.fit.MLE : 0.5 *(Eval ((distribution1["rates"])[i]) + Eval ((distribution2["rates"])[i]))};
     parameters.SetConstraint ((distribution2["rates"])[i], d, "");
     df+=1;
 }
 
 for (i, d; in; distribution1["weights"]) {
+    (extra_grid_points [1])[d] = {terms.id: (distribution1["weights"])[i], terms.fit.MLE : Eval ((distribution1["weights"])[i])};
+    (extra_grid_points [2])[d] = {terms.id: (distribution1["weights"])[i], terms.fit.MLE : Eval ((distribution2["weights"])[i])};
+    (extra_grid_points [3])[d]= {terms.id: (distribution1["weights"])[i], terms.fit.MLE : 0.5 *(Eval ((distribution1["weights"])[i]) + Eval ((distribution2["weights"])[i]))};
     parameters.SetConstraint ((distribution2["weights"])[i], d, "");
     df+=1;
 }
 
+initial_grid + extra_grid_points[1];
+initial_grid + extra_grid_points[2];
+initial_grid + extra_grid_points[3];
+
+
 io.ReportProgressMessageMD("BUSTED", "optimize", "- Degrees of freedom = " + df);
+io.ReportProgressMessageMD("BUSTED", "optimize", "- Computing the likelihood function on `Abs(initial_grid)` initial points");
+
+grid_results = mpi.ComputeOnGrid (&composite, initial_grid, "mpi.ComputeOnGrid.SimpleEvaluator", "mpi.ComputeOnGrid.ResultHandler");
+
+grid_min = Min (grid_results,1);
+grid_max = Max (grid_results,1);
+
+io.ReportProgressMessageMD("BUSTED", "optimize", "- log(L) ranges from " + Format (grid_min[terms.data.value], 8, 3) + " to " + grid_max[terms.data.value]);
+
+parameters.SetValues (initial_grid[grid_max["key"]]);
+
+io.ReportProgressMessageMD("BUSTED", "optimize", "\n>dN/dS distribution used to initialize the joint optimization");
+selection.io.report_dnds (parameters.GetStickBreakingDistribution (distribution2) % 0);
 
 
 Optimize (null_MLE, composite);
@@ -160,3 +227,37 @@ lfunction _extractRateDistribution (info) {
    };
 }
 
+//------------------------------------------------------------------------------
+
+function _init_grid_setup (omega_distro,omega_distro2) {
+
+    _initial_ranges = {};
+    _N = utility.Array1D (omega_distro[terms.parameters.rates]);
+    
+    for (_index_, _name_; in; omega_distro[terms.parameters.rates]) {
+        _r1 = Eval (_name_);
+        _r2 = Eval((omega_distro2[terms.parameters.rates])[_index_]);
+        
+        if (_index_ < _N - 1) {
+            _initial_ranges[_name_] = {
+                terms.lower_bound : Min(_r1,_r2)/2,
+                terms.upper_bound : Min(1,Max(_r1,_r2)*2)
+            };
+        } else {
+             _initial_ranges[_name_] = {
+                terms.lower_bound : Max(1,Min(_r1,_r2)/2),
+                terms.upper_bound : Max(_r1,_r2)
+            };       
+        }
+    }
+
+    for (_index_, _name_; in; omega_distro[terms.parameters.weights]) {
+        _p1 = Eval (_name_);
+        _p2 = Eval((omega_distro2[terms.parameters.weights])[_index_]);
+        _initial_ranges[_name_] = {
+            terms.lower_bound : Min(_p1,_p2)/2,
+            terms.upper_bound : Min(1,Max(_p1,_p2)*2)
+        };
+    }
+    return _initial_ranges;
+}
