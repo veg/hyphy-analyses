@@ -23,7 +23,7 @@ lfunction simulator.prepare_site_distribution (model, site_count, tree, tree_inf
     KeywordArgument   ("gamma-shape-srv", "The shape of the gamma parameter for synonymous rates (unit mean)", "1.");
     alpha_srv = io.PromptUser ("The shape of the gamma parameter for SRV (unit mean)", 1.0, 1e-6, 20, FALSE);
     KeywordArgument   ("gamma-shape", "The shape of the gamma parameter for omegas (rate = beta = 1)", "0.5");
-    alpha = io.PromptUser ("The shape of the gamma parameter for omegas (rate = beta = 1)", 1.0, 1e-6, 20, FALSE);
+    alpha_omega = io.PromptUser ("The shape of the gamma parameter for omegas (rate = beta = 1)", 1.0, 1e-6, 20, FALSE);
     KeywordArgument   ("fraction-same", "The fraction of sites where there is no property effect", "0.8");            
     fraction_same = io.PromptUser ("The fraction of sites where there is no property effect", 0.8, 0, 1, FALSE);
     KeywordArgument   ("fraction-single", "The fraction of property-aware sites where only one property with non-zero effects", "0.5");            
@@ -80,7 +80,7 @@ lfunction simulator.prepare_site_distribution (model, site_count, tree, tree_inf
 
     for (i = 0; i < site_count; i+=1) {
           site_profile[i][0] = (random.gamma (alpha_srv,alpha_srv) * 100 $ 1)/100;
-          site_profile[i][1] = (random.gamma_fast (alpha) * 100 $ 1)/100;
+          site_profile[i][1] = (random.gamma_fast (alpha_omega) * 100 $ 1)/100;
 
           if (Random (0,1) <= fraction_same) {
                for (j = 0; j < class_count; j+=1) {

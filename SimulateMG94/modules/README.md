@@ -15,7 +15,7 @@ hyphy LIBPATH=/Users/sergei/Development/hyphy/res SimulateMG94.bf
 --property-set Atchley
 --fraction-same 0.5 
 --fraction-single 0.75 
---effect-variance 3 
+--effect-variance 1 
 --mean-effect 0
 ```
 
