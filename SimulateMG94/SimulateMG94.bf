@@ -8,6 +8,7 @@ LoadFunctionLibrary("libv3/tasks/estimators.bf");
 LoadFunctionLibrary("libv3/tasks/alignments.bf");
 LoadFunctionLibrary("libv3/tasks/trees.bf");
 LoadFunctionLibrary("libv3/models/codon/MG_REV.bf");
+LoadFunctionLibrary("libv3/convenience/math.bf");
 
 LoadFunctionLibrary("SelectionAnalyses/modules/io_functions.ibf");
 LoadFunctionLibrary("SelectionAnalyses/modules/selection_lib.ibf");
@@ -183,20 +184,7 @@ simulator.root_freqs = simulator.model[terms.efv_estimate];
 KeywordArgument ("output",       "Write simulated alignments (as FASTA) to the following prefix path, using the syntax ${path}.replicate.index");
 simulator.path = io.PromptUserForFilePath ("Save simulator settings to this path, and replicates to ${path}.replicate.index");
 
-if (Type (simulator.report) == "AssociativeList") {
-    fprintf (simulator.path, CLEAR_FILE, {
-        terms.model : simulator.model,
-        terms.data.tree  : simulator.tree,
-        "simulator.site.profile" : simulator.site_profile,
-        "simulator.additional_settings" : simulator.report
-    });
-} else {
-    fprintf (simulator.path, CLEAR_FILE, {
-        terms.model : simulator.model,
-        terms.data.tree  : simulator.tree,
-        "simulator.site.profile" : simulator.site_profile
-    });
-}
+
 
 
 utility.SetEnvVariable ("DATA_FILE_PRINT_FORMAT",9);
@@ -213,21 +201,26 @@ for (simulator.i = 0; simulator.i < simulator.replicates; simulator.i += 1) {
 
 simulator.mode = 1;
 simulator.counter = 0;
+simulator.BL = {};
 
 utility.ForEachPair (simulator.sites_by_profile, "_rate_distribution_", "_site_counts_", '
     simulator.apply_site_distribution (simulator.model, _rate_distribution_,  "simulator.T");
-
-    io.ReportProgressBar ("SIMULATING", "Rate regime " + simulator.mode + " of " + utility.Array1D (simulator.sites_by_profile));
+    simulator.tree_length = +BranchLength (simulator.T, -1);
+    
+    io.ReportProgressBar ("SIMULATING", "Rate regime " + simulator.mode + " of " + utility.Array1D (simulator.sites_by_profile) + " (branch length = " + Format (simulator.tree_length, 8, 3) + ")");
     simulator.mode   += 1;
 
     utility.ForEach (_site_counts_, "_site_id_", "
-        //simulator.inverse_map + (\\"\\" + 3*(_site_id_) + \\"-\\" + (3*_site_id_+2));
         simulator.inverse_map [_site_id_] = (\\"\\" + 3*(simulator.counter) + \\"-\\" + (3*simulator.counter+2));
+        simulator.BL[simulator.counter] = simulator.tree_length;
         simulator.counter += 1;
     ");
 
 
+    
     simulator.site_block = utility.Array1D (_site_counts_);
+    
+
     if (None != simulator.root_seq) {
         simulator.template = {utility.Array1D (_site_counts_), 1};
         simulator.template[0] = "";
@@ -273,7 +266,27 @@ utility.ForEachPair (simulator.sites_by_profile, "_rate_distribution_", "_site_c
 ');
 
 
+if (Type (simulator.report) == "AssociativeList") {
+    fprintf (simulator.path, CLEAR_FILE, {
+        terms.model : simulator.model,
+        terms.data.tree  : simulator.tree,
+        terms.json.branch_lengths : simulator.BL,
+        "simulator.site.profile" : simulator.site_profile,
+        "simulator.additional_settings" : simulator.report
+    });
+} else {
+    fprintf (simulator.path, CLEAR_FILE, {
+        terms.model : simulator.model,
+        terms.data.tree  : simulator.tree,
+        terms.json.branch_lengths : simulator.BL,
+        "simulator.site.profile" : simulator.site_profile
+    });
+}
+
 io.ClearProgressBar ();
+
+
+io.ReportStatsMD ("Branch length statistics (per site)", math.GatherDescriptiveStats(Transpose(utility.DictToArray (simulator.BL))));
 
 simulator.inverse_map = Join ("," ,simulator.inverse_map);
 

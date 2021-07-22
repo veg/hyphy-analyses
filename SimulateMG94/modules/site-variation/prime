@@ -2,6 +2,7 @@ LoadFunctionLibrary("libv3/all-terms.bf");
 LoadFunctionLibrary("libv3/UtilityFunctions.bf");
 LoadFunctionLibrary("libv3/models/parameters.bf");
 LoadFunctionLibrary("libv3/convenience/random.bf");
+LoadFunctionLibrary("libv3/models/codon/MG_REV_PROPERTIES.bf");
 
 global simulator.site.alpha = 1;
 
@@ -19,9 +20,26 @@ lfunction simulator.prepare_site_distribution (model, site_count, tree, tree_inf
     simulator.site_variables[0] = "";
     simulator.site_lambdas = {};
 
+    KeywordArgument   ("gamma-shape-srv", "The shape of the gamma parameter for synonymous rates (unit mean)", "1.");
+    alpha_srv = io.PromptUser ("The shape of the gamma parameter for SRV (unit mean)", 1.0, 1e-6, 20, FALSE);
+    KeywordArgument   ("gamma-shape", "The shape of the gamma parameter for omegas (rate = beta = 1)", "0.5");
+    alpha = io.PromptUser ("The shape of the gamma parameter for omegas (rate = beta = 1)", 1.0, 1e-6, 20, FALSE);
+    KeywordArgument   ("fraction-same", "The fraction of sites where there is no property effect", "0.8");            
+    fraction_same = io.PromptUser ("The fraction of sites where there is no property effect", 0.8, 0, 1, FALSE);
+    KeywordArgument   ("fraction-single", "The fraction of property-aware sites where only one property with non-zero effects", "0.5");            
+    fraction_single = io.PromptUser ("The fraction of property-aware sites where only one property with non-zero effects", 0.5, 0, 1, FALSE);
+    KeywordArgument   ("mean-effect", "Mean property effect", "0.0");            
+    mean_effect = io.PromptUser ("Mean property effect", 0, -5, 5, FALSE);
+    KeywordArgument   ("effect-variance", "The variance for the property effect", "1.0");
+    variance_effect = Sqrt (io.PromptUser ("Mean property effect variance ", 1.0, 0, 10, FALSE));
+
+    bl_conversion_subs = {};
+
     for (i, v; in; rates) {
+        
         if (regexp.Find (i, re_m)) {
             simulator.site_lambdas [rates[i]] = "simulator.lambda." + rates[i];
+            bl_conversion_subs[v] = +mean_effect;
             simulator.site_variables[2 + class_counter] = simulator.site_lambdas [rates[i]];
             parameters.DeclareGlobalWithRanges (simulator.site_lambdas [rates[i]], 0, -10, 10);
             class_counter += 1;
@@ -41,24 +59,22 @@ lfunction simulator.prepare_site_distribution (model, site_count, tree, tree_inf
         }
     }
 
-
+   //bl_conversion_subs [local_beta] = alpha;
+   bl_str = Simplify (model[^"terms.model.branch_length_string"], bl_conversion_subs);
+   parameters.SetConstraint (local_beta, "alpha*" + local_alpha, "");
+      
     for (_node_; in; ^tree) {
-         parameters.SetConstraint ("`tree`.`_node_`.`local_alpha`",global_alpha,"");
-         parameters.SetConstraint ("`tree`.`_node_`.`local_beta`",global_beta,"");
+         lbl = (tree_info[^"terms.branch_length"])[_node_];
+         ExecuteCommands ("FindRoot (`&lfactor`,(" +bl_str + ")-" + 3*lbl + "," + local_alpha + ",0,10000)");    
+         parameters.SetConstraint ("`tree`.`_node_`.`local_alpha`","" + lfactor + "*" + global_alpha,"");
+         parameters.SetConstraint ("`tree`.`_node_`.`local_beta`","" + lfactor + "*" + global_beta,"");
          for (r,p; in; simulator.site_lambdas) {
             parameters.SetConstraint ("`tree`.`_node_`.`r`",p,"");
          }
-
     }
 
-    KeywordArgument   ("gamma-shape-srv", "The shape of the gamma parameter for synonymous rates (unit mean)", "1.");
-    alpha_srv = io.PromptUser ("The shape of the gamma parameter for SRV (unit mean)", 1.0, 1e-6, 20, FALSE);
-    KeywordArgument   ("gamma-shape", "The shape of the gamma parameter for omegas (rate = beta = 1)", "0.5");
-    alpha = io.PromptUser ("The shape of the gamma parameter for omegas (rate = beta = 1)", 1.0, 1e-6, 20, FALSE);
-    fraction_same = model ["fraction_same"];
-    mean_effect = model [^"terms.model.MG_REV_PROP.mean_prop"];
-    KeywordArgument   ("effect-variance", "The variance for the property effect", "1.0");
-    variance_effect = Sqrt (io.PromptUser ("Mean property effect variance ", 1.0, 0, 10, FALSE));
+    parameters.RemoveConstraint (local_beta);
+
 
     site_profile = {site_count, 2 + class_count};
 
@@ -66,20 +82,25 @@ lfunction simulator.prepare_site_distribution (model, site_count, tree, tree_inf
           site_profile[i][0] = (random.gamma (alpha_srv,alpha_srv) * 100 $ 1)/100;
           site_profile[i][1] = (random.gamma_fast (alpha) * 100 $ 1)/100;
 
-          if (Random (0,1) < fraction_same) {
+          if (Random (0,1) <= fraction_same) {
                for (j = 0; j < class_count; j+=1) {
                 site_profile[i][j+2] =  0;
               }
 
           } else {
-               for (j = 0; j < class_count; j+=1) {
-                site_profile[i][j+2] =  random.normal.standard () * variance_effect + mean_effect;
-              }
+               if (Random (0,1) <= fraction_single) {
+                  j = Random (0,class_count) $ 1;
+                  site_profile[i][j+2] =  random.normal.standard () * variance_effect + mean_effect;
+               } else {
+                   for (j = 0; j < class_count; j+=1) {
+                    site_profile[i][j+2] =  random.normal.standard () * variance_effect + mean_effect;
+                  }
+               }
           }
     }
 
     ^"simulator.site_variables" = simulator.site_variables;
-
+    
     return {
         "variables" : simulator.site_variables,
         "rates"     : site_profile
