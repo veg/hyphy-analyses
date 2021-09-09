@@ -26,7 +26,7 @@ If a [reqired] option is not provided on the command line, the analysis will pro
 
 code
         Which genetic code should be used
-        defaut value: Universal
+        default value: Universal
 
 alignment [required]
         An in-frame codon alignment in one of the formats supported by HyPhy
@@ -36,35 +36,35 @@ tree [conditionally required]
         applies to: Please select a tree file for the data:
 branches
         Branches to test
-        defaut value: All
+        default value: All
 
 srv
         Include synonymous rate variation in the model
-        defaut value: Yes
+        default value: Yes
 
 rates
         The number omega rate classes to include in the model [1-10, default 3]
-        defaut value: busted.rate_classes [computed at run time]
+        default value: busted.rate_classes [computed at run time]
 
 syn-rates
         The number alpha rate classes to include in the model [1-10, default 3]
-        defaut value: busted.synonymous_rate_classes [computed at run time]
+        default value: busted.synonymous_rate_classes [computed at run time]
 
 grid-size
         The number of points in the initial distributional guess for likelihood fitting
-        defaut value: 250 [computed at run time]
+        default value: 250 [computed at run time]
 
 starting-points
         The number of initial random guesses to seed rate values optimization
-        defaut value: 1 [computed at run time]
+        default value: 1 [computed at run time]
 
 output
         Write the resulting JSON to this file (default is to save to the same path as the alignment file + 'BUSTED.json')
-        defaut value: busted.codon_data_info[terms.json.json] [computed at run time]
+        default value: busted.codon_data_info[terms.json.json] [computed at run time]
 
 save-fit
         Save BUSTED model fit to this file (default is not to save)
-        defaut value: /dev/null
+        default value: /dev/null
 ```
 
 
