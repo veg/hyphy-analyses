@@ -1,12 +1,10 @@
-## BUSTED[S] with Mutiple Hits
+## BUSTED[S] with Multiple Hits
 
 > Analysis suggested by Ray Cui <rcui@age.mpg.de>
 
 This modification of BUSTED[S], which we call which we call BUSTED[SMSH], allows for a gene-wide branch-site test for episodic selection that also allows for site-to-site synonymous rate variation and multiple simultaneous hits. We combine the framework of BUSTED[S] with the MG94 + REV + TRIP codon model that accounts for single, double and triple nucleotide changes.
 
 The core test of BUSTED remains the same, with the analysis fitting an unconstrained model with `K` rate categories (`K` = 3 by default) such that &omega;<sub>i</sub> ≤ 1 for `i` < `K`, and  &omega;<sub>K</sub> ≥ 1 and compares the fit to a constrained model (all &omega; ≤ 1) using a likelihood ratio test.
-
-
 
 ## Invokation
 
