@@ -70,7 +70,7 @@ namespace fitter {
                 utility.getGlobalValue("terms.settings") : {utility.getGlobalValue("terms.settings.branch_selector") : "selection.io.SelectAllBranches"}});
 }
 
-fitter.codons_by_class =  mss.LoadClasses (null);
+fitter.codons_by_class = models.codon.MSS.LoadClasses (null);
 fitter.model_type = io.SelectAnOption ({terms.global : "rates shared by all branches", terms.local : "separate rates for each branch"}, "Model Type");
 fitter.frequency_type = io.SelectAnOption ({"CF3x4" : terms.frequencies.CF3x4,
                                             "F3x4" : terms.frequencies.F3x4,

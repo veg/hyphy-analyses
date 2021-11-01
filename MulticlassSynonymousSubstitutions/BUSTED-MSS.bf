@@ -248,7 +248,7 @@ busted.model_generator = "models.codon.BS_REL.ModelDescription";
 LoadFunctionLibrary("lib/mss.bf");
 KeywordArgument ("classes",     "A TSV file with three columns (AA, Codon, Class) which is used to partition synonymous substitutions into groups");
 KeywordArgument ("neutral",     "Neutral reference class");
-mss.codons_by_class =  mss.LoadClasses (null);
+mss.codons_by_class =  models.codon.MSS.LoadClasses  (null);
 
 
 
