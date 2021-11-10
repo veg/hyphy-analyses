@@ -242,7 +242,7 @@ selection.io.json_store_lf_withEFV(nrm.json, "GTR" ,nrm.gtr_fit [terms.fit.log_l
                             3);
                             
 
-io.ReportProgressMessageMD ("nrm", "stGTR", "Fitting the strandGTR + G model with empirical base frequencies");
+io.ReportProgressMessageMD ("nrm", "stGTR", "Fitting the NREV6 + G model with empirical base frequencies");
 
 parameters.RemoveConstraint (ratesArray);
 CA := GT;
@@ -259,19 +259,19 @@ Optimize ( res_gtr, lf_gtr );
 nrm.EFV = GetEFV ("GTRModel");
 nrm.stgtr_fit = estimators.ExtractMLEFromObject ("lf_gtr");
 
-io.ReportProgressMessageMD ("nrm", "stGTR", "\n>" + selection.io.report_fit  (nrm.stgtr_fit, 3, nrm.nuc_data_info[terms.data.sample_size]) + "\n" + selection.io.report_fit_secondary_stats (nrm.stgtr_fit));
-io.ReportProgressMessageMD ("nrm", "gtr", "_Gamma shape parameter_ = " + Format (alpha, 8, 4));
+io.ReportProgressMessageMD ("nrm", "NREV6", "\n>" + selection.io.report_fit  (nrm.stgtr_fit, 3, nrm.nuc_data_info[terms.data.sample_size]) + "\n" + selection.io.report_fit_secondary_stats (nrm.stgtr_fit));
+io.ReportProgressMessageMD ("nrm", "NREV6", "_Gamma shape parameter_ = " + Format (alpha, 8, 4));
 
 nrm.stgtr_rates = ReportMatrixAndFreqs (ratesArray, nrm.EFV);
 
-selection.io.json_store_lf_withEFV(nrm.json, "stGTR" ,nrm.stgtr_fit [terms.fit.log_likelihood],
+selection.io.json_store_lf_withEFV(nrm.json, "NREV6" ,nrm.stgtr_fit [terms.fit.log_likelihood],
                             nrm.stgtr_fit [terms.parameters],
                             nrm.nuc_data_info[terms.data.sample_size], 
                             nrm.stgtr_rates, 
                             nrm.EFV,
                             3);
 
-io.ReportProgressMessageMD ("nrm", "nrm", "Fitting the NRM + G model with empirical root frequencies");
+io.ReportProgressMessageMD ("nrm", "NREV12", "Fitting the NREV12 + G model with empirical root frequencies");
 
 parameters.RemoveConstraint (ratesArray);
 Model GTRModel = ( GTRMatrix, nrm.dataFrequencies, 0 );
@@ -282,20 +282,20 @@ Optimize ( res_gtr, lf_gtr );
 
 nrm.nrm_fit = estimators.ExtractMLEFromObject ("lf_gtr");
 
-io.ReportProgressMessageMD ("nrm", "nrm", "\n>" + selection.io.report_fit  (nrm.nrm_fit, 3, nrm.nuc_data_info[terms.data.sample_size]) + "\n" + selection.io.report_fit_secondary_stats (nrm.nrm_fit));
-io.ReportProgressMessageMD ("nrm", "gtr", "_Gamma shape parameter_ = " + Format (alpha, 8, 4));
+io.ReportProgressMessageMD ("nrm", "NREV12", "\n>" + selection.io.report_fit  (nrm.nrm_fit, 3, nrm.nuc_data_info[terms.data.sample_size]) + "\n" + selection.io.report_fit_secondary_stats (nrm.nrm_fit));
+io.ReportProgressMessageMD ("nrm", "NREV12", "_Gamma shape parameter_ = " + Format (alpha, 8, 4));
 
 nrm.EFV = GetEFV ("GTRModel");
 nrm.nrm_rates = ReportMatrixAndFreqs (ratesArray, nrm.EFV);
 
-selection.io.json_store_lf_withEFV(nrm.json, "NRM" ,nrm.nrm_fit [terms.fit.log_likelihood],
+selection.io.json_store_lf_withEFV(nrm.json, "NREV12" ,nrm.nrm_fit [terms.fit.log_likelihood],
                             nrm.nrm_fit [terms.parameters],
                             nrm.nuc_data_info[terms.data.sample_size], 
                             nrm.nrm_rates, 
                             nrm.EFV,
                             3);
 
-io.ReportProgressMessageMD ("nrm", "nrmf", "Fitting the NRM + G model with estimated root frequencies");
+io.ReportProgressMessageMD ("nrm", "NREV12F", "Fitting the NREV12 + G model with estimated root frequencies");
 
 global fA = 1/3; fA :< 1;
 global fC = 1/3; fC :< 1;
@@ -315,20 +315,20 @@ Optimize ( res_gtr, lf_gtr );
 
 nrm.nrmf_fit = estimators.ExtractMLEFromObject ("lf_gtr");
 
-io.ReportProgressMessageMD ("nrm", "nrmf", "\n>" + selection.io.report_fit  (nrm.nrmf_fit, 3, nrm.nuc_data_info[terms.data.sample_size]) + "\n" + selection.io.report_fit_secondary_stats (nrm.nrmf_fit));
-io.ReportProgressMessageMD ("nrm", "nrmf", "_Gamma shape parameter_ = " + Format (alpha, 8, 4));
+io.ReportProgressMessageMD ("nrm", "NREV12F", "\n>" + selection.io.report_fit  (nrm.nrmf_fit, 3, nrm.nuc_data_info[terms.data.sample_size]) + "\n" + selection.io.report_fit_secondary_stats (nrm.nrmf_fit));
+io.ReportProgressMessageMD ("nrm", "NREV12F", "_Gamma shape parameter_ = " + Format (alpha, 8, 4));
 
 
-io.ReportProgressMessageMD ("nrm", "gtr", "\n#### Estimates for root frequencies");
-io.ReportProgressMessageMD ("nrm", "gtr", "- A : " + nrm.rootFreqs[0]);
-io.ReportProgressMessageMD ("nrm", "gtr", "- C : " + nrm.rootFreqs[1]);
-io.ReportProgressMessageMD ("nrm", "gtr", "- G : " + nrm.rootFreqs[2]);
-io.ReportProgressMessageMD ("nrm", "gtr", "- T : " + nrm.rootFreqs[3]);
+io.ReportProgressMessageMD ("nrm", "NREV12F", "\n#### Estimates for root frequencies");
+io.ReportProgressMessageMD ("nrm", "NREV12F", "- A : " + nrm.rootFreqs[0]);
+io.ReportProgressMessageMD ("nrm", "NREV12F", "- C : " + nrm.rootFreqs[1]);
+io.ReportProgressMessageMD ("nrm", "NREV12F", "- G : " + nrm.rootFreqs[2]);
+io.ReportProgressMessageMD ("nrm", "NREV12F", "- T : " + nrm.rootFreqs[3]);
 
 nrm.EFV = GetEFV ("GTRModel");
 nrm.nrmf_rates = ReportMatrixAndFreqs (ratesArray, nrm.EFV);
 
-selection.io.json_store_lf_withEFV(nrm.json, "NRMF" ,nrm.nrmf_fit [terms.fit.log_likelihood],
+selection.io.json_store_lf_withEFV(nrm.json, "NREV12F" ,nrm.nrmf_fit [terms.fit.log_likelihood],
                             nrm.nrmf_fit [terms.parameters],
                             nrm.nuc_data_info[terms.data.sample_size], 
                             nrm.nrmf_rates, 
@@ -360,10 +360,10 @@ nrm.report = {{"Null","Alt.","LRT","Deg. freedom","p","Delta c-AIC"}};
 
 nrm.tests = {};
 nrm.pairs = {
-    "0" : {"Null" : "GTR", "Alt" : "stGTR", "nested" : FALSE},
-    "1" : {"Null" : "GTR", "Alt" : "NRM", "nested" : TRUE},
-    "2" : {"Null" : "stGTR", "Alt" : "NRM", "nested" : TRUE},
-    "3" : {"Null" : "NRM", "Alt" : "NRMF", "nested" : TRUE}
+    "0" : {"Null" : "GTR", "Alt" : "NREV6", "nested" : FALSE},
+    "1" : {"Null" : "GTR", "Alt" : "NREV12", "nested" : TRUE},
+    "2" : {"Null" : "NREV6", "Alt" : "NREV12", "nested" : TRUE},
+    "3" : {"Null" : "NREV12", "Alt" : "NREV12F", "nested" : TRUE}
 };
 
 fprintf(stdout, "\n", io.FormatTableRow(nrm.report , nrm.table_output_options));
