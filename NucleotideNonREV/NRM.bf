@@ -295,7 +295,7 @@ selection.io.json_store_lf_withEFV(nrm.json, "NREV12" ,nrm.nrm_fit [terms.fit.lo
                             nrm.EFV,
                             3);
 
-io.ReportProgressMessageMD ("nrm", "NREV12F", "Fitting the NREV12 + G model with estimated root frequencies");
+io.ReportProgressMessageMD ("nrm", "NREV12F", "Fitting the NREV12F + G model with estimated root frequencies");
 
 global fA = 1/3; fA :< 1;
 global fC = 1/3; fC :< 1;
@@ -345,8 +345,8 @@ nrm.table_output_options = {
         utility.getGlobalValue("terms.table_options.minimum_column_width"): 10,
         utility.getGlobalValue("terms.table_options.align"): "center",
         utility.getGlobalValue("terms.table_options.column_widths"): {
-            "0": 10,
-            "1": 10,
+            "0": 12,
+            "1": 12,
             "2": 15,
             "3": 15,
             "4": 15,
