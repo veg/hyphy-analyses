@@ -315,8 +315,8 @@ Optimize ( res_gtr, lf_gtr );
 
 nrm.nrmf_fit = estimators.ExtractMLEFromObject ("lf_gtr");
 
-io.ReportProgressMessageMD ("nrmf", "nrmf", "\n>" + selection.io.report_fit  (nrm.nrmf_fit, 3, nrm.nuc_data_info[terms.data.sample_size]) + "\n" + selection.io.report_fit_secondary_stats (nrm.nrmf_fit));
-io.ReportProgressMessageMD ("nrm", "gtr", "_Gamma shape parameter_ = " + Format (alpha, 8, 4));
+io.ReportProgressMessageMD ("nrm", "nrmf", "\n>" + selection.io.report_fit  (nrm.nrmf_fit, 3, nrm.nuc_data_info[terms.data.sample_size]) + "\n" + selection.io.report_fit_secondary_stats (nrm.nrmf_fit));
+io.ReportProgressMessageMD ("nrm", "nrmf", "_Gamma shape parameter_ = " + Format (alpha, 8, 4));
 
 
 io.ReportProgressMessageMD ("nrm", "gtr", "\n#### Estimates for root frequencies");
