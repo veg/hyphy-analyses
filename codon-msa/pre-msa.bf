@@ -244,7 +244,7 @@ filter.ref_seq = {"REF" : {'stripped' : filter.longest_seq}};
 filter.options = IgSCUEAL.define_alignment_settings (filter.code_info);
 
 KeywordArgument ("E", "Expected sequence similarity", 0);
-filter.E = io.PromptUser ("Expected sequence similarity (0 to automatically compute)", 0, 0, 1, False);
+filter.E = io.PromptUser ("[Advanced Setting -- Sequence similarity is based on an alignment score and is not normalized between 0 and 1. ] Expected sequence similarity (0 to automatically compute). ", 0, 0, 1, False);
 
 KeywordArgument ("skip-realignment", "Do not realign sequences to check for frameshifts", "No");
 
