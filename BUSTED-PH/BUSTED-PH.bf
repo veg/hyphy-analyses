@@ -99,14 +99,19 @@ KeywordArgument ("tree",      "A phylogenetic tree (optionally annotated with {}
         This allows handling some branching logic conditionals
     */
     
-KeywordArgument ("srv", "Include synonymous rate variation in the model", "Yes");
-KeywordArgument ("rates", "The number omega rate classes to include in the model [1-10, default 3]", busted.rate_classes);
+
 
 namespace busted {
     LoadFunctionLibrary ("SelectionAnalyses/modules/shared-load-file.bf");
-    load_file ({utility.getGlobalValue("terms.prefix"): "busted", utility.getGlobalValue("terms.settings") : {utility.getGlobalValue("terms.settings.branch_selector") : "busted.select_branches"}});
+    load_file ({utility.getGlobalValue("terms.prefix"): "busted", 
+                    utility.getGlobalValue("terms.settings") : {
+                    utility.getGlobalValue("terms.settings.branch_selector") : "busted.select_branches"
+                }
+            });
 }
 
+KeywordArgument ("srv", "Include synonymous rate variation in the model", "Yes");
+KeywordArgument ("rates", "The number omega rate classes to include in the model [1-10, default 3]", busted.rate_classes);
 
 busted.do_srv = io.SelectAnOption ({"Yes" : "Allow synonymous substitution rates to vary from site to site (but not from branch to branch)", 
                                     "Branch-site" : "Allow synonymous substitution rates to vary using general branch site models",
@@ -965,12 +970,28 @@ lfunction busted.select_branches(partition_info) {
     tree_for_analysis = (partition_info[0])[utility.getGlobalValue("terms.data.tree")];
     utility.ForEach (tree_for_analysis[utility.getGlobalValue("terms.trees.model_map")], "_value_", "`&available_models`[_value_] += 1");
     list_models   = utility.sortStrings(utility.Keys(available_models)); // get keys
-    option_count  = Abs (available_models);
-
+    option_count  = Abs (available_models);    
+ 
+    test = None;
+    if (available_models[0] == "") {
+        test = list_models[1];
+    } 
+    if (available_models[1] == "") {
+        test = list_models[0];
+    } 
+    if (None == test) {
+        //assert (0, "" +  list_models);
+        KeywordArgument ("branches",  "Branches to test");
+        test = io.SelectAnOption ({
+            "" + list_models[0] : "Branches labeled '" + list_models[0] + "'",
+            "" + list_models[1] : "Branches labeled '" + list_models[1] + "'",
+        }, "Branches to test");
+    }
+ 
     io.CheckAssertion	("`&option_count` == 2", "BUSTED-PH requires exactly one designated set of branches in the tree.");
     
     for (_key_, _value_; in; tree_for_analysis[utility.getGlobalValue("terms.trees.model_map")]) {
-        if (Abs (_value_)) {
+        if (_value_ == test) {
             tree_configuration[_key_] = utility.getGlobalValue('terms.tree_attributes.test');
         } else {
             tree_configuration[_key_] = utility.getGlobalValue('terms.tree_attributes.background');

@@ -256,6 +256,7 @@ ExecuteCommands ("Tree T = " + (nrm.trees[0])[terms.trees.newick_with_lengths]);
 LikelihoodFunction lf_gtr = ( ^nrm.filter_name, T );
 Optimize ( res_gtr, lf_gtr );
 
+
 nrm.EFV = GetEFV ("GTRModel");
 nrm.stgtr_fit = estimators.ExtractMLEFromObject ("lf_gtr");
 
@@ -310,6 +311,7 @@ nrm.rootFreqs = {{fA}
 
 ExecuteCommands ("Tree T = " + (nrm.trees[0])[terms.trees.newick_with_lengths]);
 LikelihoodFunction3 lf_gtr = ( ^nrm.filter_name, T, nrm.rootFreqs);
+
 
 Optimize ( res_gtr, lf_gtr );
 
