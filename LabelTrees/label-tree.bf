@@ -12,11 +12,11 @@ labeler.analysis_description = {terms.io.info :
                             "
                             Read a tree and (optionally) a list of sequence names, and annotate branches for subsequent analyses that accept branch partitions.
                             ",
-                            terms.io.version :          "0.1",
+                            terms.io.version :          "0.2",
                             terms.io.reference :        "TBD",
                             terms.io.authors :          "Sergei L Kosakovsky Pond",
                             terms.io.contact :          "spond@temple.edu",
-                            terms.io.requirements :     "An MSA and, optionally, a tree"
+                            terms.io.requirements :     "A tree to label. Existing tree labels will be respected, allowing for multiple sets to be labeled"
                           };
 
 
@@ -26,14 +26,26 @@ KeywordArgument  ("tree", "The tree to annotate (Newick format)");
 SetDialogPrompt  ("Load the tree to annotate (Newick format)");
 
 labeler.tree = trees.LoadAnnotatedTopology (TRUE);
+
+
 labeler.ts = labeler.tree [^"terms.trees.newick_with_lengths"];
 Topology T = labeler.ts;
+
+labeler.existing = labeler.tree [terms.trees.model_map];
 
 KeywordArgument  ("regexp", "Use the following regular expression to select a subset of leaves", "()");
 labeler.regexp = io.PromptUserForString ("Use the following regular expression to select a subset of leaves");
 
 KeywordArgument  ("label", "Use the following label for annotation", "Foreground");
 labeler.tag = io.PromptUserForString ("Use the following label for annotation");
+
+KeywordArgument  ("reroot", "Reroot the tree on this node ('None' to skip rerooting)", "None");
+labeler.reroot = io.PromptUserForString ("Reroot the tree on this node ('None' to skip rerooting)");
+
+if (labeler.reroot != "None") {
+    rerooted = RerootTree (T, labeler.reroot);
+    Topology T = rerooted;
+}
 
 labeler.labels = {};
 
@@ -90,8 +102,12 @@ fprintf (labeler.path, CLEAR_FILE, tree.Annotate ("T", "relabel_and_annotate", "
 
 function relabel_and_annotate (node_name) {
     _label = "";
-    if (labeler.labels / node_name) {
-        _label = "{" + labeler.labels[node_name] + "}";
+    if (Abs(labeler.existing [node_name]) > 0 ) {
+        _label = "{" + labeler.existing [node_name] + "}";
+    } else {
+        if (labeler.labels / node_name) {
+            _label = "{" + labeler.labels[node_name] + "}";
+        }
     }
     return node_name + _label;
 }

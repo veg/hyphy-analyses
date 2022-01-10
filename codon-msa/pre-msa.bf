@@ -38,16 +38,11 @@ KeywordArgument ("reference", "A FASTA file with REFERENCE sequences", "/dev/nul
 filter.reference_path   = io.PromptUserForString ("Load reference sequences from");
 
 filter.keep_reference = FALSE;
-
-
 filter.all_sequences = alignments.GetSequenceNames ("filter.raw_data");
 
 
 KeywordArgument ("N-fraction", "Maximum acceptable fraction of N's", "1.0");
 filter.n_fraction = io.PromptUser("Maximum acceptable fraction of N's", 0.05, 0, 1, FALSE);
-
-//KeywordArgument ("length fraction", "Minimimum fraction of sequence", "1.0");
-//filter.n_fraction = io.PromptUser("Maximum acceptable fraction of N's", 0.05, 0, 1, FALSE);
 
 
 if (filter.reference_path != "/dev/null") {
@@ -227,8 +222,7 @@ if (None == filter.reference_sequences) {
 // Transform sequence_with_copies
 filter.copies_by_reference = {};
 for (i, s; in; filter.sequences_with_copies) {
-    //console.log(s);
-    filter.copies_by_reference[s["0"]] = s;
+     filter.copies_by_reference[s["0"]] = s;
 }
 
 io.SpoolJSON(filter.copies_by_reference, filter.copies_path);

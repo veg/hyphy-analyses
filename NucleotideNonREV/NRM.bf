@@ -338,6 +338,10 @@ selection.io.json_store_lf_withEFV(nrm.json, "NREV12F" ,nrm.nrmf_fit [terms.fit.
                             0);
 
 
+KeywordArgument ("save-fit", "Save NRM+F model fit to this file (default is not to save)", "/dev/null");
+io.SpoolLFToPath("lf_gtr", io.PromptUserForFilePath ("Save NRM+F model fit to this file ['/dev/null' to skip]"));
+
+
 KeywordArgument ("output", "Write the resulting JSON to this file (default is to save to the same path as the alignment file + 'NRM.json')", nrm.nuc_data_info [terms.json.json]);
 nrm.nuc_data_info [terms.json.json] = io.PromptUserForFilePath ("Save the resulting JSON file to");
 
