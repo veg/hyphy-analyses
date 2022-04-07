@@ -263,6 +263,7 @@ utility.ForEachPair (fitter.filter_specification, "_key_", "_value_",
 
 io.ReportProgressMessageMD ("fitter", fitter.terms.MG94 + terms.genetic_code.synonymous, "**Synonymous tree** \n" + (fitter.ESEN_trees [terms.fit.synonymous_trees])[0]);
 io.ReportProgressMessageMD ("fitter", fitter.terms.MG94 + terms.genetic_code.nonsynonymous, "**Non-synonymous tree** \n" + (fitter.ESEN_trees [terms.fit.nonsynonymous_trees])[0]);
+io.ReportProgressMessageMD ("fitter", fitter.terms.MG94 + terms.genetic_code.nonsynonymous, "**Combined tree** \n" + (fitter.ESEN_trees [terms.json.trees])[0]);
 
 KeywordArgument ("save-fit", "Save MG94 model fit to this file (default is not to save)", "/dev/null");
 io.SpoolLFToPath(fitter.results[terms.likelihood_function], io.PromptUserForFilePath ("Save MG94 model fit to this file ['/dev/null' to skip]"));

@@ -17,7 +17,7 @@ utility.SetEnvVariable ("NORMALIZE_SEQUENCE_NAMES", TRUE);
 utility.SetEnvVariable ("ACCEPT_ROOTED_TREES", TRUE);
 
 
-simulator.analysis_description = {terms.io.info         : "Simulate codon data using the MG94 model of sequence evolution",
+simulator.analysis_description = {terms.io.info      : "Simulate codon data using the MG94 model of sequence evolution",
                                terms.io.version      : "0.1",
                                terms.io.authors      : "Sergei L Kosakovsky Pond",
                                terms.io.contact      : "spond@temple.edu",
@@ -204,8 +204,18 @@ simulator.counter = 0;
 simulator.BL = {};
 
 utility.ForEachPair (simulator.sites_by_profile, "_rate_distribution_", "_site_counts_", '
+
     simulator.apply_site_distribution (simulator.model, _rate_distribution_,  "simulator.T");
-    simulator.tree_length = +BranchLength (simulator.T, -1);
+    
+    simulator.bl_code = simulator.model[terms.model.get_branch_length];
+    if (Abs (simulator.bl_code)) {
+        simulator.tree_length = 0;
+        for (b; in; simulator.T) {
+            simulator.tree_length += Call (simulator.bl_code ,simulator.model,"simulator.T", b);
+        }
+    } else {
+        simulator.tree_length = +BranchLength (simulator.T, -1);
+    }
     
     io.ReportProgressBar ("SIMULATING", "Rate regime " + simulator.mode + " of " + utility.Array1D (simulator.sites_by_profile) + " (branch length = " + Format (simulator.tree_length, 8, 3) + ")");
     simulator.mode   += 1;

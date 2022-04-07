@@ -27,3 +27,30 @@ Option description
 * `mean-effect` [float, -5 to 5]: when &lambda; are being randomly generated, this is the mean of the **normal** distribution that will be used (default = 0)
 * `effect-variance` [float, 0 to 10]: when &lambda; are being randomly generated, this is the variance of the **normal** distribution that will be used (default = 1.)
 
+### BS-REL
+
+Simulate data under the mixture model (BS-REL). No SRV. Supports multiple branch partitions.
+
+```
+hyphy LIBPATH=/Users/sergei/Development/hyphy/res SimulateMG94.bf
+--model BS-REL 
+--tree CD2.nwk 
+--output sims/BSREL 
+--replicates 5 
+--branch-variation bs-rel 
+--omegas 0.1,0.9,4,0.1  
+--omegas-Others 0.1,0.9,2.0,0.1 
+--omegas-Primates 0.1,0.9,4.0,0.1
+```
+
+`omegas` : distrbution of &omega; to use for unlabeled branches (value, weight pairs)
+
+`omegas-NAME` : distrbution of &omega; to use for branches labeled with `NAME` (value, weight pairs)
+
+### BS-REL-SRV
+
+Same as above, except add
+
+```
+--site-variation bs-rel-srv-gamma --gamma 1.0
+```

@@ -14,8 +14,6 @@ lfunction simulator.prepare_site_distribution (model, site_count, tree, tree_inf
     class_count = utility.Array1D (model [^"terms.model.residue_properties"]);
     re_m = "^" +  terms.propertyImportance("");
 
-
-
     simulator.site_variables = {1, 2+class_count};
     simulator.site_variables[0] = "";
     simulator.site_lambdas = {};
@@ -61,11 +59,11 @@ lfunction simulator.prepare_site_distribution (model, site_count, tree, tree_inf
 
    //bl_conversion_subs [local_beta] = alpha;
    bl_str = Simplify (model[^"terms.model.branch_length_string"], bl_conversion_subs);
-   parameters.SetConstraint (local_beta, "alpha*" + local_alpha, "");
-      
-    for (_node_; in; ^tree) {
+   parameters.SetConstraint (local_beta, "1.*" + local_alpha, "");
+
+   for (_node_; in; ^tree) {
          lbl = (tree_info[^"terms.branch_length"])[_node_];
-         ExecuteCommands ("FindRoot (`&lfactor`,(" +bl_str + ")-" + 3*lbl + "," + local_alpha + ",0,10000)");    
+         utility.ExecuteInGlobalNamespace ("FindRoot (`&lfactor`,(" +bl_str + ")-" + 3*lbl + "," + local_alpha + ",0,10000)");   
          parameters.SetConstraint ("`tree`.`_node_`.`local_alpha`","" + lfactor + "*" + global_alpha,"");
          parameters.SetConstraint ("`tree`.`_node_`.`local_beta`","" + lfactor + "*" + global_beta,"");
          for (r,p; in; simulator.site_lambdas) {
@@ -81,7 +79,6 @@ lfunction simulator.prepare_site_distribution (model, site_count, tree, tree_inf
     for (i = 0; i < site_count; i+=1) {
           site_profile[i][0] = (random.gamma (alpha_srv,alpha_srv) * 100 $ 1)/100;
           site_profile[i][1] = (random.gamma_fast (alpha_omega) * 100 $ 1)/100;
-
           if (Random (0,1) <= fraction_same) {
                for (j = 0; j < class_count; j+=1) {
                 site_profile[i][j+2] =  0;
@@ -98,7 +95,7 @@ lfunction simulator.prepare_site_distribution (model, site_count, tree, tree_inf
                }
           }
     }
-
+    
     ^"simulator.site_variables" = simulator.site_variables;
     
     return {
@@ -112,8 +109,15 @@ lfunction simulator.apply_site_distribution (model, site, tree) {
     site = Eval (site);
 
     for (i, k; in; ^"simulator.site_variables") {
+        //console.log ("" + k + "=" + site[i]);
         parameters.SetValue (k, site[i]);
     }
+    
+    /*for (b; in; ^tree) {
+        GetInformation (T, ^(tree + "." + b));
+        console.log (Max(T,0));
+    }   
+    assert (0);*/
 
  }
 
