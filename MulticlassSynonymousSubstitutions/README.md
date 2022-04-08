@@ -1,6 +1,6 @@
 ## Codon models with multiple classes of synonymous codons.
 
-> Analysis described by Jody Hey
+> Analysis described by Jody Hey and published in [a PNAS article](https://www.pnas.org/doi/10.1073/pnas.2023575118)
 
 This analysis extends the standard Muse-Gaut 94 codon substitution models to permit **multiple classes** of synonymous substitution rates. This is accomplished by providing a tab-separated annotation file, like this [example](codons.tsv), with three columns
 
@@ -17,6 +17,24 @@ ARG	AGA	SELECTED
 LEU	TTA	SELECTED
 PRO	CCG	NEUTRAL
 LEU	TTG	NEUTRAL
+...
+```
+
+An alternative way to specify partitioned classes is to specify a group for each **pair** of codons (so that **pair** is assigned to the designated class), like in this [example](lib/pairs.tsv), with three columns
+
+```
+AA	PAIR	CLASS
+L	CTACTT	NEUTRAL
+Q	CAACAG	SELECTED
+T	ACAACC	SELECTED
+T	ACCACG	SELECTED
+R	AGACGA	SELECTED
+G	GGAGGC	SELECTED
+A	GCAGCC	SELECTED
+S	TCATCC	SELECTED
+R	AGGCGG	SELECTED
+S	TCGTCT	SELECTED
+S	AGCAGT	SELECTED
 ...
 ```
 
