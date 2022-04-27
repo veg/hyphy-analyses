@@ -979,6 +979,9 @@ lfunction busted.select_branches(partition_info) {
     if (available_models[1] == "") {
         test = list_models[0];
     } 
+    
+    io.CheckAssertion	("`&option_count` == 2", "BUSTED-PH requires exactly one designated set of branches in the tree.");
+
     if (None == test) {
         //assert (0, "" +  list_models);
         KeywordArgument ("branches",  "Branches to test");
@@ -988,7 +991,6 @@ lfunction busted.select_branches(partition_info) {
         }, "Branches to test");
     }
  
-    io.CheckAssertion	("`&option_count` == 2", "BUSTED-PH requires exactly one designated set of branches in the tree.");
     
     for (_key_, _value_; in; tree_for_analysis[utility.getGlobalValue("terms.trees.model_map")]) {
         if (_value_ == test) {
