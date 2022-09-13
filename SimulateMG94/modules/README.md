@@ -54,3 +54,5 @@ Same as above, except add
 ```
 --site-variation bs-rel-srv-gamma --gamma 1.0
 ```
+
+### Multi-hit (constant)

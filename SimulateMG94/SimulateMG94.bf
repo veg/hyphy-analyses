@@ -33,6 +33,7 @@ KeywordArgument ("tree",                 "A phylogenetic tree with branch length
 KeywordArgument ("sites",                "How many codon sites to simulate", 500);
 KeywordArgument ("replicates",           "How many replicates", 1);
 KeywordArgument ("root-seq",             "Use a specific root sequence to simulate from (overrides --sites)", "None");
+KeywordArgument ("extension",            "Use the following file extension for replicates", ".nex");
 KeywordArgument ("base-frequencies",     "Base frequencies to use. 'equal' or 9 comma-separated values [A in first codon position, C-1, G-1, A-2, C-2, G-2...] or 12 comma-separated values [A in first codon position, C-1, G-1, T-1, A-2, C-2, G-2, T-2...] to specify positional nucleotide frequencies], or the name of a file to compute frequencies from", "equal");
 KeywordArgument ("frequency-estimator",  "Equilibrium frequency estimator", "CF3x4");
 KeywordArgument ("model",                "The substitution model to use", "MG94");
@@ -50,6 +51,7 @@ simulator.sites      = io.PromptUser ("The number of codons per alignment", 300,
 simulator.replicates = io.PromptUser ("The number of replicate alignments to generate", 1, 1, 1e7, TRUE);
 
 simulator.root_seq     = io.PromptUserForString ("Use a specific root sequence to simulate from (overrides --sites)");
+simulator.extension     = io.PromptUserForString ("Use the following file extension");
 
 if (simulator.root_seq != "None") {
     io.CheckAssertion ("Abs(simulator.root_seq)>=3 && Abs(simulator.root_seq) % 3 == 0", "The length of the root string must be at least 3 and divisible by 3, had " + Abs(simulator.root_seq));
@@ -182,7 +184,7 @@ simulator.matrix [1][0] = "3"; simulator.matrix [1][1] = simulator.code[terms.co
 simulator.root_freqs = simulator.model[terms.efv_estimate];
 
 KeywordArgument ("output",       "Write simulated alignments (as FASTA) to the following prefix path, using the syntax ${path}.replicate.index");
-simulator.path = io.PromptUserForFilePath ("Save simulator settings to this path, and replicates to ${path}.replicate.index");
+simulator.path = io.PromptUserForFilePath ("Save simulator settings to this path, and replicates to ${path}.replicate.index.extension");
 
 
 
@@ -308,10 +310,12 @@ for (simulator.i = 0; simulator.i < simulator.replicates; simulator.i += 1) {
                 simulator.j += 1;
             ");
 
-    fprintf (simulator.path + ".replicate." + (1+simulator.i) , CLEAR_FILE, Join ("\n",(simulator.string_buffer[simulator.i])));
-    DataSet existing_data  = ReadDataFile (simulator.path + ".replicate." + (1+simulator.i));
+
+    simulator.replicate_file = simulator.path + ".replicate." + (1+simulator.i) + simulator.extension;
+    fprintf (simulator.replicate_file, CLEAR_FILE, Join ("\n",(simulator.string_buffer[simulator.i])));
+    DataSet existing_data  = ReadDataFile (simulator.replicate_file);
     utility.SetEnvVariable ("DATAFILE_TREE",simulator.tree[terms.trees.newick_annotated]);
     utility.SetEnvVariable ("IS_TREE_PRESENT_IN_DATA",TRUE);
     DataSetFilter all      = CreateFilter (existing_data, 1, simulator.inverse_map);
-    fprintf (simulator.path + ".replicate." + (1+simulator.i) , CLEAR_FILE, all);
+    fprintf (simulator.replicate_file, CLEAR_FILE, all);
 }

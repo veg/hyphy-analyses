@@ -10,7 +10,7 @@ lfunction simulator.set_branch_rates (model, tree_id, branch_id, branch_info) {
     if (model[^"terms.model.type"] == ^"terms.local") {
        branch_omegas = (^"simulator.bs_rel.omegas")[branch_info[^"terms.trees.model_map"]];
        if (Type (branch_omegas) != "Matrix") {
-          branch_omegas = ^"simulation.bs_rel.omega";
+          branch_omegas = ^"simulator.bs_rel.omega";
        }
        parameters.SetStickBreakingDistributionPrefix (^"simulation.model.omegas", branch_omegas, tree_id + "." + branch_id + ".");
     }

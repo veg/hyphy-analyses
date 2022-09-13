@@ -27,6 +27,11 @@ DataSetFilter input              = CreateFilter (input_ds,1);
 
 console.log ("> Loaded an alignment with `input.species` sequences and `input.sites` sites from `LAST_FILE_PATH`");
 
+KeywordArgument                  ("codon", "Enforce codon boundaries", "No");
+
+part.codon = io.SelectAnOption ({{"No", "Use partitions as stated"}, {"Yes", "Adjust to the nearest codon boundary if needed"}}, "Enforce codon boundaries");
+
+
 dfpm = utility.GetEnvVariable("DATA_FILE_PARTITION_MATRIX");
 
 if (Type(dfpm) == "Matrix") {
@@ -68,6 +73,22 @@ if (Type(dfpm) == "Matrix") {
         
         function variable_sites (s,freqs) {
             return (+freqs["_MATRIX_ELEMENT_VALUE_>0"]) > 1;
+        }
+        
+        if (part.codon == "Yes") {
+            part.part_ranges = {part_count,2};
+
+            for (i = 0; i < part_count; i+=1) {
+                part.r = regexp.Split (partitions[i][1], "-");
+                pf = +part.r[0];
+                pt = +part.r[1];
+                //console.log ("" + pf + "-" + pt);
+                pf +=  - (pf % 3);
+                pt +=  - (pt+1) % 3;
+                partitions[i][1] = "" + pf + "-"  + pt;
+           }
+            
+            
         }
         
         for (i = 0; i < part_count; i+=1) {
