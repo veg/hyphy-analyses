@@ -1,0 +1,33 @@
+RequireVersion ("2.5.37");
+
+LoadFunctionLibrary("libv3/all-terms.bf");
+LoadFunctionLibrary("libv3/UtilityFunctions.bf");
+LoadFunctionLibrary("libv3/models/parameters.bf");
+LoadFunctionLibrary("libv3/models/codon/MSS.bf");
+
+
+ 
+simulator.report = {terms.parameters.omega : simulator.bs_rel.omega};
+              
+//----------------------------------------------------------------------------------------
+
+lfunction simulator.define_model.frequencies (type,code) {    
+    model = model.codon.MSS.prompt_and_define_freq (type, code, ^"simulator.frequency_type");
+    model [^"terms.efv_estimate"] = ^"simulator.efv";
+    return model;
+}
+
+//----------------------------------------------------------------------------------------
+
+
+function simulator.define_model (code) {
+    sim.model = model.generic.DefineModel ("simulator.define_model.frequencies" ,
+                                                  "simulator.substitution_model",
+                                                  {"0" : parameters.Quote(terms.local),
+                                                  "1" : code},
+                                                  null,
+                                                  null);
+                                                  
+                                                  
+    return sim.model;
+}

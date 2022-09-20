@@ -1,0 +1,54 @@
+LoadFunctionLibrary("libv3/all-terms.bf"); 
+LoadFunctionLibrary("libv3/UtilityFunctions.bf");
+LoadFunctionLibrary("libv3/models/parameters.bf");
+
+simulator.bs_rel.omegas = {};
+
+lfunction simulator.set_branch_rates (model, tree_id, branch_id, branch_info) {
+    //console.log (tree_id + "." + branch_id);
+ 
+    if (model[^"terms.model.type"] == ^"terms.local") {
+       branch_omegas = (^"simulator.bs_rel.omegas")[branch_info[^"terms.trees.model_map"]];
+       if (Type (branch_omegas) != "Matrix") {
+          branch_omegas = ^"simulator.bs_rel.omega";
+       }
+       parameters.SetStickBreakingDistributionPrefix (^"simulation.model.omegas", branch_omegas, tree_id + "." + branch_id + ".");
+    }
+    
+
+    /** apply the same dN/dS to all branches */
+    estimators.applyBranchLength (tree_id, branch_id, model, branch_info[^"terms.branch_length"]);    
+}
+
+lfunction simulator.validate_tree (tree) {
+    if (trees.HasBranchLengths (tree)) {
+    
+        classes = utility.UniqueValues (tree[^"terms.trees.model_map"]);
+        
+        for (label; in; classes) {
+            if (label != "") {
+                KeywordArgument   ("omegas-" + label, "Omega value distribution, specified as a comma-separated string omega1,weight1,omega2,weight2,...,omegaN,weightN (weights will be normalized to sum to 1) for `label`");
+                
+                omegas = Eval ("{{" + io.PromptUserForString ("Omega distribution specification for `label`") + "}}");
+            
+                if (^"simulator.omega_classes" >= 1 && utility.Array1D (omegas) % 2 == 0) {
+                    omegas = {^"simulator.omega_classes",2}["omegas[_MATRIX_ELEMENT_ROW_* 2+_MATRIX_ELEMENT_COLUMN_]"];
+                    simulator.bs_rel.norm = 1/(+omegas[-1][1]);
+                    for (simulator.i = 0; simulator.i < ^"simulator.omega_classes"; simulator.i += 1) {
+                        omegas[simulator.i][1] = omegas[simulator.i][1] * simulator.bs_rel.norm;
+                    }
+                    console.log (">Omega distribution used for the branches `label` (omega, weight)\n" + omegas);
+
+                 } else {
+                    io.ReportAnExecutionError ("Incorrect dimensions for the omega distribution specification (even number comma-separated terms with at least two terms)");
+                 }
+                 
+                 (^"simulator.bs_rel.omegas")[label] = omegas;
+ 
+            }
+        }
+        
+        return '';
+    }
+    return 'The input tree must have input branch lengths';
+}

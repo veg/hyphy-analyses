@@ -1,0 +1,52 @@
+LoadFunctionLibrary("libv3/all-terms.bf"); 
+LoadFunctionLibrary("libv3/UtilityFunctions.bf");
+LoadFunctionLibrary("libv3/models/parameters.bf");
+
+KeywordArgument   ("omega", "The constant dN/dS ratio to apply across the tree", "1");
+simulator.omega = "" + io.PromptUser ("Tree-wide dN/dS ratio", 0.5, 0, 1e3, FALSE);
+
+KeywordArgument ("delta", "Instantaneous rate for double-hits", "0.1");
+simulator.delta = "" + io.PromptUser ("Instantaneous rate for double-hit subs", 0.1, 0, 1e3, FALSE); 
+KeywordArgument ("psi", "Instantaneous rate for triple-hits", "0.0");
+simulator.psi = "" + io.PromptUser ("Instantaneous rate for triple-hit subs", 0.0, 0, 1e3, FALSE); 
+KeywordArgument ("psi-islands", "Instantaneous rate for triple-hits in synonymous islands", "0.0");
+simulator.psi_islands = "" + io.PromptUser ("Instantaneous rate for triple-hits in synonymous islands", 0.00, 0, 1e3, FALSE); 
+
+simulator.report = {
+    terms.parameters.omega_ratio : simulator.omega,
+    terms.parameters.multiple_hit_rate : simulator.delta,
+    terms.parameters.triple_hit_rate : simulator.psi,
+    terms.parameters.triple_hit_rate_syn : simulator.psi_islands
+};
+
+
+
+lfunction simulator.set_branch_rates (model, tree_id, branch_id, branch_info) {
+    /** apply the same dN/dS to all branches */
+    rates = (model[^"terms.parameters"])[^"terms.local"];
+    parameters.SetConstraint ("`tree_id`.`branch_id`.`rates[^'terms.parameters.nonsynonymous_rate']`", 
+                              "`^'simulator.omega'`*`tree_id`.`branch_id`.`rates[^'terms.parameters.synonymous_rate']`", "");
+                              
+    parameters.SetValue ("`tree_id`.`branch_id`.`rates[^'terms.parameters.multiple_hit_rate']`", 
+                              "`^'simulator.delta'`");
+    parameters.SetValue ("`tree_id`.`branch_id`.`rates[^'terms.parameters.triple_hit_rate']`", 
+                              "`^'simulator.psi'`");
+    parameters.SetValue ("`tree_id`.`branch_id`.`rates[^'terms.parameters.triple_hit_rate_syn']`", 
+                              "`^'simulator.psi_islands'`");
+
+                
+    estimators.applyBranchLength (tree_id, branch_id, model, branch_info[^"terms.branch_length"]);    
+    /*console.log ("\n\n");
+    console.log (branch_info[^"terms.branch_length"]);
+    for (k; in; rates) {
+        console.log ("`tree_id`.`branch_id`.`k`");
+        console.log (Eval ("`tree_id`.`branch_id`.`k`"));
+    }*/
+}
+
+lfunction simulator.validate_tree (tree) {
+    if (trees.HasBranchLengths (tree)) {
+        return '';
+    }
+    return 'The input tree must have input branch lengths';
+}
