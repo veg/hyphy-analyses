@@ -7,10 +7,22 @@ KeywordArgument   ("omega", "The constant dN/dS ratio to apply across the tree",
 simulator.omega     = "" + io.PromptUser ("Tree-wide dN/dS ratio", 0.5, 0, 1e3, FALSE);
 simulator.mss_rates = {};
 simulator.mss_neutral_rate = "xx";
+
+simulator.has_nn = simulator.model[utility.getGlobalValue("terms.model.MSS.neutral")];
+
+if (Abs (simulator.has_nn) == 0 ) {
+
+    KeywordArgument  ("mss-reference-rate", "The reference rate (set to 1)");
+    mss.options = model.GetLocalParameters_RegExp (simulator.model, "codon class");
+    simulator.model[utility.getGlobalValue("terms.model.MSS.neutral")]  = io.SelectAnOption (mss.options, "The reference rate (set to 1)");
+    //console.log (simulator.model[utility.getGlobalValue("terms.model.MSS.neutral")] );
+}
+
+
 for (d,p; in; model.GetLocalParameters_RegExp (simulator.model, "codon class")) {
-    simulator.class = regexp.Split (d, "\\ +");
-    simulator.class =  simulator.class[Abs( simulator.class) - 1];
-    if (simulator.class == simulator.model[utility.getGlobalValue("terms.model.MSS.neutral")]) {
+    simulator.class = d;
+    //simulator.class =  simulator.class[Abs( simulator.class) - 1];
+    if ((simulator.class $ simulator.model[utility.getGlobalValue("terms.model.MSS.neutral")])[0] >= 0) {
         simulator.mss_neutral_rate = p;
     } else {
          KeywordArgument   ("mss-" + p, "Relative synonymous rate for `d`", 1.0);   
