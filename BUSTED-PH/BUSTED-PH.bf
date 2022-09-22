@@ -25,9 +25,9 @@ busted.analysis_description = {
 "BUSTED-PH (BUSTED-PHenotype) uses several random effects branch-site model fitted to subsets 
 of tree branches that represent tree partitioning by discrete trait to identify evidence of positive diversifying selection 
 associated with the presence of the discrete trait. This is accomplished by fitting a BUSTED model to with separate rate distributions 
-for PH+/PH- branches, testing that (i) PH+ subset is under episodic diversifying selection, (ii) PH- is NOT under diversifying selection and (iii) PH+ and PH- have different distributions 
+for PH+/PH- branches, testing that (i) PH+ subset is under episodic diversifying selection, (ii) PH- is NOT under diversifying selection and (iii) PH+ and PH- have different distributions. Version 0.2 adds support for >1 labeled classes. 
 ",
-                               terms.io.version : "0.1",
+                               terms.io.version : "0.2",
                                terms.io.reference : "*TBD*",
                                terms.io.authors : "Sergei L Kosakovsky Pond",
                                terms.io.contact : "spond@temple.edu",
@@ -38,6 +38,7 @@ io.DisplayAnalysisBanner (busted.analysis_description);
 
 busted.FG = "Test";
 busted.BG = "Background";
+busted.NUISANCE = "nuisance";
 busted.BG_TEST = terms.json.test_results + " background";
 busted.shared_distributions = terms.json.test_results + " shared distributions";
 busted.SRV = "Synonymous site-to-site rates";
@@ -51,6 +52,7 @@ busted.MG94 = terms.json.mg94xrev_sep_rates;
 busted.p_value = 0.05;
 
 busted.json.background = busted.background;
+busted.json.nuisance = busted.NUISANCE;
 busted.json.site_logl  = "Site Log Likelihood";
 busted.json.evidence_ratios  = "Evidence Ratios";
 busted.json.srv_posteriors  = "Synonymous site-posteriors";
@@ -169,6 +171,15 @@ utility.ForEachPair (busted.selected_branches, "_partition_", "_selection_",
     "_selection_ = utility.Filter (_selection_, '_value_', '_value_ != terms.tree_attributes.test');
      if (utility.Array1D (_selection_)) { busted.has_background = TRUE;} ");
 busted.json[busted.json.background] =  busted.has_background;
+
+
+busted.has_nuisance = FALSE;
+
+utility.ForEachPair (busted.selected_branches, "_partition_", "_selection_",
+    "_selection_ = utility.Filter (_selection_, '_value_', '_value_ == busted.NUISANCE');
+     if (utility.Array1D (_selection_)) { busted.has_nuisance = TRUE;} ");
+busted.json[busted.json.nuisance] =  busted.has_nuisance;
+
 
 io.CheckAssertion	("busted.has_background", "BUSTED-PH requires a foreground and a background partition.");
 
@@ -291,6 +302,7 @@ busted.background.bsrel_model =  model.generic.DefineMixtureModel(busted.model_g
         busted.filter_names,
         None);
 
+
 models.BindGlobalParameters ({"0" : busted.test.bsrel_model, "1" : busted.background.bsrel_model}, terms.nucleotideRate("[ACGT]","[ACGT]"));
 
 
@@ -337,20 +349,35 @@ PARAMETER_GROUPING + busted.distribution["rates"];
 PARAMETER_GROUPING + busted.distribution["weights"];
 
 
-if (busted.has_background) {
-    busted.model_object_map = { "busted.background" : busted.background.bsrel_model,
-                                "busted.test" :       busted.test.bsrel_model };
-    busted.background_distribution = models.codon.BS_REL.ExtractMixtureDistribution(busted.background.bsrel_model);
-    busted.init_grid_setup (busted.background_distribution);
+busted.model_object_map = { "busted.background" : busted.background.bsrel_model,
+                            "busted.test" :       busted.test.bsrel_model };
+                            
+busted.background_distribution = models.codon.BS_REL.ExtractMixtureDistribution(busted.background.bsrel_model);
+busted.init_grid_setup (busted.background_distribution);
 
-    PARAMETER_GROUPING = {};
-    PARAMETER_GROUPING + busted.background_distribution["rates"];
-    PARAMETER_GROUPING + busted.background_distribution["weights"];
-    
-} else {
-    busted.model_object_map = { "busted.test" :       busted.test.bsrel_model };
+PARAMETER_GROUPING = {};
+PARAMETER_GROUPING + busted.background_distribution["rates"];
+PARAMETER_GROUPING + busted.background_distribution["weights"];
+
+if (busted.has_nuisance) {
+    busted.nuisance.bsrel_model =  model.generic.DefineMixtureModel(busted.model_generator,
+        "busted.nuisance", {
+            "0": parameters.Quote(terms.global),
+            "1": busted.codon_data_info[terms.code],
+            "2": parameters.Quote (busted.rate_class_arguments) // the number of rate classes
+        },
+        busted.filter_names,
+        None);
+
+
+    busted.model_object_map ["busted.nuisance"] = busted.nuisance.bsrel_model;
+    busted.nuisance_distribution = models.codon.BS_REL.ExtractMixtureDistribution(busted.nuisance.bsrel_model);
+    busted.init_grid_setup (busted.nuisance_distribution);
+    PARAMETER_GROUPING + busted.nuisance_distribution["rates"];
+    PARAMETER_GROUPING + busted.nuisance_distribution["weights"];
+    models.BindGlobalParameters ({"0" : busted.test.bsrel_model, "1" : busted.nuisance.bsrel_model}, terms.nucleotideRate("[ACGT]","[ACGT]"));
+
 }
-
 
 if (busted.do_srv)  {
 
@@ -414,12 +441,22 @@ busted.initial_grid = utility.Map (busted.initial_grid, "_v_",
     'busted._renormalize (_v_, "busted.distribution", busted.initial.test_mean)'
 );
 
-if (busted.has_background) { //GDD rate category
-    busted.initial.background_mean    = ((selection.io.extract_global_MLE_re (busted.final_partitioned_mg_results, "^" + terms.parameters.omega_ratio + ".+background.+"))["0"])[terms.fit.MLE];
+busted.initial.background_mean    = ((selection.io.extract_global_MLE_re (busted.final_partitioned_mg_results, "^" + terms.parameters.omega_ratio + ".+background.+"))["0"])[terms.fit.MLE];
+busted.initial_grid = utility.Map (busted.initial_grid, "_v_", 
+    'busted._renormalize (_v_, "busted.background_distribution", busted.initial.background_mean)'
+);
+
+
+if (busted.has_nuisance) { //GDD rate category
+    busted.initial.nuisance_mean   = ((selection.io.extract_global_MLE_re (busted.final_partitioned_mg_results, "^" + terms.parameters.omega_ratio + ".+nuisance.+"))["0"])[terms.fit.MLE];
+ 
     busted.initial_grid = utility.Map (busted.initial_grid, "_v_", 
-        'busted._renormalize (_v_, "busted.background_distribution", busted.initial.background_mean)'
+        'busted._renormalize (_v_, "busted.nuisance_distribution", busted.initial.nuisance_mean)'
     );
+    
+
 }
+
 
 
 busted.model_map = {};
@@ -430,8 +467,13 @@ for (busted.partition_index = 0; busted.partition_index < busted.partition_count
                                              busted.name_mapping);
 
     busted.model_map + { "busted.test" : utility.Filter (busted.selected_branches[busted.partition_index], '_value_', '_value_ == terms.tree_attributes.test'),
-					     "busted.background" : utility.Filter (busted.selected_branches[busted.partition_index], '_value_', '_value_ != terms.tree_attributes.test')};
+					     "busted.background" : utility.Filter (busted.selected_branches[busted.partition_index], '_value_', '_value_ == busted.background')};
+					     
+	if (busted.has_nuisance) {
+	     (busted.model_map[busted.partition_index])["busted.nuisance"] = utility.Filter (busted.selected_branches[busted.partition_index], '_value_', '_value_ == busted.NUISANCE');
+	}
 }
+
 
 utility.SetEnvVariable ("ASSUME_REVERSIBLE_MODELS", TRUE);
 
@@ -451,6 +493,8 @@ busted.nm.precision = -0.00025*busted.final_partitioned_mg_results[terms.fit.log
 
                                     
 debug.checkpoint = utility.GetEnvVariable ("DEBUG_CHECKPOINT");
+
+
        
 if (Type (debug.checkpoint) != "String") {
 
@@ -526,6 +570,16 @@ if (busted.has_background) {
                                                          "_index_",
                                                          "{terms.json.omega_ratio : busted.inferred_background_distribution [_index_][0],
                                                            terms.json.proportion : busted.inferred_background_distribution [_index_][1]}");
+}
+
+if (busted.has_nuisance) {
+    io.ReportProgressMessageMD("BUSTED", "main", "* For *nuisance* branches, the following rate distribution for branch-site combinations was inferred");
+    busted.inferred_nuisance_distribution = parameters.GetStickBreakingDistribution (busted.nuisance_distribution) % 0;
+    selection.io.report_dnds (busted.inferred_nuisance_distribution);
+    busted.distribution_for_json [busted.NUISANCE] = utility.Map (utility.Range (busted.rate_classes, 0, 1),
+                                                         "_index_",
+                                                         "{terms.json.omega_ratio : busted.inferred_nuisance_distribution [_index_][0],
+                                                           terms.json.proportion : busted.inferred_nuisance_distribution [_index_][1]}");
 }
 
 if (busted.do_srv) {
@@ -640,6 +694,16 @@ if (!busted.run_test) {
                                                                terms.json.proportion : busted.inferred_background_distribution [_index_][1]}");
     }
 
+    if (busted.has_nuisance) {
+        io.ReportProgressMessageMD("BUSTED", "main", "* For *nuisance* branches, the following rate distribution for branch-site combinations was inferred");
+        busted.inferred_nuisance_distribution = parameters.GetStickBreakingDistribution (busted.nuisance_distribution) % 0;
+        selection.io.report_dnds (busted.inferred_nuisance_distribution);
+        busted.distribution_for_json [busted.NUISANCE] = utility.Map (utility.Range (busted.rate_classes, 0, 1),
+                                                             "_index_",
+                                                             "{terms.json.omega_ratio : busted.inferred_nuisance_distribution [_index_][0],
+                                                               terms.json.proportion : busted.inferred_nuisance_distribution [_index_][1]}");
+    }
+
     if (busted.do_srv) {
         if (busted.do_bs_srv) {
             busted.srv_info = parameters.GetStickBreakingDistribution ( busted.srv_rate_reporting) % 0;
@@ -723,6 +787,16 @@ if (!busted.run_test) {
                                                                terms.json.proportion : busted.inferred_background_distribution [_index_][1]}");
     }
 
+    if (busted.has_nuisance) {
+        io.ReportProgressMessageMD("BUSTED", "main", "* For *nuisance* branches, the following rate distribution for branch-site combinations was inferred");
+        busted.inferred_nuisance_distribution = parameters.GetStickBreakingDistribution (busted.nuisance_distribution) % 0;
+        selection.io.report_dnds (busted.inferred_nuisance_distribution);
+        busted.distribution_for_json [busted.NUISANCE] = utility.Map (utility.Range (busted.rate_classes, 0, 1),
+                                                             "_index_",
+                                                             "{terms.json.omega_ratio : busted.inferred_nuisance_distribution [_index_][0],
+                                                               terms.json.proportion : busted.inferred_nuisance_distribution [_index_][1]}");
+    }
+
     if (busted.do_srv) {
         if (busted.do_bs_srv) {
             busted.srv_info = parameters.GetStickBreakingDistribution ( busted.srv_rate_reporting) % 0;
@@ -768,8 +842,8 @@ estimators.RestoreLFStateFromSnapshot (busted.full_model[terms.likelihood_functi
 busted.shared_regime = 
     models.BindGlobalParameters ({"0" : busted.test.bsrel_model, "1" : busted.background.bsrel_model}, terms.parameters.omega_ratio + "|" + terms.AddCategory (utility.getGlobalValue ("terms.mixture.mixture_aux_weight"), "[0-9]+" ) );
     
+    
 
-        
 io.ReportProgressMessageMD ("BUSTED", "test-shared", "Performing the shared distribution (same on test and background brances) model fit");
    
 busted.null_results = estimators.FitExistingLF (busted.full_model[terms.likelihood_function], busted.model_object_map);
@@ -786,6 +860,16 @@ busted.distribution_for_json = {busted.FG : utility.Map (utility.Range (busted.r
                                                      "_index_",
                                                      "{terms.json.omega_ratio : busted.inferred_test_distribution [_index_][0],
                                                        terms.json.proportion : busted.inferred_test_distribution [_index_][1]}")};
+
+if (busted.has_nuisance) {
+    io.ReportProgressMessageMD("BUSTED", "main", "* For *nuisance* branches, the following rate distribution for branch-site combinations was inferred");
+    busted.inferred_nuisance_distribution = parameters.GetStickBreakingDistribution (busted.nuisance_distribution) % 0;
+    selection.io.report_dnds (busted.inferred_nuisance_distribution);
+    busted.distribution_for_json [busted.NUISANCE] = utility.Map (utility.Range (busted.rate_classes, 0, 1),
+                                                         "_index_",
+                                                         "{terms.json.omega_ratio : busted.inferred_nuisance_distribution [_index_][0],
+                                                           terms.json.proportion : busted.inferred_nuisance_distribution [_index_][1]}");
+}
 
 if (busted.do_srv) {
     if (busted.do_bs_srv) {
@@ -903,7 +987,7 @@ lfunction busted._renormalize (v, distro, mean) {
     d = Rows (m);
     m = +(m[-1][0] $ m[-1][1]); // current mean
     for (i = 0; i < d; i+=1) {
-        (v[((^"busted.distribution")["rates"])[i]])[^"terms.fit.MLE"] = (v[((^"busted.distribution")["rates"])[i]])[^"terms.fit.MLE"] / m * mean;
+        (v[((^distro)["rates"])[i]])[^"terms.fit.MLE"] = (v[((^distro)["rates"])[i]])[^"terms.fit.MLE"] / m * mean;
     }
     return v;
     
@@ -973,22 +1057,29 @@ lfunction busted.select_branches(partition_info) {
     option_count  = Abs (available_models);    
  
     test = None;
-    if (available_models[0] == "") {
-        test = list_models[1];
-    } 
-    if (available_models[1] == "") {
-        test = list_models[0];
-    } 
-    
-    io.CheckAssertion	("`&option_count` == 2", "BUSTED-PH requires exactly one designated set of branches in the tree.");
+     
+    io.CheckAssertion	("`&option_count` >= 2", "BUSTED-PH requires one or more designated branch subsets.");
 
-    if (None == test) {
-        //assert (0, "" +  list_models);
-        KeywordArgument ("branches",  "Branches to test");
-        test = io.SelectAnOption ({
-            "" + list_models[0] : "Branches labeled '" + list_models[0] + "'",
-            "" + list_models[1] : "Branches labeled '" + list_models[1] + "'",
-        }, "Branches to test");
+    KeywordArgument ("branches",  "Branches to test");
+    test_options = {};
+    for (n; in; list_models) {
+        if (Abs (n) == 0) {
+            test_options ["Unlabeled"] = "Unlabeled branches";
+        } else {
+            test_options [n] = "Branches labeled '" + ("" + n) + "'";
+        }
+        
+    }       
+    
+    test = io.SelectAnOption (test_options, "Branches to test");
+    
+    reference = "";
+    
+    if (option_count > 2) {
+        test_options - test;
+        test_options   ["Remaining"] = "All remaining branches";
+        KeywordArgument ("comparison",  "Branches to compare to", "Remaining");
+        reference = io.SelectAnOption (test_options, "Branches to compare to");
     }
  
     
@@ -996,11 +1087,16 @@ lfunction busted.select_branches(partition_info) {
         if (_value_ == test) {
             tree_configuration[_key_] = utility.getGlobalValue('terms.tree_attributes.test');
         } else {
-            tree_configuration[_key_] = utility.getGlobalValue('terms.tree_attributes.background');
+            if (reference == "" || _value_ == reference) {
+                tree_configuration[_key_] = utility.getGlobalValue('terms.tree_attributes.background');
+            } else {
+                tree_configuration[_key_] = utility.getGlobalValue('busted.NUISANCE');
+            }
         }
     }
     
-
+    
+    
     return_set + tree_configuration;
     return return_set;
 }
