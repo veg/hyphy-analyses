@@ -1080,6 +1080,9 @@ lfunction busted.select_branches(partition_info) {
         test_options   ["Remaining"] = "All remaining branches";
         KeywordArgument ("comparison",  "Branches to compare to", "Remaining");
         reference = io.SelectAnOption (test_options, "Branches to compare to");
+        if (reference == "Remaining") {
+            reference = "";
+        }
     }
  
     
