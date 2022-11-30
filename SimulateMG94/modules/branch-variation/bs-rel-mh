@@ -6,18 +6,37 @@ simulator.bs_rel.omegas = {};
 
 lfunction simulator.set_branch_rates (model, tree_id, branch_id, branch_info) {
     //console.log (tree_id + "." + branch_id);
- 
+    
+    
     if (model[^"terms.model.type"] == ^"terms.local") {
-       branch_omegas = (^"simulator.bs_rel.omegas")[branch_info[^"terms.trees.model_map"]];
-       if (Type (branch_omegas) != "Matrix") {
+        rates = (model[^"terms.parameters"])[^"terms.local"];
+
+        branch_omegas = (^"simulator.bs_rel.omegas")[branch_info[^"terms.trees.model_map"]];
+        if (Type (branch_omegas) != "Matrix") {
           branch_omegas = ^"simulator.bs_rel.omega";
-       }
-       parameters.SetStickBreakingDistributionPrefix (^"simulation.model.omegas", branch_omegas, tree_id + "." + branch_id + ".");
+        }
+            
+        parameters.SetLocalValue (tree_id,branch_id,rates[^'terms.parameters.multiple_hit_rate'], 
+                                  "`^'simulator.delta'`");
+        parameters.SetLocalValue (tree_id,branch_id,rates[^'terms.parameters.triple_hit_rate'], 
+                                  "`^'simulator.psi'`");
+        parameters.SetLocalValue (tree_id,branch_id,rates[^'terms.parameters.triple_hit_rate_syn'], 
+                                  "`^'simulator.psi_islands'`");
+                                  
+                                                                                  
+        parameters.SetStickBreakingDistributionPrefix (^"simulation.model.omegas", branch_omegas, tree_id + "." + branch_id + ".");
+        
     }
     
 
     /** apply the same dN/dS to all branches */
     estimators.applyBranchLength (tree_id, branch_id, model, branch_info[^"terms.branch_length"]);    
+    /*
+    for (k, n; in; (model["parameters"])["local"]) {
+        pn = "`tree_id`.`branch_id`.`n`";
+        console.log (pn + "=> " + ^pn);
+    }
+    */
 }
 
 lfunction simulator.validate_tree (tree) {

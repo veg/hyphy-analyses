@@ -205,6 +205,7 @@ simulator.mode = 1;
 simulator.counter = 0;
 simulator.BL = {};
 
+
 utility.ForEachPair (simulator.sites_by_profile, "_rate_distribution_", "_site_counts_", '
 
     simulator.apply_site_distribution (simulator.model, _rate_distribution_,  "simulator.T");
@@ -251,6 +252,7 @@ utility.ForEachPair (simulator.sites_by_profile, "_rate_distribution_", "_site_c
         DataSet simulated_data = Simulate (simulator.T, simulator.root_freqs, simulator.matrix, simulator.start_from_seq);
 
     } else {
+        //console.log (simulator.matrix);
         DataSet simulated_data = Simulate (simulator.T, simulator.root_freqs, simulator.matrix, simulator.site_block*simulator.replicates);
     }
     // simulate ALL sites from one scenario here

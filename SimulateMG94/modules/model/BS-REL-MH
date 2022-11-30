@@ -42,7 +42,7 @@ simulator.report = {
 //----------------------------------------------------------------------------------------
 
 lfunction simulator.define_model.frequencies (type,code,rate_classes) {
-    model = Call ("models.codon.BS_REL_Per_Branch_Mixing.ModelDescription", type, code,rate_classes);
+    model = Call ("models.codon.BS_REL_Per_Branch_Mixing.MH.ModelDescription", type, code,rate_classes);
     if (^"simulator.frequency_type" == "F3x4") {
         model[utility.getGlobalValue("terms.model.frequency_estimator")] = "frequencies.empirical.F3x4";
     } else {
@@ -70,6 +70,8 @@ function simulator.define_model (code) {
                    
     simulation.model.omegas = models.codon.BS_REL.ExtractMixtureDistribution(simulation.model);
     //parameters.SetStickBreakingDistribution (simulation.model.omegas, simulator.bs_rel.omega);
+    
+    //console.log (simulation.model);
                                
     return simulation.model;
 }
