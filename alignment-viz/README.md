@@ -8,9 +8,8 @@ This script generates a PostScript file containing a simple visualization of per
 
 ```
 hyphy alignment-viz.bf --alignment test/HIV_RT.nex 
-							--output output/nt.ps 
-							--font-size 12 
-							--ticks 5  
+			--output output/nt.ps 						--font-size 12 
+			--ticks 5  
 ```
 
 #### Output
@@ -53,6 +52,6 @@ ticks
 2. Amino-acid alignments can be displayed as well (see `output/aa.ps`).
 ![](img/aa.png) 
 
-3. To display a subset of sites, you can use `site-filter`, e.g., `--site-filter '0-100'` or `--site-filter '0,5,10-20`
+3. To display a subset of sites, you can use `site-filter`, e.g., `--site-filter '0-100'` or `--site-filter '0,5,10-20'`
 
-4. To displace a subset of sequences, you can use `sequence-filter`, e.g., `--sequence-filter '0-10'` or `--sequence-filter '0,1,2,3`
+4. To displace a subset of sequences, you can use `sequence-filter`, e.g., `--sequence-filter '0-10'` or `--sequence-filter '0,1,2,3'`
