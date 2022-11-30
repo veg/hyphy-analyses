@@ -36,11 +36,29 @@ if (av_viz.site_filter == "None") {
 
 KeywordArgument ("sequence-filter", "Use this string to filter sequences", "None");
 av_viz.seq_filter = io.PromptUserForString ("Use this string to filter sequences");
+
 if (av_viz.seq_filter == "None") {
     av_viz.seq_filter = "";
 }
 
-DataSetFilter av_viz.filter = CreateFilter (av_viz.raw_data,1, av_viz.site_filter, av_viz.seq_filter);
+KeywordArgument ("sequence-regexp", "Use this regexp to filter sequences by name", "None");
+av_viz.seq_regexp = io.PromptUserForString ("Use this regexp to filter sequences by name");
+
+
+
+if (av_viz.seq_regexp != "None") {
+    function av_viz.filter_regexp (id, data) {
+        return None != regexp.Find (id, av_viz.seq_regexp);
+    }
+
+    DataSetFilter av_viz.filter = CreateFilter (av_viz.raw_data,1, av_viz.site_filter, "av_viz.filter_regexp");
+} else {
+    DataSetFilter av_viz.filter = CreateFilter (av_viz.raw_data,1, av_viz.site_filter, av_viz.seq_filter);
+}
+
+io.ReportProgressMessage ("Data QC", "Filtering retained `av_viz.filter.sites` sites and `av_viz.filter.species` sequences");
+
+
 
 KeywordArgument ("output", "Write the PostScript to", av_viz.alignment[terms.data.file] + ".ps");
 av_viz.output = io.PromptUserForFilePath ("Write the PostScript to");
