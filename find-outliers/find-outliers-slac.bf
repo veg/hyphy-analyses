@@ -59,9 +59,26 @@ Topology T = outliers.treeS;
 outliers.parents_by_seq = trees.ParentMap ("T");
 outliers.internals = {};
 
+outliers.descendants_by_node = {};
 
 for (n, p; in; outliers.parents_by_seq) {
     outliers.internals[p] = 1;
+}
+
+outliers.seq_suspect_ranges = {};
+
+for (n; in; T) {
+    if (outliers.internals[n]) {
+        outliers.my_children = outliers.descendants_by_node[n];
+    } else {
+        outliers.my_children = {n : 1};
+    }
+    p = outliers.parents_by_seq [n];
+    if (outliers.descendants_by_node / p == FALSE) {
+        outliers.descendants_by_node [p] = {};
+    }
+    outliers.descendants_by_node [p] * outliers.my_children;
+    outliers.seq_suspect_ranges [n] = {};
 }
 
 
@@ -74,31 +91,24 @@ for (branch, bdata; in; (outliers.slac.json[terms.json.branch_attributes])["0"])
                 if (outliers.suspect_sites_by_seq / branch == 0) {
                     outliers.suspect_sites_by_seq[branch] = {};
                 }
-            
                 (outliers.suspect_sites_by_seq[branch])[index] = 1;
-            
             }
         }
     }
 }
 
-outliers.seq_suspect_ranges = {};
 
 outliers.filter.sites = (outliers.slac.json[terms.json.input])[terms.json.sites];
 
 //console.log (outliers.suspect_sites_by_seq["VS_BALACU1"]);
 
 for (seq_idx, seq_mh; in; outliers.suspect_sites_by_seq) {
-    outliers.seq_suspect_ranges [seq_idx] = {};
     counter      = seq_mh[0];
     window_start = 0;
     window_span  = 1;
+    my_children = outliers.descendants_by_node[seq_idx];
     for (i = 1; i < outliers.filter.sites; i+=1) {
-        
-        /*if (seq_idx == "VS_BALACU1") {
-            fprintf (stdout, i, " : ", window_start, "/", window_span, " counter = ", counter, " frac = ", counter / window_span , "\n");
-        }*/
-        
+               
         if (window_span < outliers.min_window) {
             counter += seq_mh[i];
             window_span += 1;
@@ -111,6 +121,15 @@ for (seq_idx, seq_mh; in; outliers.suspect_sites_by_seq) {
                     for (j = window_start; j < window_start + window_span - 1; j+=1) {
                         (outliers.seq_suspect_ranges[seq_idx])[j] = 1;
                     }
+                    
+                    if (Abs (my_children)) {
+                        for (c,ignore; in; my_children) {
+                            for (j = window_start; j < window_start + window_span - 1; j+=1) {
+                                (outliers.seq_suspect_ranges[c])[j] = 1;
+                            }
+                        }
+                    }
+                    
                     //outliers.seq_suspect_ranges[seq_idx] + {{window_start__, window_start__ + window_span__ - 2}};
                     window_start = i;
                     counter = seq_mh[i];
@@ -147,10 +166,11 @@ lfunction outliers.filter_partials_callback (code) {
     }
     return code;
 }
+
 for (outliers.seq_name, seq_ranges; in; outliers.seq_suspect_ranges) {
    if (outliers.internals [outliers.seq_name]) {
         continue;
-   }
+   } 
    seq.info   = ((outliers.slac.json[terms.json.branch_attributes])["0"])[outliers.seq_name];
    seq.codons = seq.info[terms.codon];
    if (outliers.filter_partials) {
@@ -170,3 +190,13 @@ outliers.filtered * 0;
 KeywordArgument ("output", "Write filtering results to");
 outliers.outpath = io.PromptUserForFilePath ("Write filtering results to");
 fprintf (outliers.outpath, CLEAR_FILE, outliers.filtered);
+
+DataSet outliers.check = ReadDataFile (outliers.outpath);
+
+lfunction outliers.non_gap (site, freq) {
+    return +freq ["_MATRIX_ELEMENT_VALUE_>0"];
+}
+
+utility.SetEnvVariable ("DATA_FILE_PRINT_FORMAT",9);
+DataSetFilter outliers.check.filter = CreateFilter (outliers.check, 3, "outliers.non_gap");
+fprintf (outliers.outpath, CLEAR_FILE, outliers.check.filter);
