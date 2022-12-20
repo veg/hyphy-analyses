@@ -2,6 +2,7 @@ RequireVersion ("2.5.44");
 
 LoadFunctionLibrary("SelectionAnalyses/modules/io_functions.ibf");
 LoadFunctionLibrary("SelectionAnalyses/modules/selection_lib.ibf");
+LoadFunctionLibrary("libv3/UtilityFunctions.bf");
 LoadFunctionLibrary("libv3/tasks/trees.bf");
 
 
@@ -167,6 +168,9 @@ lfunction outliers.filter_partials_callback (code) {
     return code;
 }
 
+// Filter out internal nodes for now, but leave the possibility open to export a larger JSON
+outliers.seq_suspect_ranges_tips = {};
+
 for (outliers.seq_name, seq_ranges; in; outliers.seq_suspect_ranges) {
    if (outliers.internals [outliers.seq_name]) {
         continue;
@@ -177,6 +181,7 @@ for (outliers.seq_name, seq_ranges; in; outliers.seq_suspect_ranges) {
         seq.codons = seq.codons ["outliers.filter_partials_callback(_MATRIX_ELEMENT_VALUE_)"];
    }
    if (Abs (seq_ranges))  {
+        outliers.seq_suspect_ranges_tips[outliers.seq_name] = utility.Keys(seq_ranges);
         seq.filter = {};      
         console.log ("Filtering " + (+seq_ranges) + " sites from `outliers.seq_name`");
         outliers.filtered * (">" + outliers.seq_name + "\n" + Join ("", seq.codons["outliers.filter(_MATRIX_ELEMENT_VALUE_,seq_ranges[_MATRIX_ELEMENT_COLUMN_])"]) + "\n");
@@ -200,3 +205,10 @@ lfunction outliers.non_gap (site, freq) {
 utility.SetEnvVariable ("DATA_FILE_PRINT_FORMAT",9);
 DataSetFilter outliers.check.filter = CreateFilter (outliers.check, 3, "outliers.non_gap");
 fprintf (outliers.outpath, CLEAR_FILE, outliers.check.filter);
+
+KeywordArgument ("outlier-coord-output", "Write outlier coordinates to");
+outliers.coord_outpath = io.PromptUserForFilePath ("Write outlier coordinates to");
+io.SpoolJSON(outliers.seq_suspect_ranges_tips, outliers.coord_outpath);
+fprintf (outliers.coord_outpath, CLOSE_FILE);
+
+
