@@ -40,5 +40,9 @@ In this script, the filter-partials argument is a keyword argument that specifie
 
 The filter-partials argument allows the user to specify whether partially resolved codons should be filtered out of the analysis or not. If the argument is set to "Yes", the script will treat partially resolved codons as problematic and will filter them out of the analysis. If the argument is set to "No", partially resolved codons will be treated as normal and will not be filtered out.
 
+## Output
+A FASTA file containing sequences with problematic stretches masked will be written to a path specied by `--output`. 
+A JSON file listing each site masked will be written to a path specified by `--outlier-coord-output`.
+
 ## Summary
 Overall, the script is designed to identify stretches of sequence-level residues that may be problematic in the context of the SLAC analysis. It does this by sliding a window across the multiple sequence alignment and identifying regions where a specified fraction of the residues in the window are multiple hits. The script also allows the user to filter out partially resolved codons and to specify a threshold for the number of substitutions on a branch that should be counted towards the "filtering" process.
