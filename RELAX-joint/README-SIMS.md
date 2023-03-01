@@ -258,7 +258,7 @@ ls /Users/sergei/Development/hyphy-analyses/RELAX-joint/simulations/relaxation-0
 ```
 hyphy RELAX-joint.bf 
 	--filelist simulations/mix-10.lst  
-	--output simulations/mix-10.lst 
+	--output simulations/mix-10.json 
 ```
 
 There now IS a benefit from having multiple `K` per file (since there really are two truly different values). 

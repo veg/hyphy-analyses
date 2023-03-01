@@ -1,4 +1,4 @@
-RequireVersion ("2.5.28");
+RequireVersion ("2.5.47");
 
 LoadFunctionLibrary     ("libv3/convenience/regexp.bf");
 LoadFunctionLibrary     ("libv3/convenience/math.bf");
@@ -6,6 +6,7 @@ LoadFunctionLibrary     ("libv3/convenience/random.bf");
 LoadFunctionLibrary     ("libv3/UtilityFunctions.bf");
 LoadFunctionLibrary     ("libv3/IOFunctions.bf");
 LoadFunctionLibrary     ("libv3/models/parameters.bf");
+LoadFunctionLibrary     ("libv3/models/rate_variation.bf");
 LoadFunctionLibrary     ("libv3/tasks/estimators.bf");
 LoadFunctionLibrary     ("SelectionAnalyses/modules/io_functions.ibf");
 
@@ -19,8 +20,8 @@ namespace terms.relax_joint {
 };
 
 
-relax_joint.analysisDescription = {terms.io.info : "Load a collection of RELAX models fitted to individual alignments, and perform a joint test of relaxation/intensification, by using a single 'K' parameter for all genes",
-                           terms.io.version : "0.0.1",
+relax_joint.analysisDescription = {terms.io.info : "Load a collection of RELAX models fitted to individual alignments, and perform a joint test of relaxation/intensification, by using a single 'K' parameter for all genes, or a mixture of several K parameters (a random effects model)",
+                           terms.io.version : "0.1.0",
                            terms.io.reference : "TBA",
                            terms.io.authors : "Sergei L Kosakovsky Pond",
                            terms.io.contact : "spond@temple.edu",
@@ -40,12 +41,13 @@ relax_joint.file_list = io.get_a_list_of_files(io.PromptUserForFilePathRead ("Li
 KeywordArgument ("output", "Write comparison JSON to");
 relax_joint.output_path = io.PromptUserForFilePath ("Save the resulting JSON file to");
 
+KeywordArgument ("components", "How many random effect components (1-4, '1' for shared K)? ", 1);
+relax_joint.components = io.PromptUser ("How many random effect components ('1' for shared K)", 1, 1, 4, TRUE);
 
 relax_joint.file_count = utility.Array1D (relax_joint.file_list);
 io.CheckAssertion("relax_joint.file_count >= 1", "A non-empty file list is required");
 
 io.ReportProgressMessageMD("relax_joint", "data" , "* Loaded a list with **" + relax_joint.file_count  + "** files");
-
 
 relax_joint.path_ordering = {};
 relax_joint.trees = {};
@@ -61,9 +63,8 @@ relax_joint.likelihoodFunctionComponents = {};
 
 
 for (relax_joint.counter = 0; relax_joint.counter < relax_joint.file_count; relax_joint.counter += 1  ) {
-    relax_joint.path = relax_joint.file_list[relax_joint.counter ];
-    io.ReportProgressMessageMD("relax_joint", "data" , "* Loading file \`" + relax_joint.path + "\`");
-   
+     relax_joint.path = relax_joint.file_list[relax_joint.counter ];
+     io.ReportProgressMessageMD("relax_joint", "data" , "* Loading file \`" + relax_joint.path + "\`");
      relax_joint.namespace = "relax_joint_" + relax_joint.counter;
      ExecuteCommands ('
         namespace `relax_joint.namespace` {
@@ -116,7 +117,6 @@ relax_joint.json = {
 
 
 relax_joint.free = (Columns (relax_joint.K))[0];
-
 relax_joint.geo_mean = Eval (relax_joint.free);
 
 
@@ -152,8 +152,11 @@ io.ReportProgressMessageMD ("relax_joint", "optimize", "\n- Shared K = " + Forma
 relax_joint.lrt_joint = math.DoLRT (relax_joint.MLE[1][0], independentLL, relax_joint.file_count-1);
 io.ReportProgressMessageMD("relax_joint", "results", "- p-value for file-level K (vs a single K) " + relax_joint.lrt_joint[terms.p_value]);
 
-                    
+KeywordArgument ("save-fit", "Save RELAX alternative model fit to this file (default is not to save)", "/dev/null");
+relax.save_fit_path = io.PromptUserForFilePath ("Save the joint RELAX model fit to this file ['/dev/null' to skip]");
+io.SpoolLFToPath("relax_joint.LF", relax.save_fit_path);
 
+                
 relax_joint.distributions_alt = {};
 
 for (relax_joint.counter, relax_joint.path; in; relax_joint.file_list) {
@@ -178,7 +181,6 @@ utility.SetEnvVariable ("USE_LAST_RESULTS", TRUE);
 
 Optimize (relax_joint.MLE_null, relax_joint.LF);
 io.ReportProgressMessageMD("relax_joint", "optimize", "\n- Joint NULL model likelihood " + Format (relax_joint.MLE_null[1][0], 10, 3));
-io.ReportProgressMessageMD("relax_joint", "optimize", "\n- Shared K = " + Format (Eval (relax_joint.free), 10, 3));
 
 relax_joint.distributions_alt = {};
 

@@ -11,7 +11,7 @@
  
 */
 
-RequireVersion ("2.5.35");
+RequireVersion ("2.5.48");
 
 LoadFunctionLibrary ("libv3/all-terms.bf");
 LoadFunctionLibrary ("libv3/convenience/math.bf");
@@ -26,6 +26,12 @@ LoadFunctionLibrary ("libv3/convenience/random.bf");
 utility.SetEnvVariable ("NORMALIZE_SEQUENCE_NAMES", TRUE);
 utility.SetEnvVariable ("ACCEPT_ROOTED_TREES", TRUE);
 
+namespace nrm.terms {
+    gtr     = "GTR";
+    nrev6   = "NREV6"; 
+    nrev12  = "NREV12"; 
+    nrev12f = "NREV12+F";
+}
 
 /*---------------------Display analysis information-------------------------------*/
 
@@ -52,7 +58,7 @@ nrm.json = {
 
 /*---------------------Get data and tree-------------------------------*/
 
-KeywordArgument ("alignment",   "Sequence alignment to screen for recombination");
+KeywordArgument ("alignment",   "Sequence alignment to fit non-reversible models to");
 KeywordArgument ("tree", "A phylogenetic tree (optionally annotated with {})", null, "Please select a tree file for the data:");
 
 namespace nrm {
@@ -164,10 +170,6 @@ lfunction ReportMatrixAndFreqs ( rates, frequencies ) {
   
 }
 
-/* user defined functions */
-lfunction nrm.extractLFInfo ( res, lf_id, xp, samplesize ) {
-    
-}
 
 /* end of user defined functions */
 
@@ -175,6 +177,9 @@ lfunction nrm.extractLFInfo ( res, lf_id, xp, samplesize ) {
 /* define a nucleotide bias correction matrix AG := 1 */
 
 /* built like this incase we want to scale to codon models with nuc bias terms */
+
+
+selection.io.startTimer (nrm.json [terms.json.timers], "Overall", 0);
 
 global alpha = .35; alpha:>0.001;alpha:<100;
 category c = (4, EQUAL, MEAN, 
@@ -203,9 +208,17 @@ global TG = 1;
 
 nrm.filter_name = (nrm.filter_specification [0])[terms.data.name];
 HarvestFrequencies (nrm.dataFrequencies,^nrm.filter_name,1,1,1);
+
+nrm.empirical = alignments.Sequence_Frequencies (nrm.filter_name);
+
+selection.io.json_store_branch_attribute(nrm.json, "Observed frequencies", node_label, 5,
+                                             0,
+                                             nrm.empirical["frequencies"]);                  
+
+
+nrm.json [terms.data.characters] = nrm.empirical["characters"];
+
 io.ReportProgressMessageMD ("nrm", "gtr", "Fitting the GTR + G model with empirical base frequencies");
-
-
 
 /* standard GTR */
 CA := AC;
@@ -226,7 +239,9 @@ LikelihoodFunction lf_gtr = ( ^nrm.filter_name, T );
 Optimize ( res_gtr, lf_gtr );
 nrm.gtr_fit = estimators.ExtractMLEFromObject ("lf_gtr");
 
+
 nrm.EFV = GetEFV ("GTRModel");
+nrm.freqs_over_tree = nrm.evolve_frequencies (nrm.EFV);
 
 io.ReportProgressMessageMD ("nrm", "gtr", "\n>" + selection.io.report_fit  (nrm.gtr_fit, 3, nrm.nuc_data_info[terms.data.sample_size]) + "\n" + selection.io.report_fit_secondary_stats (nrm.gtr_fit));
 io.ReportProgressMessageMD ("nrm", "gtr", "_Gamma shape parameter_ = " + Format (alpha, 8, 4));
@@ -234,12 +249,21 @@ io.ReportProgressMessageMD ("nrm", "gtr", "_Gamma shape parameter_ = " + Format 
 nrm.gtr_rates = ReportMatrixAndFreqs (ratesArray, nrm.EFV);
 
 
-selection.io.json_store_lf_withEFV(nrm.json, "GTR" ,nrm.gtr_fit [terms.fit.log_likelihood],
+selection.io.json_store_lf_withEFV(nrm.json, nrm.terms.gtr ,nrm.gtr_fit [terms.fit.log_likelihood],
                             nrm.gtr_fit [terms.parameters],
                             nrm.nuc_data_info[terms.data.sample_size], 
                             nrm.gtr_rates, 
-                            nrm.EFVs,
+                            nrm.EFV,
                             3);
+
+selection.io.json_store_branch_attribute(nrm.json, nrm.terms.gtr, terms.branch_length, 1,
+                                             0,
+                                             selection.io.extract_branch_info((nrm.gtr_fit[terms.branch_length])[0],
+                                              "selection.io.branch.length"));                  
+
+selection.io.json_store_branch_attribute(nrm.json, nrm.terms.gtr + " frequencies", node_label, 6,
+                                             0,
+                                             nrm.freqs_over_tree);                  
                             
 
 io.ReportProgressMessageMD ("nrm", "stGTR", "Fitting the NREV6 + G model with empirical base frequencies");
@@ -257,8 +281,11 @@ LikelihoodFunction lf_gtr = ( ^nrm.filter_name, T );
 Optimize ( res_gtr, lf_gtr );
 
 
+
 nrm.EFV = GetEFV ("GTRModel");
 nrm.stgtr_fit = estimators.ExtractMLEFromObject ("lf_gtr");
+nrm.freqs_over_tree = nrm.evolve_frequencies (nrm.EFV);
+
 
 io.ReportProgressMessageMD ("nrm", "NREV6", "\n>" + selection.io.report_fit  (nrm.stgtr_fit, 3, nrm.nuc_data_info[terms.data.sample_size]) + "\n" + selection.io.report_fit_secondary_stats (nrm.stgtr_fit));
 io.ReportProgressMessageMD ("nrm", "NREV6", "_Gamma shape parameter_ = " + Format (alpha, 8, 4));
@@ -272,6 +299,15 @@ selection.io.json_store_lf_withEFV(nrm.json, "NREV6" ,nrm.stgtr_fit [terms.fit.l
                             nrm.EFV,
                             3);
 
+selection.io.json_store_branch_attribute(nrm.json, nrm.terms.nrev6, terms.branch_length, 2,
+                                             0,
+                                             selection.io.extract_branch_info((nrm.stgtr_fit[terms.branch_length])[0],
+                                              "selection.io.branch.length"));                  
+
+selection.io.json_store_branch_attribute(nrm.json, nrm.terms.nrev6 + " frequencies", node_label, 7,
+                                             0,
+                                             nrm.freqs_over_tree);                  
+
 io.ReportProgressMessageMD ("nrm", "NREV12", "Fitting the NREV12 + G model with empirical root frequencies");
 
 parameters.RemoveConstraint (ratesArray);
@@ -283,18 +319,29 @@ Optimize ( res_gtr, lf_gtr );
 
 nrm.nrm_fit = estimators.ExtractMLEFromObject ("lf_gtr");
 
-io.ReportProgressMessageMD ("nrm", "NREV12", "\n>" + selection.io.report_fit  (nrm.nrm_fit, 3, nrm.nuc_data_info[terms.data.sample_size]) + "\n" + selection.io.report_fit_secondary_stats (nrm.nrm_fit));
-io.ReportProgressMessageMD ("nrm", "NREV12", "_Gamma shape parameter_ = " + Format (alpha, 8, 4));
+io.ReportProgressMessageMD ("nrm", nrm.terms.nrev12, "\n>" + selection.io.report_fit  (nrm.nrm_fit, 3, nrm.nuc_data_info[terms.data.sample_size]) + "\n" + selection.io.report_fit_secondary_stats (nrm.nrm_fit));
+io.ReportProgressMessageMD ("nrm", nrm.terms.nrev12, "_Gamma shape parameter_ = " + Format (alpha, 8, 4));
 
 nrm.EFV = GetEFV ("GTRModel");
 nrm.nrm_rates = ReportMatrixAndFreqs (ratesArray, nrm.EFV);
+nrm.freqs_over_tree = nrm.evolve_frequencies (nrm.EFV);
 
-selection.io.json_store_lf_withEFV(nrm.json, "NREV12" ,nrm.nrm_fit [terms.fit.log_likelihood],
+
+selection.io.json_store_lf_withEFV(nrm.json, nrm.terms.nrev12, ,nrm.nrm_fit [terms.fit.log_likelihood],
                             nrm.nrm_fit [terms.parameters],
                             nrm.nuc_data_info[terms.data.sample_size], 
                             nrm.nrm_rates, 
                             nrm.EFV,
                             3);
+
+selection.io.json_store_branch_attribute(nrm.json, nrm.terms.nrev12, terms.branch_length, 2,
+                                             0,
+                                             selection.io.extract_branch_info((nrm.nrm_fit[terms.branch_length])[0],
+                                              "selection.io.branch.length"));                  
+
+selection.io.json_store_branch_attribute(nrm.json, nrm.terms.nrev12 + " frequencies", node_label, 8,
+                                             0,
+                                             nrm.freqs_over_tree);                  
 
 io.ReportProgressMessageMD ("nrm", "NREV12F", "Fitting the NREV12F + G model with estimated root frequencies");
 
@@ -312,10 +359,10 @@ nrm.rootFreqs = {{fA}
 ExecuteCommands ("Tree T = " + (nrm.trees[0])[terms.trees.newick_with_lengths]);
 LikelihoodFunction3 lf_gtr = ( ^nrm.filter_name, T, nrm.rootFreqs);
 
-
 Optimize ( res_gtr, lf_gtr );
 
 nrm.nrmf_fit = estimators.ExtractMLEFromObject ("lf_gtr");
+
 
 io.ReportProgressMessageMD ("nrm", "NREV12F", "\n>" + selection.io.report_fit  (nrm.nrmf_fit, 3, nrm.nuc_data_info[terms.data.sample_size]) + "\n" + selection.io.report_fit_secondary_stats (nrm.nrmf_fit));
 io.ReportProgressMessageMD ("nrm", "NREV12F", "_Gamma shape parameter_ = " + Format (alpha, 8, 4));
@@ -329,14 +376,25 @@ io.ReportProgressMessageMD ("nrm", "NREV12F", "- T : " + nrm.rootFreqs[3]);
 
 nrm.EFV = GetEFV ("GTRModel");
 nrm.nrmf_rates = ReportMatrixAndFreqs (ratesArray, nrm.EFV);
+nrm.freqs_over_tree = nrm.evolve_frequencies (Transpose (Eval(nrm.rootFreqs)));
 
-selection.io.json_store_lf_withEFV(nrm.json, "NREV12F" ,nrm.nrmf_fit [terms.fit.log_likelihood],
+
+selection.io.json_store_lf_withEFV(nrm.json, nrm.terms.nrev12f ,nrm.nrmf_fit [terms.fit.log_likelihood],
                             nrm.nrmf_fit [terms.parameters],
                             nrm.nuc_data_info[terms.data.sample_size], 
                             nrm.nrmf_rates, 
                             nrm.EFV,
                             0);
 
+selection.io.json_store_branch_attribute(nrm.json, nrm.terms.nrev12f, terms.branch_length, 3,
+                                             0,
+                                             selection.io.extract_branch_info((nrm.nrmf_fit[terms.branch_length])[0],
+                                              "selection.io.branch.length"));                  
+
+
+selection.io.json_store_branch_attribute(nrm.json, nrm.terms.nrev12f + " frequencies", node_label, 8,
+                                             0,
+                                             nrm.freqs_over_tree);                  
 
 KeywordArgument ("save-fit", "Save NRM+F model fit to this file (default is not to save)", "/dev/null");
 io.SpoolLFToPath("lf_gtr", io.PromptUserForFilePath ("Save NRM+F model fit to this file ['/dev/null' to skip]"));
@@ -364,16 +422,20 @@ io.ReportProgressMessageMD ("nrm", "tests", "Model comparison results");
 
 nrm.report = {{"Null","Alt.","LRT","Deg. freedom","p","Delta c-AIC"}};
 
+
 nrm.tests = {};
 nrm.pairs = {
-    "0" : {"Null" : "GTR", "Alt" : "NREV6", "nested" : FALSE},
-    "1" : {"Null" : "GTR", "Alt" : "NREV12", "nested" : TRUE},
-    "2" : {"Null" : "NREV6", "Alt" : "NREV12", "nested" : TRUE},
-    "3" : {"Null" : "NREV12", "Alt" : "NREV12F", "nested" : TRUE}
+    "0" : {"Null" : nrm.terms.gtr, "Alt" : nrm.terms.nrev6, "nested" : FALSE},
+    "1" : {"Null" : nrm.terms.gtr, "Alt" : nrm.terms.nrev12f, "nested" : TRUE},
+    "2" : {"Null" : nrm.terms.gtr, "Alt" : nrm.terms.nrev12, "nested" : TRUE},
+    "3" : {"Null" : nrm.terms.nrev6, "Alt" : nrm.terms.nrev12f, "nested" : TRUE},
+    "4" : {"Null" : nrm.terms.nrev12, "Alt" : nrm.terms.nrev12f, "nested" : TRUE}
 };
 
 fprintf(stdout, "\n", io.FormatTableRow(nrm.report , nrm.table_output_options));
 nrm.table_output_options[utility.getGlobalValue("terms.table_options.header")] = FALSE;
+
+nrm.raw_ps = {};
 
 for (p; in; nrm.pairs ) {  
 
@@ -388,6 +450,7 @@ for (p; in; nrm.pairs ) {
         nrm.row[2] = Format (nrm.lrt[terms.LRT], 10, 4);
         nrm.row[4] = Format (nrm.lrt[terms.p_value], 10, 4);
         nrm.tests [p["Null"] + " vs "+ p["Alt"]] = nrm.lrt;
+        nrm.raw_ps[p["Null"] + " vs "+ p["Alt"]] = nrm.lrt[terms.p_value];
     } else {
         nrm.row[2] = null;
         nrm.row[3] = null;
@@ -397,11 +460,31 @@ for (p; in; nrm.pairs ) {
    fprintf(stdout, io.FormatTableRow(nrm.row, nrm.table_output_options));
 }
 
+for (k,p; in; math.HolmBonferroniCorrection(nrm.raw_ps)) {
+    ((nrm.tests)[k])[terms.json.corrected_pvalue] = p;
+}
+
 
 nrm.json[terms.json.test_results] =nrm.tests;
 
+selection.io.stopTimer (nrm.json [terms.json.timers], "Overall");
+
+
 io.SpoolJSON (nrm.json, nrm.nuc_data_info [terms.json.json]);
 
-
-
+function nrm.evolve_frequencies (F) {
+    LOOP_TREE_ITERATOR_PREORDER = 1;
+    nrm.frequencies = {};
+    for (p,n; in; T) {
+        if (None == p) {    
+            nrm.frequencies [n] = F;
+        } else {
+            GetInformation (nrm.TM, ^"T.`n`");
+            nrm.TM = nrm.frequencies [p] * Exp(nrm.TM);
+            nrm.frequencies [n] = nrm.TM;
+        }
+    }
+    LOOP_TREE_ITERATOR_PREORDER = 0;
+    return nrm.frequencies;
+}
 
