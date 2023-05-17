@@ -128,6 +128,44 @@ selection.io.json_store_lf (fitter.json,
 KeywordArgument ("save-fit", "Save MG94 model fit to this file (default is not to save)", "/dev/null");
 io.SpoolLFToPath(fitter.results[terms.likelihood_function], io.PromptUserForFilePath ("Save MG94 model fit to this file ['/dev/null' to skip]"));
 
+
+// LRT testing
+
+fitter.lrt_testing = {};
+fitter.pvalues = {};
+
+function fitter.SetToOne (set) {
+    if (set) {
+        fitter.SetToOne.stash = Eval (fitter.param.ID);
+        parameters.SetConstraint (fitter.param.ID, fitter.use_this_value, "");
+    } else {
+        parameters.SetValue (fitter.param.ID, fitter.SetToOne.stash);
+    }
+    return 1;
+}
+
+for (fitter.var; in; fitter.globals) {
+    fitter.param.ID  = fitter.var[terms.id];
+    fitter.param.MLE = fitter.var[terms.fit.MLE];
+    fitter.param.desc = fitter.var[terms.description];
+    
+    ExecuteCommands ('
+        KeywordArgument  ("`fitter.param.desc`", "Point hypothesis LRT (set null value, or null to skip) ", "null");
+        fitter.use_this_value = io.PromptUserForString ("Point hypothesis LRT (set null value, or null to skip");
+        
+    ');
+    
+    if (fitter.use_this_value != "null") {
+        fitter.lrt_testing [fitter.param.desc] = (estimators.ConstrainAndRunLRT (fitter.results[terms.likelihood_function], "fitter.SetToOne"));
+        (fitter.lrt_testing [fitter.param.desc])[terms.fit.MLE] =  +fitter.use_this_value;
+        io.ReportProgressMessageMD("fitter", "LRT", "\nLikelihood ratio test for _`fitter.param.desc` == `fitter.use_this_value`_, **p = " + Format ((fitter.lrt_testing[fitter.param.desc])[terms.p_value], 8, 4) + "**.");
+        fitter.pvalues  [fitter.param.desc] =  (fitter.lrt_testing     [fitter.param.desc])[terms.p_value];
+
+    }
+}
+
+fitter.json [terms.json.test_results] = fitter.LRTs;
+
 selection.io.stopTimer (fitter.json [terms.json.timers], fitter.model_name);
 
 selection.io.stopTimer (fitter.json [terms.json.timers], "Overall");

@@ -213,8 +213,11 @@ utility.ForEachPair (simulator.sites_by_profile, "_rate_distribution_", "_site_c
     simulator.bl_code = simulator.model[terms.model.get_branch_length];
     if (Abs (simulator.bl_code)) {
         simulator.tree_length = 0;
+        simulator.tree_root = BranchName (simulator.T, BranchCount (simulator.T));
         for (b; in; simulator.T) {
-            simulator.tree_length += Call (simulator.bl_code ,simulator.model,"simulator.T", b);
+            if (b != simulator.tree_root) {
+                simulator.tree_length += Call (simulator.bl_code ,simulator.model,"simulator.T", b);
+            }
         }
     } else {
         simulator.tree_length = +BranchLength (simulator.T, -1);

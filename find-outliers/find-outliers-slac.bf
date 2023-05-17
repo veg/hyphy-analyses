@@ -68,18 +68,22 @@ for (n, p; in; outliers.parents_by_seq) {
 
 outliers.seq_suspect_ranges = {};
 
+outliers.tree_root = BranchName (T, BranchCount (T));
+ 
 for (n; in; T) {
-    if (outliers.internals[n]) {
-        outliers.my_children = outliers.descendants_by_node[n];
-    } else {
-        outliers.my_children = {n : 1};
+    if (n != outliers.tree_root) {
+        if (outliers.internals[n]) {
+            outliers.my_children = outliers.descendants_by_node[n];
+        } else {
+            outliers.my_children = {n : 1};
+        }
+        p = outliers.parents_by_seq [n];
+        if (outliers.descendants_by_node / p == FALSE) {
+            outliers.descendants_by_node [p] = {};
+        }
+        outliers.descendants_by_node [p] * outliers.my_children;
+        outliers.seq_suspect_ranges [n] = {};
     }
-    p = outliers.parents_by_seq [n];
-    if (outliers.descendants_by_node / p == FALSE) {
-        outliers.descendants_by_node [p] = {};
-    }
-    outliers.descendants_by_node [p] * outliers.my_children;
-    outliers.seq_suspect_ranges [n] = {};
 }
 
 
