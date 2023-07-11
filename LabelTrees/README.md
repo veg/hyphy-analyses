@@ -1,7 +1,5 @@
 ## LabelTrees -- automatic tree annotation for partitioned analyses
 
-> Inspired by issue
-
 Given an input Newick tree, and either a regular expression **or** a list of taxon names in a file, the script annotates the tree
 
 ## Invokation

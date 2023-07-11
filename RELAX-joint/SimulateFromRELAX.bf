@@ -28,7 +28,8 @@ GetString (sim.parameters, ^sim.lf,-1);
 
 
 sim.globals = sim.parameters [terms.parameters.global_independent];
-console.log (">The likelihood function `sim.lf` has `utility.Array1D(sim.globals)` global parameters");
+sim.locals = sim.parameters [terms.parameters.local_independent];
+console.log (">The likelihood function `sim.lf` has `utility.Array1D(sim.globals)` global parameters and `utility.Array1D(sim.locals)` local parameters");
 
 
 
@@ -49,6 +50,21 @@ for (sim.param; in; sim.globals) {
     ');
     
     ^sim.param = sim.use_this_value;
+}
+
+if (utility.Array1D(sim.locals) > 0) {
+     ExecuteCommands ('
+        KeywordArgument  ("local-scaler", "Scale local parameters", 1.);
+        sim.use_this_value = io.PromptUser ("Scale local parameters (multiplicative)",
+                                            1,
+                                            0,
+                                            10000,
+                                            0);
+    ');
+    
+    for (sim.param; in; sim.locals) {
+        ^sim.param = ^sim.param * sim.use_this_value;
+    }
 }
 
 KeywordArgument  ("replicates", "How many replicates to generate", 10);

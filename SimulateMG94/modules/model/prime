@@ -20,7 +20,7 @@ simulator.report = {"Property Set" : simulator.property_set};
 //----------------------------------------------------------------------------------------
 
 lfunction simulator.define_model.frequencies (type,code,prop_set) {
-    model = Call ("models.codon.MG_REV_PROP.ModelDescription", type, code, prop_set);
+    model = Call ("models.codon.MG_REV_PROPERTIES.ModelDescription", type, code, prop_set);
     if (^"simulator.frequency_type" == "F3x4") {
         model[utility.getGlobalValue("terms.model.frequency_estimator")] = "frequencies.empirical.F3x4";
     } else {
