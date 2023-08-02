@@ -75,7 +75,7 @@ See [this paper](https://journals.plos.org/plosone/article?id=10.1371/journal.po
 
 
 ```
-HYPHYMP FitMG94.bf --alignment CD2.nex --lrt Yes
+hyphy FitMG94.bf --alignment CD2.nex --lrt Yes
 ```
 
 --- 
@@ -130,4 +130,104 @@ Likelihood ratio test for _non-synonymous/synonymous rate ratio == 1_, **p =   0
 
 ### Writing detailed analysis report to `/Users/sergei/Development/hyphy-analyses/FitMG94/CD2.nex.FITTER.json'
 
+##Local model fits 
 
+Specifying `--type local` will fit a model where each branch has its own &alpha; (dS) and &beta; (dN) rates. Further specifying `--lrt Yes` will test whether or not dN ≠ dS along a given branch. The `JSON` output file will include such branch level parameters in the corresponding dictionary:
+
+```
+"branch attributes":{
+   "0":{
+     "BABOON":{
+       "Confidence Intervals":{
+         "LB":0,
+         "MLE":0,
+         "UB":0.6860409126311118
+        },
+       "LRT":{
+         "Corrected P-value":1,
+         "FDR":0.5456841416635031,
+         "LRT":2.669070286591705,
+         "p-value":0.1023157765619068
+        },
+       "Nucleotide GTR":0.001679681026555922,
+       "Standard MG94":0.001815827116959503,
+       "dN":1.267499201636807e-10,
+       "dS":0.008603986131448501,
+       "nonsynonymous":1e-10,
+       "original name":"BABOON",
+       "synonymous":0.001815827116959503
+      },
+```
+
+### Example invokation
+
+```
+hyphy FitMG94.bf --alignment CD2.nex --type local --lrt Yes
+```
+
+Analysis Description
+--------------------
+Fit an MG94xREV model with several selectable options frequency
+estimator and report the fit results including dN/dS ratios, and
+synonymous and non-synonymous branch lengths. v0.2 adds LRT test for
+dN/dS != 1. v0.3 adds LRT test support for dN/dS != 1 for local models
+
+- __Requirements__: in-frame codon alignment and a phylogenetic tree
+
+- __Written by__: Sergei L Kosakovsky Pond
+
+- __Contact Information__: spond@temple.edu
+
+- __Analysis Version__: 0.3
+
+rooted: No
+
+>code –> Universal
+>Loaded a multiple sequence alignment with **10** sequences, **187** codons, and **1** partitions from `/Users/sergei/Development/hyphy-analyses/FitMG94/CD2.nex`
+
+>type –> local
+
+>frequencies –> CF3x4
+
+>lrt –> Yes
+
+
+### Obtaining branch lengths and nucleotide substitution biases under the nucleotide GTR model
+
+>kill-zero-lengths –> Yes
+* Log(L) = -3532.32, AIC-c =  7112.86 (24 estimated parameters)
+* 1 partition. Total tree length by partition (subs/site)  1.694
+
+### Fitting Standard MG94
+* Log(L) = -3450.61, AIC-c =  6995.58 (46 estimated parameters)
+
+### Running the likelihood ratio tests for dN/dS=1 and estimating confidence intervals for dN/dS along each branch
+
+|            Branch            |     Length     |     dN/dS      |Approximate dN/dS CI|LRT p-value dN != dS|
+|:----------------------------:|:--------------:|:--------------:|:------------------:|:------------------:|
+|             PIG              |     0.192      |     1.345      |   0.966 - 1.809    |       0.3794       |
+|             COW              |     0.253      |     1.918      |   1.456 - 2.479    |       0.0516       |
+|            Node5             |     0.103      |     1.482      |   0.836 - 2.304    |       0.4878       |
+|            HORSE             |     0.209      |     1.245      |   0.926 - 1.635    |       0.4828       |
+|             CAT              |     0.277      |     1.604      |   1.241 - 2.038    |       0.1190       |
+|            Node4             |     0.066      |     0.664      |   0.275 - 1.202    |       0.5664       |
+|           RHMONKEY           |     0.004      |10000000000.0...|0.000 - 10000.000...|       0.2845       |
+|            BABOON            |     0.002      |     0.000      |   0.000 - 0.686    |       0.1023       |
+|            Node11            |     0.026      |     0.401      |   0.139 - 0.817    |       0.1605       |
+|            HUMAN             |     0.000      |     1.000      |0.000 - 10000.000...|       1.0000       |
+|            CHIMP             |     0.002      |10000000000.0...|0.000 - 10000.000...|       0.4355       |
+|            Node14            |     0.018      |     0.368      |   0.052 - 0.924    |       0.2652       |
+|            Node10            |     0.110      |     1.915      |   1.270 - 2.728    |       0.2750       |
+|            Node3             |     0.290      |     0.432      |   0.317 - 0.573    |       0.0015       |
+|             RAT              |     0.066      |     1.089      |   0.610 - 1.717    |       0.9070       |
+|            MOUSE             |     0.122      |     0.525      |   0.343 - 0.755    |       0.1057       |
+
+### **Synonymous tree** 
+((((PIG:0.03937408670808301,COW:0.03878451353271926)Node5:0.0195616708158665,HORSE:0.04559327378804292,CAT:0.04931224992892905)Node4:0.02284730872773409,((RHMONKEY:0,BABOON:0.001815827116959503)Node11:0.01202579316224195,(HUMAN:0,CHIMP:0)Node14:0.008700053742021586)Node10:0.01688166070650646)Node3:0.1292228327513776,RAT:0.01590572225225523,MOUSE:0.04854724584993934)
+
+### **Non-synonymous tree** 
+((((PIG:0.1521831461112254,COW:0.2138117251333718)Node5:0.08333270489251039,HORSE:0.1632014620903291,CAT:0.2273175155627533)Node4:0.04358798007485778,((RHMONKEY:0.003666894925291958,BABOON:0)Node11:0.01385522359919074,(HUMAN:0,CHIMP:0.001837936132619463)Node14:0.00920920510293554)Node10:0.09291437133059131)Node3:0.1603787381398532,RAT:0.04977984176707917,MOUSE:0.07324864703524042)
+**Combined tree** 
+((((PIG:0.1915572328193086,COW:0.2525962386660908)Node5:0.102894375708377,HORSE:0.2087947358783719,CAT:0.2766297654916826)Node4:0.06643528880259186,((RHMONKEY:0.003666894925291958,BABOON:0.001815827116959503)Node11:0.02588101676143268,(HUMAN:0,CHIMP:0.001837936132619463)Node14:0.01790925884495711)Node10:0.1097960320370977)Node3:0.2896015708912303,RAT:0.06568556401933438,MOUSE:0.1217958928851798)
+
+### Writing detailed analysis report to `/Users/sergei/Development/hyphy-analyses/FitMG94/CD2.nex.FITTER.json'

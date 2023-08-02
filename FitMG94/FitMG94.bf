@@ -15,8 +15,9 @@ LoadFunctionLibrary("SelectionAnalyses/modules/selection_lib.ibf");
 utility.SetEnvVariable ("NORMALIZE_SEQUENCE_NAMES", TRUE);
 
 fitter.analysis_description = {terms.io.info : "Fit an MG94xREV model with several selectable options frequency estimator and 
-report the fit results including dN/dS ratios, and synonymous and non-synonymous branch lengths. v0.2 adds LRT test for dN/dS != 1",
-                               terms.io.version : "0.2",
+report the fit results including dN/dS ratios, and synonymous and non-synonymous branch lengths. v0.2 adds LRT test for dN/dS != 1. 
+v0.3 adds LRT test support for dN/dS != 1 for local models",
+                               terms.io.version : "0.3",
                                terms.io.authors : "Sergei L Kosakovsky Pond",
                                terms.io.contact : "spond@temple.edu",
                                terms.io.requirements : "in-frame codon alignment and a phylogenetic tree"
@@ -31,6 +32,7 @@ namespace fitter.terms {
 }  
 
 terms.fitter.ci = "Confidence Intervals";
+terms.fitter.lrt = "LRT";
 
  
 KeywordArgument ("rooted", "Accept rooted trees", "No");
@@ -78,11 +80,10 @@ fitter.frequency_type = io.SelectAnOption ({"CF3x4" : terms.frequencies.CF3x4,
                                             "F3x4" : terms.frequencies.F3x4,
                                             "F1x4" : terms.frequencies.F1x4}, "Equilibrium frequency estimator");
 
-if (fitter.model_type == terms.global) {
-    KeywordArgument ("lrt",         "Perform LRT to test which for dN/dS == 1 (global model only)", "No");
-    fitter.compute_lrt = io.SelectAnOption ({"No"  : "Do not perform LRT",
-                                            "Yes" : "Perform LRT to test omega == 1"}, "Perform LRT to test omega != 1") != "No";
-}
+KeywordArgument ("lrt",         "Perform LRT to test which for dN/dS == 1 (global model only)", "No");
+fitter.compute_lrt = io.SelectAnOption ({"No"  : "Do not perform LRT",
+                                        "Yes" : "Perform LRT to test omega == 1"}, "Perform LRT to test omega != 1") != "No";
+
 
 
 KeywordArgument ("output", "Write the resulting JSON to this file (default is to save to the same path as the alignment file + 'MG94.json')", fitter.codon_data_info [terms.json.json]);
@@ -144,37 +145,119 @@ for (_value_; in; fitter.global_dnds) {
 }
 
 if (fitter.model_type == terms.local) {
+
+    fitter.table_screen_output  = {"0" : "Branch", "1" : "Length" , "2": "dN/dS", "3" : "Approximate dN/dS CI"};
+
+
+    if (^"fitter.compute_lrt") {
+        io.ReportProgressMessageMD("fitter", "LRT", "Running the likelihood ratio tests for dN/dS=1 and estimating confidence intervals for dN/dS along each branch");
+        fitter.table_screen_output + "LRT p-value dN != dS";
+	} else {
+        io.ReportProgressMessageMD("fitter", "LRT", "Estimating confidence intervals for dN/dS along each branch");	
+	}
+	
+	fitter.table_output_options = {terms.table_options.header : TRUE, 
+                            terms.table_options.minimum_column_width: 16,
+                            terms.table_options.column_widths: {
+                                    "0" : 30,
+                                    "1" : 10,
+                                    "2" : 10,
+                                    "3" : 20,
+                                    "4" : 12}, 
+                            terms.table_options.align : "center"};
+
+
+    fprintf (stdout, "\n",
+                    io.FormatTableRow (fitter.table_screen_output,fitter.table_output_options));
+                    
+    fitter.table_output_options [terms.table_options.header] = FALSE;            
     fitter.ci = {};
+    fitter.lrt = {};
+    fitter.save_lf = estimators.TakeLFStateSnapshot((^"fitter.results")[^"terms.likelihood_function"]);
+    fitter.alphaP = "";
+    fitter.betaP  = "";
+       
+    lfunction fitter.local_omega (set) {
+        if (set) {
+            parameters.SetConstraint (^"fitter.betaP", ^"fitter.alphaP", "");
+        } else {
+            parameters.ClearConstraint (^"fitter.betaP");
+        }
+        return 1;
+    }
+    
     lfunction profile_ci (tree_name, node_name, model_description, ignore) {
         omega = 1;
         omega :> 0;
         omega :< 10000;
         
-         
+        report_row = {};
+        report_row + node_name;
+        report_row + Format (((((^"fitter.results")[^"terms.branch_length"])["0"])[node_name])[^"terms.fit.MLE"], 0, 3);
+          
         alphaName = tree_name + "." + node_name + "." + (model_description [utility.getGlobalValue ("terms.local")])[utility.getGlobalValue ("terms.parameters.synonymous_rate")];
         betaName = tree_name + "." + node_name + "." + (model_description [utility.getGlobalValue ("terms.local")])[utility.getGlobalValue ("terms.parameters.nonsynonymous_rate")];
         saveAlpha = ^alphaName;
         saveBeta = ^betaName;
         
+        ^"fitter.alphaP" = alphaName;
+        ^"fitter.betaP" = betaName;
+        
         omega = saveBeta/Max (saveAlpha, 1e-6);
+        report_row + Format (parameters.NormalizeRatio (saveBeta, saveAlpha), 0, 3);
         
         ^betaName := omega * ^alphaName;
         ci_spec = {&omega : 1};
     
         (^"fitter.ci")[node_name] = parameters.GetProfileCI(ci_spec,(^"fitter.results")[^"terms.likelihood_function"], 0.95);
         
+        report_row + (Format (((^"fitter.ci")[node_name])[^"terms.lower_bound"], 0, 3) + " - " + Format (((^"fitter.ci")[node_name])[^"terms.upper_bound"], 0, 3));
+        
         ^alphaName = saveAlpha;
-        ^betaName = saveBeta;         
+        ^betaName = saveBeta;  
+        
+        
+        if (^"fitter.compute_lrt") {
+            local.lrt = estimators.ConstrainAndRunLRT ((^"fitter.results")[^"terms.likelihood_function"], "fitter.local_omega");
+            report_row + Format (local.lrt[^"terms.p_value"], 0, 4);
+            (^"fitter.lrt")[node_name] = local.lrt;
+        }  
+        
+        fprintf (stdout, io.FormatTableRow (report_row,^"fitter.table_output_options"));    
     }
     
     estimators.TraverseLocalParameters (fitter.results[terms.likelihood_function], fitter.results[utility.getGlobalValue("terms.model")], "profile_ci");
+    
+    
+    
     selection.io.json_store_branch_attribute(fitter.json, terms.fitter.ci , terms.json.branch_attributes, fitter.display_orders[fitter.terms.MG94 ] + 3,
                                              "0",
                                              fitter.ci);
+                        
+    if (fitter.compute_lrt) {
+    
+        fitter.corrected = (math.HolmBonferroniCorrection (
+            utility.Map (fitter.lrt, "_value_", "_value_[terms.p_value]")
+        ));
+
+        fitter.fdr = (math.BenjaminiHochbergFDR (
+            utility.Map (fitter.lrt, "_value_", "_value_[terms.p_value]")
+        ));
+        
+        for (i,v; in; fitter.lrt) {
+            v [terms.json.corrected_pvalue] = fitter.corrected[i];
+            v ["FDR"] = fitter.fdr[i];
+        }
+            
+        selection.io.json_store_branch_attribute(fitter.json, terms.fitter.lrt , terms.json.branch_attributes, fitter.display_orders[fitter.terms.MG94 ] + 4,
+                                                 "0",
+                                                 fitter.lrt);
+    }
+                                            
 }
 
 
-if (fitter.compute_lrt) {
+if (fitter.compute_lrt && fitter.model_type == terms.global) {
     selection.io.startTimer (fitter.json [terms.json.timers], fitter.terms.LRT , fitter.display_orders [fitter.terms.LRT ]);
     io.ReportProgressMessageMD("fitter", "LRT", "Running the likelihood ratio tests for dN/dS=1");
 
