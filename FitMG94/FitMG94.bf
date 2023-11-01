@@ -1,4 +1,4 @@
-RequireVersion ("2.5.24");
+RequireVersion ("2.5.52");
 
 
 LoadFunctionLibrary("libv3/all-terms.bf"); 

@@ -1,0 +1,44 @@
+{
+ "fits":{
+   "Clade model C":{
+     "Class 1 omega":0.00489558177166652,
+     "Class 1 weight":0.80638721731003,
+     "Class 2 omega":1,
+     "Class 2 weight":0.007161046455931649,
+     "Class 3 omega BG":0.07613133580245579,
+     "Class 3 omega FG":0.06323014617404525,
+     "Class 3 weight":0.1864517362340383,
+     "Log Likelihood":-32801.27620575637
+    },
+   "M1a model":{
+     "Class 1 omega":0.01349144865812611,
+     "Class 1 weight":0.9710570063211119,
+     "Class 2 omega":1,
+     "Class 2 weight":0.02894299367888808,
+     "Class 3 omega BG":1,
+     "Class 3 omega FG":1,
+     "Class 3 weight":0,
+     "Log Likelihood":-33253.47905199893
+    },
+   "M2_rel model":{
+     "Class 1 omega":0.004867730912160508,
+     "Class 1 weight":0.8088070192469138,
+     "Class 2 omega":1,
+     "Class 2 weight":0.007009274221718612,
+     "Class 3 omega BG":0.07469013983656587,
+     "Class 3 omega FG":0.07469013983656587,
+     "Class 3 weight":0.1841837065313676,
+     "Log Likelihood":-32801.60804886476
+    }
+  },
+ "test results":{
+   "Clade C model|M1a":{
+     "LRT":904.4056924851175,
+     "p-value":0
+    },
+   "Clade C model|M2_rel":{
+     "LRT":0.6636862167651998,
+     "p-value":0.4152615787013851
+    }
+  }
+}

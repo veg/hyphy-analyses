@@ -1,0 +1,53 @@
+{
+ "fits":{
+   "Branch-site model A ":{
+     "Class 1 omega":0.01368704188115498,
+     "Class 1 weight":0.9719890061783727,
+     "Class 2 omega":1,
+     "Class 2 weight":0.02605014153482002,
+     "Class 3 omega BG":0.01368704188115498,
+     "Class 3 omega FG":6.546985080638395,
+     "Class 3 weight":0.001909671449144509,
+     "Class 4 omega BG":1,
+     "Class 4 omega FG":6.546985080638395,
+     "Class 4 weight":5.118083766277707e-05,
+     "Log Likelihood":-33247.22402897038
+    },
+   "M1a model":{
+     "Class 1 omega":0.01359280432269452,
+     "Class 1 weight":0.9712373057354039,
+     "Class 2 omega":1,
+     "Class 2 weight":0.0287626942645961,
+     "Class 3 omega BG":0.01359280432269452,
+     "Class 3 omega FG":1,
+     "Class 3 weight":0,
+     "Class 4 omega BG":1,
+     "Class 4 omega FG":1,
+     "Class 4 weight":0,
+     "Log Likelihood":-33253.50238789505
+    },
+   "Model A omega2:=1":{
+     "Class 1 omega":0.01363373543551174,
+     "Class 1 weight":0.9702670386967072,
+     "Class 2 omega":1,
+     "Class 2 weight":0.02680961392100385,
+     "Class 3 omega BG":0.01363373543551174,
+     "Class 3 omega FG":1,
+     "Class 3 weight":0.002844743781983656,
+     "Class 4 omega BG":1,
+     "Class 4 omega FG":1,
+     "Class 4 weight":7.860360030533621e-05,
+     "Log Likelihood":-33249.73523709382
+    }
+  },
+ "test results":{
+   "Model A|M1a":{
+     "LRT":12.55671784932201,
+     "p-value":0.001876477509869745
+    },
+   "Model A|Model A neutral":{
+     "LRT":5.022416246880312,
+     "p-value":0.0250212304021914
+    }
+  }
+}

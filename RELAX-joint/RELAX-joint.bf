@@ -47,6 +47,14 @@ relax_joint.components = io.PromptUser ("How many random effect components ('1' 
 relax_joint.file_count = utility.Array1D (relax_joint.file_list);
 io.CheckAssertion("relax_joint.file_count >= 1", "A non-empty file list is required");
 
+KeywordArgument ("strict",  "Constrain rate distributions to be the same across all components", "No");
+
+relax_joint.strict = io.SelectAnOption ({
+                                        {"No", "Each component has its own reference distribution of dN/dS"}
+                                        {"Yes", "All components share the reference distribution of dN/dS"}
+                                  }, "Constrain rate distributions to be the same across all components") == "Yes";
+
+
 io.ReportProgressMessageMD("relax_joint", "data" , "* Loaded a list with **" + relax_joint.file_count  + "** files");
 
 relax_joint.path_ordering = {};
@@ -55,9 +63,13 @@ relax_joint.file_prefix = {};
 relax_joint.order2path = {};
 relax_joint.lf_info = {};
 relax_joint.distributions = {};
+relax_joint.distributions_test = {};
+relax_joint.distributions_srv = {};
 relax_joint.distribution_estimates_ind = {};
+relax_joint.distribution_estimates_dep = {};
 relax_joint.K = {};
 relax_joint.K_estimates = {};
+relax.joint_component_LL = {};
 
 relax_joint.likelihoodFunctionComponents = {};
 
@@ -75,13 +87,18 @@ for (relax_joint.counter = 0; relax_joint.counter < relax_joint.file_count; rela
                 (^"relax_joint.likelihoodFunctionComponents") + n;
                 (^"relax_joint.likelihoodFunctionComponents") + (lfSpec["Trees"])[i];
             }
-            (^"relax_joint.distributions")[^"relax_joint.path"] =  _extractRateDistribution (lfSpec);
+            (^"relax_joint.distributions")[^"relax_joint.path"] =  _extractRateDistribution (lfSpec, "reference", "Global Independent");
+            (^"relax_joint.distributions_test")[^"relax_joint.path"] =  _extractRateDistribution (lfSpec, "test", "Global Constrained");
             (^"relax_joint.K")[^"relax_joint.path"] =  _extractKParameter (lfSpec);
             (^"relax_joint.K_estimates")[^"relax_joint.counter"] =  Eval (((^"relax_joint.K")[^"relax_joint.path"]));
             (^"relax_joint.distribution_estimates_ind")[^"relax_joint.counter"] = parameters.GetStickBreakingDistribution ( (^"relax_joint.distributions")[^"relax_joint.path"] ) % 0;
+            (^"relax_joint.distribution_estimates_dep")[^"relax_joint.counter"] = parameters.GetStickBreakingDistribution ( (^"relax_joint.distributions_test")[^"relax_joint.path"] ) % 0;
             
             io.ReportProgressMessageMD("relax_joint", "data" , "**K** = " + Format ((^"relax_joint.K_estimates")[^"relax_joint.counter"], 6, 2) );
+            io.ReportProgressMessageMD("relax_joint", "data" , ">Reference");
             selection.io.report_dnds ((^"relax_joint.distribution_estimates_ind")[^"relax_joint.counter"] );
+            io.ReportProgressMessageMD("relax_joint", "data" , ">Test");
+            selection.io.report_dnds ((^"relax_joint.distribution_estimates_dep")[^"relax_joint.counter"] );
 
             
         }
@@ -89,10 +106,12 @@ for (relax_joint.counter = 0; relax_joint.counter < relax_joint.file_count; rela
      relax_joint.file_prefix  [relax_joint.path] = relax_joint.namespace;
      relax_joint.order2path [Abs (relax_joint.path_ordering)] = relax_joint.path;
      relax_joint.path_ordering [relax_joint.path] = Abs (relax_joint.path_ordering);
-}   
+}
+
+
 
 ExecuteCommands ('
-    LikelihoodFunction relax_joint.LF = (' + Join (",",relax_joint.likelihoodFunctionComponents) + ');
+    LikelihoodFunction relax_joint.LF = (' + Join (",",relax_joint.likelihoodFunctionComponents) + ',"+BLOCK_LIKELIHOOD");
 ');
 
 LFCompute (relax_joint.LF, LF_START_COMPUTE);
@@ -119,29 +138,74 @@ relax_joint.json = {
 relax_joint.free = (Columns (relax_joint.K))[0];
 relax_joint.geo_mean = Eval (relax_joint.free);
 
+if (relax_joint.geo_mean == 0) {
+    relax_joint.geo_mean = 1;
+}
+
 
 terms.relax.k_range    = {
         terms.lower_bound: "0",
         terms.upper_bound: "50"
     };
     
+
+start_grid = {};
+/*
+for (i = 0.05; i < 2; i += 0.05) {
+    start_grid + {
+        "`relax_joint.free`" : i
+    };
+}
+*/
+    
 for (relax_joint.counter, relax_joint.k_parameter; in; relax_joint.K) {
     if (relax_joint.k_parameter != relax_joint.free) {      
-        relax_joint.geo_mean  = relax_joint.geo_mean  * Eval (relax_joint.k_parameter);
+        relax.this_K = Eval (relax_joint.k_parameter);
+        if (relax.this_K > 0) {
+            relax_joint.geo_mean  = relax_joint.geo_mean  * relax.this_K;
+             start_grid + {
+                "`relax_joint.free`" : relax.this_K
+             };
+        }
         parameters.SetConstraint (relax_joint.k_parameter, relax_joint.free,"");
     } 
     parameters.SetRange(relax_joint.k_parameter, terms.relax.k_range);
 }
 
+relax_joint.additional_df = 0;
+
+if (relax_joint.strict) {
+    ref_path = relax_joint.file_list[0];
+    ref_distro = relax_joint.distributions[ref_path];
+    for (f, rates; in; relax_joint.distributions) {
+        if (f != ref_path) {
+            for (i,p; in; rates[terms.parameters.rates]) {
+                 parameters.SetConstraint (p, (ref_distro[terms.parameters.rates])[i],"");
+                 relax_joint.additional_df  += 1;
+            }
+            for (i,p; in; rates[terms.parameters.weights]) {
+                 parameters.SetConstraint (p, (ref_distro[terms.parameters.weights])[i],"");
+                 relax_joint.additional_df  += 1;
+            }
+        }
+    }
+}
+
+
 relax_joint.geo_mean = relax_joint.geo_mean ^ (1/relax_joint.file_count );
 ^relax_joint.free  = relax_joint.geo_mean;
- 
+
+start_grid + {
+                "`relax_joint.free`" : relax_joint.geo_mean
+             };
 
 io.ReportProgressMessageMD("relax_joint", "optimize", "Fitting the joint RELAX model");
 io.ReportProgressMessageMD("relax_joint", "optimize", "\n- Independent model likelihood " + Format (independentLL, 10, 3));
 utility.SetEnvVariable ("USE_LAST_RESULTS", TRUE);
 
-Optimize (relax_joint.MLE, relax_joint.LF);
+relax.joint_component_LL  ["Independent"] = BLOCK_LIKELIHOOD;
+
+Optimize (relax_joint.MLE, relax_joint.LF, {"OPTIMIZATION_START_GRID" : start_grid });
 io.ReportProgressMessageMD("relax_joint", "optimize", "\n- Joint model likelihood " + Format (relax_joint.MLE[1][0], 10, 3));
 
 relax_joint.ci = parameters.GetProfileCI(relax_joint.free, "relax_joint.LF", 0.95);
@@ -149,12 +213,18 @@ relax_joint.ci = parameters.GetProfileCI(relax_joint.free, "relax_joint.LF", 0.9
 io.ReportProgressMessageMD ("relax_joint", "optimize", "\n- Shared K = " + Format (Eval (relax_joint.free), 10, 3) + 
                     " (95% profile CI " + Format ((relax_joint.ci )[terms.lower_bound],8,4) + "-" + Format ((relax_joint.ci )[terms.upper_bound],8,4) + ")");
                     
-relax_joint.lrt_joint = math.DoLRT (relax_joint.MLE[1][0], independentLL, relax_joint.file_count-1);
+relax_joint.lrt_joint = math.DoLRT (relax_joint.MLE[1][0], independentLL, relax_joint.file_count-1 + relax_joint.additional_df );
 io.ReportProgressMessageMD("relax_joint", "results", "- p-value for file-level K (vs a single K) " + relax_joint.lrt_joint[terms.p_value]);
 
 KeywordArgument ("save-fit", "Save RELAX alternative model fit to this file (default is not to save)", "/dev/null");
 relax.save_fit_path = io.PromptUserForFilePath ("Save the joint RELAX model fit to this file ['/dev/null' to skip]");
 io.SpoolLFToPath("relax_joint.LF", relax.save_fit_path);
+
+LFCompute (relax_joint.LF, LF_START_COMPUTE);
+LFCompute (relax_joint.LF, ignore);
+LFCompute (relax_joint.LF, LF_DONE_COMPUTE);
+
+relax.joint_component_LL  ["Joint"] = BLOCK_LIKELIHOOD;
 
                 
 relax_joint.distributions_alt = {};
@@ -162,7 +232,11 @@ relax_joint.distributions_alt = {};
 for (relax_joint.counter, relax_joint.path; in; relax_joint.file_list) {
     io.ReportProgressMessageMD("relax_joint", "optimize" , "* File \`" + relax_joint.path + "\`");
     relax_joint.distributions_alt [relax_joint.counter] = parameters.GetStickBreakingDistribution ( relax_joint.distributions[relax_joint.path] ) % 0;
+    io.ReportProgressMessageMD("relax_joint", "data" , ">Reference");
     selection.io.report_dnds (relax_joint.distributions_alt [relax_joint.counter]);
+    io.ReportProgressMessageMD("relax_joint", "data" , ">Test");
+    selection.io.report_dnds (parameters.GetStickBreakingDistribution ( relax_joint.distributions_test[relax_joint.path] ) % 0);
+
 }   
 
 
@@ -182,18 +256,28 @@ utility.SetEnvVariable ("USE_LAST_RESULTS", TRUE);
 Optimize (relax_joint.MLE_null, relax_joint.LF);
 io.ReportProgressMessageMD("relax_joint", "optimize", "\n- Joint NULL model likelihood " + Format (relax_joint.MLE_null[1][0], 10, 3));
 
+LFCompute (relax_joint.LF, LF_START_COMPUTE);
+LFCompute (relax_joint.LF, ignore);
+LFCompute (relax_joint.LF, LF_DONE_COMPUTE);
+
+relax.joint_component_LL  ["Null"] = BLOCK_LIKELIHOOD;
+
+
 relax_joint.distributions_alt = {};
 
 for (relax_joint.counter, relax_joint.path; in; relax_joint.file_list) {
     io.ReportProgressMessageMD("relax_joint", "optimize" , "* File \`" + relax_joint.path + "\`");
     relax_joint.distributions_alt [relax_joint.counter] = parameters.GetStickBreakingDistribution ( relax_joint.distributions[relax_joint.path] ) % 0;
+    io.ReportProgressMessageMD("relax_joint", "data" , ">Reference");
     selection.io.report_dnds (relax_joint.distributions_alt [relax_joint.counter]);
+    io.ReportProgressMessageMD("relax_joint", "data" , ">Test");
+    selection.io.report_dnds (parameters.GetStickBreakingDistribution ( relax_joint.distributions_test[relax_joint.path] ) % 0);
 }   
 
 
 (relax_joint.json["distributions"])["RELAX-null"] = relax_joint.distributions_alt;
 (relax_joint.json["fits"])["RELAX-null"] = relax_joint.MLE_null[1][0];
-
+(relax_joint.json["fits"])["components"] = relax.joint_component_LL;
 
 relax_joint.lrt_relax = math.DoLRT (relax_joint.MLE_null[1][0], relax_joint.MLE[1][0], 1);
 
@@ -216,14 +300,14 @@ lfunction _extractLFInfo (id) {
     return lfInfo;
 }
 
-lfunction _extractRateDistribution (info) {
+lfunction _extractRateDistribution (info, pattern, set) {
 
    patterns = {
-        "rates" : "reference.omega[0-9]+$",
-        "weights" : "reference.bsrel_mixture_aux_[0-9]+$",
+        "rates" : "`pattern`.omega[0-9]+$",
+        "weights" : "`pattern`.bsrel_mixture_aux_[0-9]+$",
         
    };
-   matches = regexp.PartitionByRegularExpressions (info["Global Independent"], patterns);
+   matches = regexp.PartitionByRegularExpressions (info[set], patterns);
    N = Abs (matches[patterns["rates"]]);
    M = Abs (matches[patterns["weights"]]);
    assert (N > 1 && N == M+1, "Missing distribution parameters");
