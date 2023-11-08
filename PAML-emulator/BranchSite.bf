@@ -1,7 +1,12 @@
 LoadFunctionLibrary ("libv3/IOFunctions.bf");
 LoadFunctionLibrary ("libv3/tasks/trees.bf");
 LoadFunctionLibrary ("libv3/tasks/estimators.bf");
+LoadFunctionLibrary ("libv3/tasks/alignments.bf");
 LoadFunctionLibrary ("libv3/tasks/mpi.bf");
+LoadFunctionLibrary ("libv3/convenience/regexp.bf");
+LoadFunctionLibrary("SelectionAnalyses/modules/io_functions.ibf");
+LoadFunctionLibrary("SelectionAnalyses/modules/selection_lib.ibf");
+
 
 
 /* 1. include a file to define the genetic code
@@ -9,30 +14,38 @@ LoadFunctionLibrary ("libv3/tasks/mpi.bf");
    independent of directory placement
  */
 
-incFileName = HYPHY_LIB_DIRECTORY+"TemplateBatchFiles"+DIRECTORY_SEPARATOR+"TemplateModels"+DIRECTORY_SEPARATOR+"chooseGeneticCode.def";
-ExecuteCommands  ("#include \""+incFileName+"\";");
+utility.SetEnvVariable ("NORMALIZE_SEQUENCE_NAMES", TRUE);
 
-/* 2. load a codon partition  */
+paml.branch_site.json = {};
 
-SetDialogPrompt 			("Please locate a coding alignment:");
-DataSet 	  ds		   = ReadDataFile (PROMPT_FOR_FILE);
-DataSetFilter filteredData = CreateFilter (ds,3,"","",GeneticCodeExclusions);
-coding_path = LAST_FILE_PATH;
+namespace paml.branch_site {
+    LoadFunctionLibrary (HYPHY_LIB_DIRECTORY+"TemplateBatchFiles/SelectionAnalyses/modules/shared-load-file.bf");
+    load_file (
+                {
+                    utility.getGlobalValue("terms.prefix"): "paml.branch_site", 
+                    utility.getGlobalValue("terms.settings") : {utility.getGlobalValue("terms.settings.branch_selector") : "selection.io.SelectAllBranches"}
+                }
+            );
+}
 
-fprintf (stdout, "\nLoaded a ", filteredData.species, " sequence alignment with ", filteredData.sites, " codons from\n",coding_path,"\n");
+paml.filter_name = paml.branch_site.filter_names["0"];
+tree_annotation = (paml.branch_site.partitions_and_trees["0"])[terms.data.tree];
 
-/* 3. include a file to prompt for a tree */
+if (utility.Array1D (tree_annotation[terms.trees.model_list]) < 2) {
+    tree_annotation = trees.extract_paml_annotation ((tree_annotation[terms.trees.newick_annotated])[0][-1]);
+}
 
-LoadFunctionLibrary ("queryTree.bf");
-
-tree_annotation = trees.extract_paml_annotation (treeString);
 treeString = tree_annotation[terms.trees.newick];
+
+paml.ds_name = (paml.branch_site.codon_data_info)[terms.data.dataset];
 
 /* 4. Compute nucleotide counts by position for the F3x4 estimator */
 
 COUNT_GAPS_IN_FREQUENCIES = 0;
-HarvestFrequencies (baseFreqs,filteredData,3,1,1);
+HarvestFrequencies (baseFreqs,^paml.filter_name,3,1,1);
 COUNT_GAPS_IN_FREQUENCIES = 1;
+
+_Genetic_Code = paml.branch_site.codon_data_info[terms.code];
 
 fprintf (stdout, "\nBase composition:\n\tA: ", Format (baseFreqs[0][0],10,5),",",Format (baseFreqs[0][1],10,5),",",Format (baseFreqs[0][2],10,5),
 								    "\n\tC: ", Format (baseFreqs[1][0],10,5),",",Format (baseFreqs[1][1],10,5),",",Format (baseFreqs[1][2],10,5), 
@@ -184,11 +197,11 @@ HKY85_Matrix = {{*,t*kappa_inv,t,t*kappa_inv}
 				{t,t*kappa_inv,*,kappa_inv*t}
 				{t*kappa_inv,t,kappa_inv*t,*}};
 			
-HarvestFrequencies (nucFreqs,ds,1,1,1);
+HarvestFrequencies (nucFreqs,^paml.ds_name,1,1,1);
 Model HKY85_Model = (HKY85_Matrix,nucFreqs,1);
 
 Tree		  nucTree = treeString;
-DataSetFilter nucData = CreateFilter (ds,1);
+DataSetFilter nucData = CreateFilter (^paml.ds_name,1);
 
 fprintf (stdout, "Obtaining nucleotide branch lengths and kappa to be used as starting values...\n");
 LikelihoodFunction	nuc_lf = (nucData,nucTree);
@@ -257,7 +270,7 @@ for (bc=0; bc<Columns(bNames)-1; bc += 1) {
 	}
 }
 
-LikelihoodFunction lf = (filteredData, givenTree);
+LikelihoodFunction lf = (^paml.filter_name, givenTree);
 start.grid  =  {    
     "0" : {
         "P_0"        : 0.8,
