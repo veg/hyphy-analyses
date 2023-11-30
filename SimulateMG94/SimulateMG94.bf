@@ -142,6 +142,8 @@ ExecuteAFile (PATH_TO_CURRENT_BF + "modules/branch-variation/" + simulator.modul
 
 model.ApplyModelToTree ("simulator.T", simulator.tree, {"0" : simulator.model}, null);
 
+simulator.has_categories = utility.Array1D ((simulator.model[terms.parameters])[terms.category]) > 0;
+
 /** validate the tree **/
 
 simulator.validation_error                     = simulator.validate_tree (simulator.tree);
@@ -162,7 +164,6 @@ KeywordArgument ("site-variation",       "The model for describing site-to-site 
 simulator.module.site = io.PromptUserForString ('Site variation module');
 
 ExecuteAFile (PATH_TO_CURRENT_BF + "modules/site-variation/"   + simulator.module.site);
-
 
 simulator.site_profile = simulator.prepare_site_distribution (simulator.model, simulator.sites, "simulator.T", simulator.tree);
 
@@ -187,8 +188,6 @@ KeywordArgument ("output",       "Write simulated alignments (as FASTA) to the f
 simulator.path = io.PromptUserForFilePath ("Save simulator settings to this path, and replicates to ${path}.replicate.index.extension");
 
 
-
-
 utility.SetEnvVariable ("DATA_FILE_PRINT_FORMAT",9);
 utility.SetEnvVariable ("DATAFILE_TREE",simulator.tree[terms.trees.newick_annotated]);
 utility.SetEnvVariable ("IS_TREE_PRESENT_IN_DATA",TRUE);
@@ -205,9 +204,7 @@ simulator.mode = 1;
 simulator.counter = 0;
 simulator.BL = {};
 
-
-utility.ForEachPair (simulator.sites_by_profile, "_rate_distribution_", "_site_counts_", '
-
+for (_rate_distribution_, _site_counts_; in; simulator.sites_by_profile) {
     simulator.apply_site_distribution (simulator.model, _rate_distribution_,  "simulator.T");
     
     simulator.bl_code = simulator.model[terms.model.get_branch_length];
@@ -225,18 +222,18 @@ utility.ForEachPair (simulator.sites_by_profile, "_rate_distribution_", "_site_c
     
     io.ReportProgressBar ("SIMULATING", "Rate regime " + simulator.mode + " of " + utility.Array1D (simulator.sites_by_profile) + " (branch length = " + Format (simulator.tree_length, 8, 3) + ")");
     simulator.mode   += 1;
+    
+    
 
-    utility.ForEach (_site_counts_, "_site_id_", "
-        simulator.inverse_map [_site_id_] = (\\"\\" + 3*(simulator.counter) + \\"-\\" + (3*simulator.counter+2));
+    for (_site_id_; in; utility.DictToArray (_site_counts_)) {
+        simulator.inverse_map [_site_id_] = ("" + 3*(simulator.counter) + "-" + (3*simulator.counter+2));
         simulator.BL[simulator.counter] = simulator.tree_length;
         simulator.counter += 1;
-    ");
-
-
     
+    }
+        
     simulator.site_block = utility.Array1D (_site_counts_);
     
-
     if (None != simulator.root_seq) {
         simulator.template = {utility.Array1D (_site_counts_), 1};
         simulator.template[0] = "";
@@ -258,21 +255,24 @@ utility.ForEachPair (simulator.sites_by_profile, "_rate_distribution_", "_site_c
         //console.log (simulator.matrix);
         DataSet simulated_data = Simulate (simulator.T, simulator.root_freqs, simulator.matrix, simulator.site_block*simulator.replicates);
     }
+ 
     // simulate ALL sites from one scenario here
     if (simulator.rate_type == 0) {
          GetString (simulator.sim_names, simulated_data, -1);
          for (simulator.i = 0; simulator.i < simulator.replicates; simulator.i += 1) {
             simulator.j = 0;
-            utility.ForEach (simulator.sim_names,"_value_", "
-                (simulator.string_buffer[simulator.i])+\\"\\";
+            for (_value_; in; simulator.sim_names) {
+                (simulator.string_buffer[simulator.i])+"";
                 (simulator.string_buffer[simulator.i])[simulator.j] * (simulator.sites*3);
                 simulator.j += 1;
-            ");
+            }
          }
     }
 
     for (simulator.i = 0; simulator.i < simulator.replicates; simulator.i += 1) {
-        DataSetFilter all      = CreateFilter (simulated_data, 1, siteIndex>=simulator.i*3*simulator.site_block&&siteIndex<=(simulator.i+1)*3*simulator.site_block-1);
+    
+        //DataSetFilter all      = CreateFilter (simulated_data, 1, siteIndex>=simulator.i*3*simulator.site_block&&siteIndex<=(simulator.i+1)*3*simulator.site_block-1);
+        DataSetFilter all      = CreateFilter (simulated_data, 1, siteIndex$3%simulator.replicates == simulator.i);
         for (simulator.j = 0; simulator.j < all.species; simulator.j+=1) {
             GetDataInfo (sim.string, all, simulator.j);
             (simulator.string_buffer[simulator.i])[simulator.j] * sim.string;
@@ -280,8 +280,7 @@ utility.ForEachPair (simulator.sites_by_profile, "_rate_distribution_", "_site_c
     }
 
     simulator.rate_type += 1;
-');
-
+}
 
 if (Type (simulator.report) == "AssociativeList") {
     fprintf (simulator.path, CLEAR_FILE, {

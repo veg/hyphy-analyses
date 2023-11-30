@@ -55,7 +55,7 @@ if (labeler.regexp == "()") {
   labeler.list_dict = io.ReadDelimitedFile (null,",",FALSE);
   labeler.list = {};
   for (k, v; in; labeler.list_dict["rows"]) {
-    labeler.labels[v[0]] = labeler.tag;
+    labeler.labels[regexp.Replace (v[0],"\\ +$", "")] = labeler.tag;
   }
 } else {
   for (n; in; T) {
@@ -98,6 +98,8 @@ console.log ("\nLabeled " + (utility.Array1D (labeler.labels) - label.core) + " 
 
 KeywordArgument ("output", "Write labeled Newick tree to");
 labeler.path = io.PromptUserForFilePath ("Write labeled Newick tree to");
+
+
 fprintf (labeler.path, CLEAR_FILE, tree.Annotate ("T", "relabel_and_annotate", "{}", TRUE));
 
 function relabel_and_annotate (node_name) {
