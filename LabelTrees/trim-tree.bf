@@ -85,13 +85,15 @@ for (i,n; in; labeler.seq_names) {
         labeler.same_taxon[n_trimmed] = {};
     } 
     labeler.same_taxon[n_trimmed] + i;
-    labeler.rename_seqs[n] = n_trimmed;
+    labeler.rename_seqs[n] = n_trimmed && 1;
+    labeler.rename_seqs[n&&1] =  n_trimmed && 1;
     if (labeler.content_by_id [i] < labeler.filter.sites * labeler.threshold) {
         console.log ("- Trimming " + n + " as too short (" + labeler.content_by_id [i] + ", " + Format (100*labeler.content_by_id [i]/labeler.filter.sites, 5, 3) + "%)");      
         labeler.too_short [n] = 1;
         continue;
     }
     labeler.seq_names_dict [n_trimmed] = 1;
+    labeler.seq_names_dict [n_trimmed && 1] = 1;
 }
 
 
@@ -147,6 +149,7 @@ labeler.tree_names_dict - labeler.include_species;
 if (Abs (labeler.tree_names_dict)) {
     T - Rows(labeler.tree_names_dict);
 }
+
 
 
 function labeler.includeSeq (name, seq) {
