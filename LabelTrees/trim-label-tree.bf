@@ -101,9 +101,12 @@ for (i,n; in; labeler.seq_names) {
     if (labeler.content_by_id [i] < labeler.filter.sites * labeler.threshold) {
         console.log ("- Trimming " + n + " as too short (" + labeler.content_by_id [i] + ", " + Format (100*labeler.content_by_id [i]/labeler.filter.sites, 5, 3) + "%)");      
         labeler.too_short [n] = 1;
+        labeler.too_short [n && 1] = 1;
         continue;
     }
+        
     labeler.seq_names_dict [n_trimmed] = 1;
+    labeler.seq_names_dict [n_trimmed && 1] = 1;
 }
 
 
@@ -139,7 +142,6 @@ for (n; in; labeler.tree_names) {
 labeler.include_species = {};
 
 console.log ("");
-
 
 for (k, v; in; labeler.tree_names_dict) {
     if (labeler.seq_names_dict[k]) {
