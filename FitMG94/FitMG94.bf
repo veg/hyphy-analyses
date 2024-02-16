@@ -33,13 +33,14 @@ namespace fitter.terms {
 
 terms.fitter.ci = "Confidence Intervals";
 terms.fitter.lrt = "LRT";
+terms.fitter.partitioned = "partitioned";
 
  
 KeywordArgument ("rooted", "Accept rooted trees", "No");
+KeywordArgument ("type",        "Model type: global (single dN/dS for all branches) or local (separate dN/dS)", terms.global, "Model Type");
 KeywordArgument ("code",        "Which genetic code should be used", "Universal");  
 KeywordArgument ("alignment",   "An in-frame codon alignment in one of the formats supported by HyPhy");
 KeywordArgument ("tree",        "A phylogenetic tree", null, "Please select a tree file for the data:");
-KeywordArgument ("type",        "Model type: global (single dN/dS for all branches) or local (separate dN/dS)", terms.global, "Model Type");
 KeywordArgument ("frequencies", "Equilibrium frequency estimator", "CF3x4");
 
 fitter.json    = { terms.json.analysis: fitter.analysis_description,
@@ -66,16 +67,22 @@ if (fitter.accept_rooted_trees == "Yes") {
     utility.SetEnvVariable ("ACCEPT_ROOTED_TREES", TRUE);
 }
 
+fitter.model_type = io.SelectAnOption ({terms.global : "Shared dN/dS for all branches", terms.local : "Each branch has its own dN and dS", terms.fitter.partitioned : "Each branch partition has its own dN/dS"}, "Model Type");
 
 
 namespace fitter {
     LoadFunctionLibrary ("SelectionAnalyses/modules/shared-load-file.bf");
-    load_file ({utility.getGlobalValue("terms.prefix"): "fitter", 
-                utility.getGlobalValue("terms.settings") : {utility.getGlobalValue("terms.settings.branch_selector") : "selection.io.SelectAllBranches"}});
+    if (model_type == ^"terms.fitter.partitioned") {
+        load_file ({utility.getGlobalValue("terms.prefix"): "fitter", 
+            utility.getGlobalValue("terms.settings") : {utility.getGlobalValue("terms.settings.branch_selector") : "selection.io.SelectAllBranchSets"}});
+    } else {
+        load_file ({utility.getGlobalValue("terms.prefix"): "fitter", 
+            utility.getGlobalValue("terms.settings") : {utility.getGlobalValue("terms.settings.branch_selector") : "selection.io.SelectAllBranches"}});
+    }
+
 }
 
 
-fitter.model_type = io.SelectAnOption ({terms.global : "Shared dN/dS for all branches", terms.local : "Each branch has its own dN and dS"}, "Model Type");
 fitter.frequency_type = io.SelectAnOption ({"CF3x4" : terms.frequencies.CF3x4, 
                                             "F3x4" : terms.frequencies.F3x4,
                                             "F1x4" : terms.frequencies.F1x4}, "Equilibrium frequency estimator");
@@ -108,14 +115,25 @@ lfunction fitter.defineMG (type, code) {
     return m;
 }
 
-fitter.results =  estimators.FitCodonModel (fitter.filter_names, fitter.trees, "fitter.defineMG", fitter.codon_data_info [utility.getGlobalValue("terms.code")],
-    {
-        terms.run_options.model_type: fitter.model_type,
-        terms.run_options.retain_lf_object: TRUE,
-        terms.run_options.retain_model_object : TRUE
-    }, 
-    fitter.gtr_results);
-
+if (fitter.model_type == terms.fitter.partitioned) {
+    fitter.results =  estimators.FitCodonModel (fitter.filter_names, fitter.trees, "fitter.defineMG", fitter.codon_data_info [utility.getGlobalValue("terms.code")],
+        {
+            terms.run_options.model_type            : terms.local,
+            terms.run_options.retain_lf_object      : TRUE,
+            terms.run_options.retain_model_object   : TRUE,
+            terms.run_options.partitioned_omega     : fitter.selected_branches
+        }, 
+        fitter.gtr_results);
+        
+} else {
+    fitter.results =  estimators.FitCodonModel (fitter.filter_names, fitter.trees, "fitter.defineMG", fitter.codon_data_info [utility.getGlobalValue("terms.code")],
+        {
+            terms.run_options.model_type: fitter.model_type,
+            terms.run_options.retain_lf_object: TRUE,
+            terms.run_options.retain_model_object : TRUE
+        }, 
+        fitter.gtr_results);
+}
 
 
 io.ReportProgressMessageMD("fitter", fitter.terms.MG94 , "* " + selection.io.report_fit (fitter.results, 0, fitter.codon_data_info[terms.data.sample_size]));
@@ -257,7 +275,7 @@ if (fitter.model_type == terms.local) {
 }
 
 
-if (fitter.compute_lrt && fitter.model_type == terms.global) {
+if (fitter.compute_lrt && fitter.model_type != terms.local) {
     selection.io.startTimer (fitter.json [terms.json.timers], fitter.terms.LRT , fitter.display_orders [fitter.terms.LRT ]);
     io.ReportProgressMessageMD("fitter", "LRT", "Running the likelihood ratio tests for dN/dS=1");
 
