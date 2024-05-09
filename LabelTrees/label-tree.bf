@@ -47,6 +47,17 @@ if (labeler.reroot != "None") {
     Topology T = rerooted;
 }
 
+KeywordArgument  ("invert", "Invert selection", "No");
+
+labeler.inverse  = io.SelectAnOption (
+  {
+    {"No","Matching list/regexp"}
+    {"Yes","NOT matching list/regexp"}
+    
+  },
+  "Invert selection"
+) == "Yes";
+
 labeler.labels = {};
 
 if (labeler.regexp == "()") {
@@ -55,14 +66,35 @@ if (labeler.regexp == "()") {
   labeler.list_dict = io.ReadDelimitedFile (null,",",FALSE);
   labeler.list = {};
   for (k, v; in; labeler.list_dict["rows"]) {
-    labeler.labels[regexp.Replace (v[0],"\\ +$", "")] = labeler.tag;
+    labeler.list[regexp.Replace (v[0],"\\ +$", "")] = 1;
   }
-} else {
-  for (n; in; T) {
-    if (regexp.Find (n,labeler.regexp)) {
-      labeler.labels[n] = labeler.tag;
+  if (labeler.inverse) {
+     for (n; in; T) {
+        if (labeler.list[n] == 0) {
+          labeler.labels[n] = labeler.tag;
+        }
+      }
+  } else {
+      for (n; in; T) {
+        if (labeler.list[n]) {
+          labeler.labels[n] = labeler.tag;
+        }
+      }
     }
-  }
+} else {
+  if (labeler.inverse) {
+     for (n; in; T) {
+        if (None == regexp.Find (n,labeler.regexp)) {
+          labeler.labels[n] = labeler.tag;
+        }
+      }
+  } else {
+      for (n; in; T) {
+        if (regexp.Find (n,labeler.regexp)) {
+          labeler.labels[n] = labeler.tag;
+        }
+      }
+    }
 }
 
 assert (utility.Array1D (labeler.labels) > 0, "A non-empty set of selected branches is required");
@@ -82,19 +114,45 @@ labeler.kind  = io.SelectAnOption (
   "Strategy for labeling internal nodes"
 );
 
-if (labeler.kind == "All descendants") {
-  labeler.labels * ((trees.ConjunctionLabel ("T", labeler.labels))["labels"]);
-}
+KeywordArgument  ("leaf-nodes", "Strategy for labeling selected leaves", "Label");
 
-if (labeler.kind == "Some descendants") {
-  labeler.labels * ((trees.DisjunctionLabel ("T", labeler.labels))["labels"]);
-}
+labeler.tips  = io.SelectAnOption (
+  {
+    {"Label","Include tips"}
+    {"Skip","Only label internal nodes using the selected strategy"}
+    
+  },
+  "Include tips in labeling"
+) == "Label";
 
-if (labeler.kind == "Parsimony") {
-  labeler.labels * ((trees.ParsimonyLabel ("T", labeler.labels))["labels"]);
-}
+if (labeler.tips) {
+    if (labeler.kind == "All descendants") {
+      labeler.labels * ((trees.ConjunctionLabel ("T", labeler.labels))["labels"]);
+    }
 
-console.log ("\nLabeled " + (utility.Array1D (labeler.labels) - label.core) + " additional branches\n");
+    if (labeler.kind == "Some descendants") {
+      labeler.labels * ((trees.DisjunctionLabel ("T", labeler.labels))["labels"]);
+    }
+
+    if (labeler.kind == "Parsimony") {
+      labeler.labels * ((trees.ParsimonyLabel ("T", labeler.labels))["labels"]);
+    }
+
+    console.log ("\nLabeled " + (utility.Array1D (labeler.labels) - label.core) + " additional internal branches\n");
+} else {
+    if (labeler.kind == "All descendants") {
+      labeler.labels = ((trees.ConjunctionLabel ("T", labeler.labels))["labels"]);
+    }
+
+    if (labeler.kind == "Some descendants") {
+      labeler.labels = ((trees.DisjunctionLabel ("T", labeler.labels))["labels"]);
+    }
+
+    if (labeler.kind == "Parsimony") {
+      labeler.labels = ((trees.ParsimonyLabel ("T", labeler.labels))["labels"]);
+    }
+    console.log ("\nLabeled " + (utility.Array1D (labeler.labels) ) + " internal branches\n");
+}
 
 KeywordArgument ("output", "Write labeled Newick tree to");
 labeler.path = io.PromptUserForFilePath ("Write labeled Newick tree to");
