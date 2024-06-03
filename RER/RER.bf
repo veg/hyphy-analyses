@@ -46,6 +46,7 @@ namespace terms.rer {
     strategy      = "labeling strategy";
     model         = "model";
     rv            = "rate variation";
+    branch_level  = "branch level analysis"
 }
 
 rer.json    = { 
@@ -146,11 +147,18 @@ rer.branch_set = io.MultiSelectOptions (
 rer.branches = {};
 
 
+
 for (k;in;rer.branch_set) {
     rer.branches [k] = terms.rer.test;
 }
 
-io.ReportProgressMessage ("", ">Selected **" + utility.Array1D (rer.branch_set) + "** tips as designated lineages: \`" + Join (", ", rer.branch_set) + "\`");
+
+rer.branch_count = utility.Array1D (rer.branch_set);
+
+io.CheckAssertion("rer.branch_count > 0 && rer.branch_count < rer.filter.species", "RERConverge requires that both test and background partition be non-empty");
+ 
+ 
+io.ReportProgressMessage ("", ">Selected **" + rer.branch_count + "** tips as designated lineages: \`" + Join (", ", rer.branch_set) + "\`");
 
 rer.labeling_option = io.SelectAnOption (
     {   
@@ -212,6 +220,7 @@ rer.rateVariation = io.SelectAnOption  ({"None"  : "Constant rates",
                                           "Site to site rate variation option");
 
 
+
 if (rer.rateVariation != "None") {
     KeywordArgument ("rate-classes",   "How many site rate classes to use", "4");
     rer.rateClasses = io.PromptUser(">How many site rate classes to use", 4, 2, 10, TRUE);
@@ -222,6 +231,23 @@ if (rer.rateVariation != "None") {
         rer.model.generator = "rer.model.withGDD";
     }
 }
+
+KeywordArgument ("full-model",   "Fit the full unconstrained model", "Yes");
+rer.fit_full_model = io.SelectAnOption  ({"Yes"  : "Fit the model with all branch lengths unconstrained",
+                                          "No" : "Do NOT fit the model with all branch lengths unconstrained"},
+                                          "Fit the full unconstrained model") == "Yes";
+
+
+
+if (rer.branch_count > 1) {
+    KeywordArgument ("branch-level-analysis",   "Perform test clade branch-level testing", "No");
+    rer.outlier = io.SelectAnOption  ({"No"  : "Do NOT perform branch-level testing",
+                                              "Yes" : "Perform  branch-level testing ()"},
+                                              "Perform test clade branch-level testing") == "Yes";
+} else {
+    rer.outlier = FALSE;
+}
+
 
 (rer.json [terms.json.analysis])[terms.rer.rv] = rer.rateVariation;
 
@@ -398,6 +424,20 @@ selection.io.stopTimer (rer.json [terms.json.timers], terms.rer.proportional);
 
 ref.parameter_set = estimators.TraverseLocalParameters (ref.lf_id, rer.fit_proportional_partitioned[terms.model], "rer.collect_constraints");
 
+if (rer.outlier ) {
+    rer.by_test_branch = {};
+    for (n,p; in; ref.parameter_set ) {
+        if (rer.branches[n] == terms.rer.test) {
+            rer.stash_constraint = parameters.GetConstraint (p);
+            parameters.RemoveConstraint (p);
+            rer.fit_test_unconstrained = estimators.FitExistingLF (ref.lf_id, rer.fit_proportional_partitioned[terms.model]);
+            rer.by_test_branch[n] = {terms.fit.log_likelihood : rer.fit_test_unconstrained[terms.fit.log_likelihood]};
+            parameters.SetConstraint (p, rer.stash_constraint,"");
+        }
+    }    
+}
+
+
 for (n,p; in; ref.parameter_set ) {
     if (rer.branches[n] == terms.rer.test) {
         parameters.RemoveConstraint (p);
@@ -423,6 +463,7 @@ selection.io.json_store_branch_attribute(rer.json, terms.rer.unconstrained_test,
                                               "selection.io.branch.length"));                  
 
 rer.lengths_test_unconstrained  = rer.process_branch_lengths (rer.fit_test_unconstrained, rer.branches);
+
 rer.print_row [0] = terms.rer.unconstrained_test;
 rer.BL = +rer.lengths_test_unconstrained[terms.rer.test];
 rer.print_row [1] = Format (rer.BL,10,4);
@@ -434,48 +475,136 @@ rer.print_row [5] = Format (rer.fit_test_unconstrained[terms.fit.log_likelihood]
 rer.print_row [6] = Format (selection.io.getIC(rer.fit_test_unconstrained[terms.fit.log_likelihood], rer.fit_test_unconstrained[terms.parameters] + rer.empirical_parameters, rer.sample_size),6,3);
 fprintf(stdout, io.FormatTableRow(rer.print_row, rer.table_output_options));
 
+if (rer.outlier ) {
+   rer.null_ll = rer.fit_proportional[terms.fit.log_likelihood];
+   rer.alt_ll = rer.fit_test_unconstrained[terms.fit.log_likelihood];
+   rer.outlier_pvalues = {};
+   
+   rer.i = 0;
+   for (n,p; in; rer.by_test_branch) {
+        (rer.by_test_branch[n])[terms.Null] = math.DoLRT (rer.null_ll,p[terms.fit.log_likelihood], 1);
+        rer.outlier_pvalues[rer.i] = ((rer.by_test_branch[n])[terms.Null])[terms.p_value];
+        rer.i += 1;
+        (rer.by_test_branch[n])[terms.alternative] = math.DoLRT (p[terms.fit.log_likelihood], rer.alt_ll, rer.branch_count-1);
+        rer.outlier_pvalues[rer.i] = ((rer.by_test_branch[n])[terms.alternative])[terms.p_value];
+        rer.i += 1;
+   }
+   rer.outlier_pvalues = math.HolmBonferroniCorrection(rer.outlier_pvalues);
+   rer.i = 0;
+   for (n,p; in; rer.by_test_branch) {
+        ((rer.by_test_branch[n])[terms.Null])[terms.json.corrected_pvalue] = rer.outlier_pvalues[rer.i];
+        rer.i += 1;
+        ((rer.by_test_branch[n])[terms.alternative])[terms.json.corrected_pvalue] = rer.outlier_pvalues[rer.i];
+        rer.i += 1;
+  }   
+}
+
 
 selection.io.stopTimer (rer.json [terms.json.timers], terms.rer.unconstrained_test);
 
-// UNCONSTRAINED
-// -------------
-
-for (n,p; in; ref.parameter_set ) {
-    if (rer.branches[n] != terms.rer.test) {
-        parameters.RemoveConstraint (p);
+if (rer.fit_full_model) {
+    // UNCONSTRAINED
+    // -------------
+    
+    for (n,p; in; ref.parameter_set ) {
+        if (rer.branches[n] != terms.rer.test) {
+            parameters.RemoveConstraint (p);
+        }
     }
+    
+    selection.io.startTimer (rer.json [terms.json.timers], terms.rer.unconstrained, 4);
+    
+    rer.fit_full_unconstrained = estimators.FitExistingLF (ref.lf_id, rer.fit_proportional_partitioned[terms.model]);
+    
+    selection.io.stopTimer (rer.json [terms.json.timers], terms.rer.unconstrained);
+    
+    selection.io.json_store_lf (rer.json,
+                                terms.rer.unconstrained ,
+                                rer.fit_full_unconstrained[terms.fit.log_likelihood],
+                                rer.fit_full_unconstrained[terms.parameters],
+                                rer.sample_size,
+                                utility.Map (rer.fit_full_unconstrained[terms.global], "_value_", '_value_ [terms.fit.MLE]'), 
+                                3);
+                                
+    selection.io.json_store_branch_attribute(rer.json, terms.rer.unconstrained, terms.branch_length, 4,
+                                                 0,
+                                                 selection.io.extract_branch_info((rer.fit_full_unconstrained[terms.branch_length])[0],
+                                                  "selection.io.branch.length"));       
+                                                             
+    rer.lengths_unconstrained  = rer.process_branch_lengths (rer.fit_full_unconstrained, rer.branches);
+    rer.print_row [0] = terms.rer.unconstrained;
+    rer.BL = +rer.lengths_unconstrained[terms.rer.test];
+    rer.print_row [1] = Format (rer.BL,10,4);
+    rer.print_row [2] = Format (rer.BL/rer.ref_lengths[terms.rer.test],6,3);
+    rer.BL = +rer.lengths_unconstrained[terms.rer.background];
+    rer.print_row [3] = Format (rer.BL,10,4);
+    rer.print_row [4] = Format (rer.BL/rer.ref_lengths[terms.rer.background],6,3);
+    rer.print_row [5] = Format (rer.fit_full_unconstrained[terms.fit.log_likelihood],6,3);
+    rer.print_row [6] = Format (selection.io.getIC(rer.fit_full_unconstrained[terms.fit.log_likelihood], rer.fit_full_unconstrained[terms.parameters] + rer.empirical_parameters, rer.sample_size),6,3);
+    fprintf(stdout, io.FormatTableRow(rer.print_row, rer.table_output_options));
 }
 
-selection.io.startTimer (rer.json [terms.json.timers], terms.rer.unconstrained, 4);
+// REPORT OUTLIER DETECTION RESULTS, IF DONE
+// -----------------------------------------
 
-rer.fit_full_unconstrained = estimators.FitExistingLF (ref.lf_id, rer.fit_proportional_partitioned[terms.model]);
+if (rer.outlier) {
+    io.ReportProgressMessageMD ("rer", "outlier", "Single-branch signal");
+    io.ReportProgressMessageMD ("rer", "outlier", "> p-values corrected using the Holm-Bonferroni procedure");
+    io.ReportProgressMessageMD ("rer", "outlier", "> (*) marks a possible outlier branch which is mostly responsible for rate differences");
+    io.ReportProgressMessageMD ("rer", "outlier", "> (#) marks a branch which contributes to the rate difference signal");
+    io.ReportProgressMessageMD ("rer", "outlier", "");
 
-selection.io.stopTimer (rer.json [terms.json.timers], terms.rer.unconstrained);
 
-selection.io.json_store_lf (rer.json,
-                            terms.rer.unconstrained ,
-                            rer.fit_full_unconstrained[terms.fit.log_likelihood],
-                            rer.fit_full_unconstrained[terms.parameters],
-                            rer.sample_size,
-                            utility.Map (rer.fit_full_unconstrained[terms.global], "_value_", '_value_ [terms.fit.MLE]'), 
-                            3);
-                            
-selection.io.json_store_branch_attribute(rer.json, terms.rer.unconstrained, terms.branch_length, 4,
-                                             0,
-                                             selection.io.extract_branch_info((rer.fit_full_unconstrained[terms.branch_length])[0],
-                                              "selection.io.branch.length"));       
-                                                         
-rer.lengths_unconstrained  = rer.process_branch_lengths (rer.fit_full_unconstrained, rer.branches);
-rer.print_row [0] = terms.rer.unconstrained;
-rer.BL = +rer.lengths_unconstrained[terms.rer.test];
-rer.print_row [1] = Format (rer.BL,10,4);
-rer.print_row [2] = Format (rer.BL/rer.ref_lengths[terms.rer.test],6,3);
-rer.BL = +rer.lengths_unconstrained[terms.rer.background];
-rer.print_row [3] = Format (rer.BL,10,4);
-rer.print_row [4] = Format (rer.BL/rer.ref_lengths[terms.rer.background],6,3);
-rer.print_row [5] = Format (rer.fit_full_unconstrained[terms.fit.log_likelihood],6,3);
-rer.print_row [6] = Format (selection.io.getIC(rer.fit_full_unconstrained[terms.fit.log_likelihood], rer.fit_full_unconstrained[terms.parameters] + rer.empirical_parameters, rer.sample_size),6,3);
-fprintf(stdout, io.FormatTableRow(rer.print_row, rer.table_output_options));
+    rer.table_output_options = {
+        utility.getGlobalValue("terms.table_options.header"): 1,
+        utility.getGlobalValue("terms.table_options.minimum_column_width"): 16,
+        utility.getGlobalValue("terms.table_options.align"): "left",
+        utility.getGlobalValue("terms.table_options.column_widths"): {
+            "0": 50,
+            "1" :20,
+            "2" :20
+        }
+    };
+    
+    rer.header = {
+            3,
+            1
+        };
+        
+    rer.header[0] = "Branch";
+    rer.header[1] = "Single branch";
+    rer.header[2] = "All but this branch";
+    
+    fprintf(stdout, io.FormatTableRow(rer.header, rer.table_output_options));
+    rer.table_output_options[utility.getGlobalValue("terms.table_options.header")] = FALSE;
+    
+    rer.print_row = {
+            3,
+            1
+        };
+             
+    rer.print_row [0] = "";   
+    
+    rer.cutoff = 0.05;
+    
+    for (n,p; in; rer.by_test_branch) {
+        rer.print_row[0] = n;
+        rer.pn = (p[terms.Null])[terms.json.corrected_pvalue];
+        rer.pa = (p[terms.alternative])[terms.json.corrected_pvalue];
+        if (rer.pn <= rer.cutoff && rer.pa > rer.cutoff) {
+            rer.print_row[0] = "(*) " + rer.print_row[0];
+        }
+        if (rer.pn <= rer.cutoff && rer.pa <= rer.cutoff) {
+            rer.print_row[0] = "(#) " + rer.print_row[0];
+        }
+
+        rer.print_row[1] = Format ((p[terms.Null])[terms.json.corrected_pvalue], 10, 6);
+        rer.print_row[2] = Format ((p[terms.alternative])[terms.json.corrected_pvalue], 10, 6);
+        fprintf(stdout, io.FormatTableRow(rer.print_row, rer.table_output_options));
+    }   
+    
+    rer.json [terms.rer.branch_level] = rer.by_test_branch;
+}
 
 // COMPUTE AND REPORT TEST STATISTICS
 // ----------------------------------
@@ -484,25 +613,39 @@ io.ReportProgressMessageMD ("rer", "testing", "LRT test results between pairs of
 io.ReportProgressMessageMD ("rer", "testing", "> p-values corrected using the Holm-Bonferroni procedure (raw values in parentheses)");
 io.ReportProgressMessageMD ("rer", "testing", "");
 
+if (rer.fit_full_model) {
+    rer.hierarchy = {{terms.rer.proportional,terms.rer.proportional_partitoned,terms.rer.unconstrained_test,terms.rer.unconstrained}};
+    rer.fit_results = {
+        "0" : {{rer.fit_proportional[terms.fit.log_likelihood],rer.fit_proportional[terms.parameters] + rer.empirical_parameters}},
+        "1" : {{rer.fit_proportional_partitioned[terms.fit.log_likelihood],rer.fit_proportional_partitioned[terms.parameters]}},
+        "2" : {{rer.fit_test_unconstrained[terms.fit.log_likelihood],rer.fit_test_unconstrained[terms.parameters] + rer.empirical_parameters}},
+        "3" : {{rer.fit_full_unconstrained[terms.fit.log_likelihood],rer.fit_full_unconstrained[terms.parameters] + rer.empirical_parameters}}
+    };
+    rer.model_count = 4;
+} else {
+    rer.hierarchy = {{terms.rer.proportional,terms.rer.proportional_partitoned,terms.rer.unconstrained_test}};
+    rer.fit_results = {
+        "0" : {{rer.fit_proportional[terms.fit.log_likelihood],rer.fit_proportional[terms.parameters] + rer.empirical_parameters}},
+        "1" : {{rer.fit_proportional_partitioned[terms.fit.log_likelihood],rer.fit_proportional_partitioned[terms.parameters]}},
+        "2" : {{rer.fit_test_unconstrained[terms.fit.log_likelihood],rer.fit_test_unconstrained[terms.parameters] + rer.empirical_parameters}}
+    };
+    rer.model_count = 3;
+}
 
-rer.hierarchy = {{terms.rer.proportional,terms.rer.proportional_partitoned,terms.rer.unconstrained_test,terms.rer.unconstrained}};
-rer.fit_results = {
-    "0" : {{rer.fit_proportional[terms.fit.log_likelihood],rer.fit_proportional[terms.parameters] + rer.empirical_parameters}},
-    "1" : {{rer.fit_proportional_partitioned[terms.fit.log_likelihood],rer.fit_proportional_partitioned[terms.parameters]}},
-    "2" : {{rer.fit_test_unconstrained[terms.fit.log_likelihood],rer.fit_test_unconstrained[terms.parameters] + rer.empirical_parameters}},
-    "3" : {{rer.fit_full_unconstrained[terms.fit.log_likelihood],rer.fit_full_unconstrained[terms.parameters] + rer.empirical_parameters}}
-};
 
 rer.test_matrix = {};
 rer.test_lrt = {};
 
-for (i = 0; i < 4; i+=1) {
-    for (j = i+1; j < 4; j+=1) {
+
+for (i = 0; i < rer.model_count ; i+=1) {
+    for (j = i+1; j < rer.model_count ; j+=1) {
         rer.lrt = math.DoLRT ((rer.fit_results[i])[0],(rer.fit_results[j])[0],(rer.fit_results[j])[1]-(rer.fit_results[i])[1]);
         rer.test_matrix[rer.hierarchy[i] + ":" + rer.hierarchy[j]] = rer.lrt[terms.p_value];
         rer.test_lrt[rer.hierarchy[i] + ":" + rer.hierarchy[j]] = rer.lrt[terms.LRT]; 
     }
 }   
+
+
 
 rer.test_matrix_corrected = math.HolmBonferroniCorrection(rer.test_matrix);
 rer.json [terms.json.test_results] = {};
@@ -548,12 +691,12 @@ rer.print_row = {
              
 rer.print_row [0] = "";   
 
-for (i = 0; i < 3; i+=1) {
+for (i = 0; i < rer.model_count - 1; i+=1) {
     rer.print_row [0] = rer.hierarchy[i];
     for (j = 1; j <= i; j+=1) {
         rer.print_row [j] = "N/A";
     }
-    for (j = i+1; j < 4; j+=1) {
+    for (j = i+1; j < rer.model_count ; j+=1) {
         rer.key = rer.hierarchy[i] + ":" + rer.hierarchy[j];
         rer.print_row [j] = Format (rer.test_matrix_corrected[rer.key], 8, 7) + " (" + Format (rer.test_matrix[rer.key], 6, 5) + ")";
     }
