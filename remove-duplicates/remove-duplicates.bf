@@ -94,7 +94,9 @@ if (filter.tree != "None") {
         }
     }
 
-    T - utility.Keys(filter.delete_leaves);
+    if (utility.Array1D (filter.delete_leaves)) {
+        T - utility.Keys(filter.delete_leaves);
+    }
     utility.SetEnvVariable ("DATAFILE_TREE", Format (T,1,1));
     utility.SetEnvVariable ("IS_TREE_PRESENT_IN_DATA", TRUE);
 }

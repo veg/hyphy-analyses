@@ -14,6 +14,9 @@ if (Abs (simulator.has_nn) == 0 ) {
 
     KeywordArgument  ("mss-reference-rate", "The reference rate (set to 1)");
     mss.options = model.GetLocalParameters_RegExp (simulator.model, "codon class");
+    
+    console.log (mss.options);
+    
     simulator.model[utility.getGlobalValue("terms.model.MSS.neutral")]  = io.SelectAnOption (mss.options, "The reference rate (set to 1)");
     //console.log (simulator.model[utility.getGlobalValue("terms.model.MSS.neutral")] );
 }
