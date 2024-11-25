@@ -68,10 +68,11 @@ namespace fitter {
 }
 
 
+
 io.ReportProgressMessageMD ("fitter", fitter.model_name,  "Fitting `fitter.model_name`");
 selection.io.startTimer (fitter.json [terms.json.timers], fitter.model_name , fitter.display_order [fitter.terms.codon_model ]);
 
-
+fitter.model_type = terms.global;
 
 fitter.results =  estimators.FitCodonModel (fitter.filter_names, fitter.trees, fitter.model_generator, fitter.codon_data_info [utility.getGlobalValue("terms.code")],
     {
@@ -151,7 +152,7 @@ for (fitter.var; in; fitter.globals) {
     
     ExecuteCommands ('
         KeywordArgument  ("`fitter.param.desc`", "Point hypothesis LRT (set null value, or null to skip) ", "null");
-        fitter.use_this_value = io.PromptUserForString ("Point hypothesis LRT (set null value, or null to skip");
+        fitter.use_this_value = io.PromptUserForString ("Point hypothesis LRT (set parameter value for the null, or enter \\\" null\\\" to skip)");
         
     ');
     
