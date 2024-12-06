@@ -16,8 +16,8 @@ utility.SetEnvVariable ("NORMALIZE_SEQUENCE_NAMES", TRUE);
 
 fitter.analysis_description = {terms.io.info : "Fit an MG94xREV model with several selectable options frequency estimator and 
 report the fit results including dN/dS ratios, and synonymous and non-synonymous branch lengths. v0.2 adds LRT test for dN/dS != 1. 
-v0.3 adds LRT test support for dN/dS != 1 for local models",
-                               terms.io.version : "0.3",
+v0.3 adds LRT test support for dN/dS != 1 for local models. v0.4 adds the lineage option",
+                               terms.io.version : "0.4",
                                terms.io.authors : "Sergei L Kosakovsky Pond",
                                terms.io.contact : "spond@temple.edu",
                                terms.io.requirements : "in-frame codon alignment and a phylogenetic tree"
@@ -34,6 +34,8 @@ namespace fitter.terms {
 terms.fitter.ci = "Confidence Intervals";
 terms.fitter.lrt = "LRT";
 terms.fitter.partitioned = "partitioned";
+terms.fitter.lineage = "lineage";
+terms.fitter.MLE = "Lineage dN/dS";
 
  
 KeywordArgument ("rooted", "Accept rooted trees", "No");
@@ -67,7 +69,12 @@ if (fitter.accept_rooted_trees == "Yes") {
     utility.SetEnvVariable ("ACCEPT_ROOTED_TREES", TRUE);
 }
 
-fitter.model_type = io.SelectAnOption ({terms.global : "Shared dN/dS for all branches", terms.local : "Each branch has its own dN and dS", terms.fitter.partitioned : "Each branch partition has its own dN/dS"}, "Model Type");
+fitter.model_type = io.SelectAnOption ({
+    terms.global : "Shared dN/dS for all branches", 
+    terms.local : "Each branch has its own dN and dS", 
+    terms.fitter.partitioned : "Each branch partition has its own dN/dS",
+    terms.fitter.lineage : "Iterate over lineages (root-to-tip) for each tip, and estimate the dN/dS shared by lineage branches. Other branches have separate (nuisance) dN/dS values"}, 
+"Model Type");
 
 
 namespace fitter {
@@ -79,7 +86,6 @@ namespace fitter {
         load_file ({utility.getGlobalValue("terms.prefix"): "fitter", 
             utility.getGlobalValue("terms.settings") : {utility.getGlobalValue("terms.settings.branch_selector") : "selection.io.SelectAllBranches"}});
     }
-
 }
 
 
@@ -126,15 +132,20 @@ if (fitter.model_type == terms.fitter.partitioned) {
         fitter.gtr_results);
         
 } else {
+    
+    fitter.mta = fitter.model_type;
+    if (fitter.model_type == terms.fitter.lineage) {
+        fitter.mta = terms.local;
+    }
+    
     fitter.results =  estimators.FitCodonModel (fitter.filter_names, fitter.trees, "fitter.defineMG", fitter.codon_data_info [utility.getGlobalValue("terms.code")],
         {
-            terms.run_options.model_type: fitter.model_type,
+            terms.run_options.model_type: fitter.mta,
             terms.run_options.retain_lf_object: TRUE,
             terms.run_options.retain_model_object : TRUE
         }, 
         fitter.gtr_results);
 }
-
 
 io.ReportProgressMessageMD("fitter", fitter.terms.MG94 , "* " + selection.io.report_fit (fitter.results, 0, fitter.codon_data_info[terms.data.sample_size]));
 fitter.global_dnds = selection.io.extract_global_MLE_re (fitter.results, terms.parameters.omega_ratio);
@@ -162,6 +173,26 @@ for (_value_; in; fitter.global_dnds) {
         };
 }
 
+function fitter.correct_p_values () {
+   fitter.corrected = (math.HolmBonferroniCorrection (
+        utility.Map (fitter.lrt, "_value_", "_value_[terms.p_value]")
+    ));
+
+    fitter.fdr = (math.BenjaminiHochbergFDR (
+        utility.Map (fitter.lrt, "_value_", "_value_[terms.p_value]")
+    ));
+    
+    for (i,v; in; fitter.lrt) {
+        v [terms.json.corrected_pvalue] = fitter.corrected[i];
+        v ["FDR"] = fitter.fdr[i];
+    }
+        
+    selection.io.json_store_branch_attribute(fitter.json, terms.fitter.lrt , terms.json.branch_attributes, fitter.display_orders[fitter.terms.MG94 ] + 4,
+                                             "0",
+                                             fitter.lrt);
+}
+
+
 if (fitter.model_type == terms.local) {
 
     fitter.table_screen_output  = {"0" : "Branch", "1" : "Length" , "2": "dN/dS", "3" : "Approximate dN/dS CI"};
@@ -177,7 +208,7 @@ if (fitter.model_type == terms.local) {
 	fitter.table_output_options = {terms.table_options.header : TRUE, 
                             terms.table_options.minimum_column_width: 16,
                             terms.table_options.column_widths: {
-                                    "0" : 30,
+                                    "0" : 50,
                                     "1" : 10,
                                     "2" : 10,
                                     "3" : 20,
@@ -253,29 +284,130 @@ if (fitter.model_type == terms.local) {
                                              fitter.ci);
                         
     if (fitter.compute_lrt) {
-    
-        fitter.corrected = (math.HolmBonferroniCorrection (
-            utility.Map (fitter.lrt, "_value_", "_value_[terms.p_value]")
-        ));
-
-        fitter.fdr = (math.BenjaminiHochbergFDR (
-            utility.Map (fitter.lrt, "_value_", "_value_[terms.p_value]")
-        ));
-        
-        for (i,v; in; fitter.lrt) {
-            v [terms.json.corrected_pvalue] = fitter.corrected[i];
-            v ["FDR"] = fitter.fdr[i];
-        }
-            
-        selection.io.json_store_branch_attribute(fitter.json, terms.fitter.lrt , terms.json.branch_attributes, fitter.display_orders[fitter.terms.MG94 ] + 4,
-                                                 "0",
-                                                 fitter.lrt);
+        fitter.correct_p_values ();
     }
                                             
 }
 
+if (fitter.model_type == terms.fitter.lineage) {
 
-if (fitter.compute_lrt && fitter.model_type != terms.local) {
+    fitter.table_screen_output  = {"0" : "Lineage", "1" : "Root-to-tip" , "2": "dN/dS", "3" : "Approximate dN/dS CI"};
+
+    if (^"fitter.compute_lrt") {
+        io.ReportProgressMessageMD("fitter", "LRT", "Running the likelihood ratio tests for dN/dS=1 and estimating confidence intervals for dN/dS along each lineage");
+        fitter.table_screen_output + "LRT p-value dN != dS";
+	} else {
+        io.ReportProgressMessageMD("fitter", "LRT", "Estimating confidence intervals for dN/dS along each lineage");	
+	}
+	
+	fitter.table_output_options = {terms.table_options.header : TRUE, 
+                            terms.table_options.minimum_column_width: 16,
+                            terms.table_options.column_widths: {
+                                    "0" : 50,
+                                    "1" : 10,
+                                    "2" : 10,
+                                    "3" : 20,
+                                    "4" : 12}, 
+                            terms.table_options.align : "center"};
+                            
+     fprintf (stdout, "\n",
+                    io.FormatTableRow (fitter.table_screen_output,fitter.table_output_options));
+                    
+    fitter.table_output_options [terms.table_options.header] = FALSE;            
+    fitter.ci = {};
+    fitter.lrt = {};
+    fitter.MLE = {};
+    fitter.lf_name = (^"fitter.results")[^"terms.likelihood_function"];
+    fitter.save_lf = estimators.TakeLFStateSnapshot(fitter.lf_name);
+    global fitter.lineage_omega = 1;
+              
+    
+    GetString(fitter.lf_info, ^ fitter.lf_name, -1);
+    fitter.tree_id = (fitter.lf_info[utility.getGlobalValue ("terms.fit.trees")])[0];
+    fitter.parent_map = trees.ParentMap (fitter.tree_id);
+    
+    
+    lfunction fitter.lineage_path (tree_name, node_name, model_description, ignore) {
+          
+        alphaName = tree_name + "." + node_name + "." + (model_description [utility.getGlobalValue ("terms.local")])[utility.getGlobalValue ("terms.parameters.synonymous_rate")];
+        betaName = tree_name + "." + node_name + "." + (model_description [utility.getGlobalValue ("terms.local")])[utility.getGlobalValue ("terms.parameters.nonsynonymous_rate")];
+        if ((^"fitter.path_to_root")[node_name]) {
+            saveAlpha = ^alphaName;
+            saveBeta = ^betaName;
+                        
+            parameters.SetConstraint (betaName, "fitter.lineage_omega*" + alphaName, "");
+            
+        }
+    }
+    
+    fitter.ci_spec = {"fitter.lineage_omega" : 1};
+ 
+    
+    function fitter.lrt_lineage_omega (set) {
+        if (set) {
+            fitter.SetToOne.stash = fitter.lineage_omega;
+            parameters.SetConstraint ("fitter.lineage_omega", "1", "");
+
+        } else {
+            parameters.SetValue ("fitter.lineage_omega", fitter.SetToOne.stash);
+        }
+        return 1;
+    }
+    
+    for (n; in; TipName(^fitter.tree_id, -1) ) {
+        fitter.path_to_root = {};
+        fitter.path_to_root [n] = 1;
+        fitter.p = fitter.parent_map[n];
+        fitter.ll = (((fitter.results[terms.branch_length])["0"])[n])[terms.fit.MLE];
+        while (Abs (fitter.p)) {
+            fitter.ll += (((fitter.results[terms.branch_length])["0"])[fitter.p])[terms.fit.MLE];
+            fitter.path_to_root [fitter.p] = 1;
+            fitter.p = fitter.parent_map[fitter.p];
+        }
+        fitter.path_mean = 1;
+        estimators.TraverseLocalParameters (fitter.lf_name, fitter.results[utility.getGlobalValue("terms.model")], "fitter.lineage_path");
+        Optimize (res, ^fitter.lf_name);
+        
+        
+
+        report_row = {};
+        report_row + n;
+        report_row + Format (fitter.ll, 0, 3);
+        report_row + Format (fitter.lineage_omega,0,3);
+        fitter.MLE [n] = fitter.lineage_omega;
+        
+        fitter.ci[n] = parameters.GetProfileCI(fitter.ci_spec,fitter.lf_name, 0.95);
+
+        report_row + (Format ((fitter.ci[n])[terms.lower_bound], 0, 3) + " - " + Format ((fitter.ci[n])[terms.upper_bound], 0, 3));
+        
+        if (fitter.compute_lrt) {
+            local.lrt = estimators.ConstrainAndRunLRT (fitter.lf_name, "fitter.lrt_lineage_omega");
+            report_row + Format (local.lrt[terms.p_value], 0, 4);
+            fitter.lrt[n] = local.lrt;
+        }         
+
+        fprintf (stdout, io.FormatTableRow (report_row,^"fitter.table_output_options"));    
+
+        estimators.RestoreLFStateFromSnapshot (fitter.lf_name, fitter.save_lf);
+    }
+    
+    selection.io.json_store_branch_attribute(fitter.json, terms.fitter.ci , terms.json.branch_attributes, fitter.display_orders[fitter.terms.MG94 ] + 3,
+                                         "0",
+                                         fitter.ci);
+
+    selection.io.json_store_branch_attribute(fitter.json, terms.fitter.MLE , terms.json.branch_attributes, fitter.display_orders[fitter.terms.MG94 ] + 4,
+                                         "0",
+                                         fitter.MLE);
+
+
+    if (fitter.compute_lrt) {
+        fitter.correct_p_values ();
+    }
+
+}
+
+
+if (fitter.compute_lrt && fitter.model_type != terms.local && fitter.model_type != terms.fitter.lineage) {
     selection.io.startTimer (fitter.json [terms.json.timers], fitter.terms.LRT , fitter.display_orders [fitter.terms.LRT ]);
     io.ReportProgressMessageMD("fitter", "LRT", "Running the likelihood ratio tests for dN/dS=1");
 
