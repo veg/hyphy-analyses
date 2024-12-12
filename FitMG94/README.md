@@ -151,10 +151,10 @@ tree [conditionally required]
 
 type
 	Model type: 
- * global (single dN/dS for all branches)
- * local (separate dN/dS)
- * partitioned (separate dN/dS for user-defined groups)
- * lineage (dN/dS for user-selected lineage)
+ - global (single dN/dS for all branches)
+ - local (separate dN/dS)
+ - partitioned (separate dN/dS for user-defined groups)
+ - lineage (dN/dS for user-selected lineage)
 	default value: terms.global [computed at run time]
 	applies to: Model Type
 
