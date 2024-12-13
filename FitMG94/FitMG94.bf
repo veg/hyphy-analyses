@@ -39,7 +39,11 @@ terms.fitter.MLE = "Lineage dN/dS";
 
  
 KeywordArgument ("rooted", "Accept rooted trees", "No");
-KeywordArgument ("type",        "Model type: global (single dN/dS for all branches) or local (separate dN/dS)", terms.global, "Model Type");
+KeywordArgument ("type", "Model type: 
+        - global (single dN/dS for all branches) 
+        - local (separate dN/dS) 
+        - partitioned (separate dN/dS for user-defined groups)
+        - lineage (separate dN/dS for each tip's lineage)", terms.global, "Model Type");
 KeywordArgument ("code",        "Which genetic code should be used", "Universal");  
 KeywordArgument ("alignment",   "An in-frame codon alignment in one of the formats supported by HyPhy");
 KeywordArgument ("tree",        "A phylogenetic tree", null, "Please select a tree file for the data:");
@@ -93,7 +97,7 @@ fitter.frequency_type = io.SelectAnOption ({"CF3x4" : terms.frequencies.CF3x4,
                                             "F3x4" : terms.frequencies.F3x4,
                                             "F1x4" : terms.frequencies.F1x4}, "Equilibrium frequency estimator");
 
-KeywordArgument ("lrt",         "Perform LRT to test which for dN/dS == 1 (global model only)", "No");
+KeywordArgument ("lrt",         "Perform LRT to test which for dN/dS == 1", "No");
 fitter.compute_lrt = io.SelectAnOption ({"No"  : "Do not perform LRT",
                                         "Yes" : "Perform LRT to test omega == 1"}, "Perform LRT to test omega != 1") != "No";
 

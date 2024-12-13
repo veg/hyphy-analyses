@@ -150,7 +150,11 @@ tree [conditionally required]
 	applies to: Please select a tree file for the data:
 
 type
-	Model type: global (single dN/dS for all branches) or local (separate dN/dS)
+	Model type: 
+ - global (single dN/dS for all branches)
+ - local (separate dN/dS)
+ - partitioned (separate dN/dS for user-defined groups)
+ - lineage (dN/dS for user-selected lineage)
 	default value: terms.global [computed at run time]
 	applies to: Model Type
 
@@ -159,7 +163,7 @@ frequencies
 	default value: CF3x4
 
 lrt
-	Perform LRT to test which for dN/dS == 1 (global model only)
+	Perform LRT to test which for dN/dS == 1
 	default value: No
 
 output
@@ -175,6 +179,8 @@ save-fit
 
 * `global` : dN/dS ratio is shared by all branches
 * `local` : synonymous and non-synonymous rates are inferred separately for each branch
+* `partitioned` : dN/dS is inferred separately in each of several groups, as annotated in tree file input
+* `lineage` : dN/dS ratio is estimated separately for each root-to-tip lineage
 
 ### Frequencies
 
