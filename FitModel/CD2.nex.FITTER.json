@@ -9,23 +9,23 @@
  "branch attributes":{
    "0":{
      "BABOON":{
-       "Nucleotide GTR":0.001678689767869871,
+       "Nucleotide GTR":0.001678803885968513,
        "original name":"BABOON"
       },
      "CAT":{
-       "Nucleotide GTR":0.2660234833648666,
+       "Nucleotide GTR":0.265938714048058,
        "original name":"CAT"
       },
      "CHIMP":{
-       "Nucleotide GTR":0.001819837918680059,
+       "Nucleotide GTR":0.001818022637861297,
        "original name":"CHIMP"
       },
      "COW":{
-       "Nucleotide GTR":0.2479016419239061,
+       "Nucleotide GTR":0.2481545605131824,
        "original name":"COW"
       },
      "HORSE":{
-       "Nucleotide GTR":0.2090842764618991,
+       "Nucleotide GTR":0.2092590347900627,
        "original name":"HORSE"
       },
      "HUMAN":{
@@ -33,37 +33,37 @@
        "original name":"HUMAN"
       },
      "MOUSE":{
-       "Nucleotide GTR":0.1181062889108754,
+       "Nucleotide GTR":0.1181131542662479,
        "original name":"MOUSE"
       },
      "Node10":{
-       "Nucleotide GTR":0.1062758888960853
+       "Nucleotide GTR":0.1062574133768877
       },
      "Node11":{
-       "Nucleotide GTR":0.02567013851859819
+       "Nucleotide GTR":0.02566559690226634
       },
      "Node14":{
-       "Nucleotide GTR":0.01785076947403866
+       "Nucleotide GTR":0.01784446327383793
       },
      "Node3":{
-       "Nucleotide GTR":0.2766782849165396
+       "Nucleotide GTR":0.2766405037347265
       },
      "Node4":{
-       "Nucleotide GTR":0.06615074151970557
+       "Nucleotide GTR":0.06614904047771765
       },
      "Node5":{
-       "Nucleotide GTR":0.09884569148885179
+       "Nucleotide GTR":0.09875313774113872
       },
      "PIG":{
-       "Nucleotide GTR":0.1870659600731556,
+       "Nucleotide GTR":0.1871048543315428,
        "original name":"PIG"
       },
      "RAT":{
-       "Nucleotide GTR":0.06657075189171403,
+       "Nucleotide GTR":0.06653813469113982,
        "original name":"RAT"
       },
      "RHMONKEY":{
-       "Nucleotide GTR":0.003779289843443009,
+       "Nucleotide GTR":0.003775507269463882,
        "original name":"RHMONKEY"
       }
     },
@@ -88,38 +88,36 @@
   },
  "fits":{
    "Codon model":{
-     "AIC-c":6996.836696932381,
-     "Log Likelihood":-3464.807237355079,
+     "AIC-c":6997.080265975003,
+     "Log Likelihood":-3467.000415903715,
      "Rate Distributions":{
-       "Substitution rate from nucleotide A to nucleotide C":0.5704797281743692,
+       "Substitution rate from nucleotide A to nucleotide C":0.5790497882589283,
        "Substitution rate from nucleotide A to nucleotide G":1,
-       "Substitution rate from nucleotide A to nucleotide T":0.2621324703361643,
-       "Substitution rate from nucleotide C to nucleotide G":0.4983695387895935,
-       "Substitution rate from nucleotide C to nucleotide T":0.9447835723652338,
-       "Substitution rate from nucleotide G to nucleotide T":0.3219488546827544,
-       "non-synonymous/synonymous rate ratio":1.017807754890881,
-       "synonymous rate between codon classes NEUTRAL and SELECTED":0.7860649326552118,
-       "synonymous rate within codon class SELECTED":1.214392868289977
+       "Substitution rate from nucleotide A to nucleotide T":0.2661068830599754,
+       "Substitution rate from nucleotide C to nucleotide G":0.4753628151849472,
+       "Substitution rate from nucleotide C to nucleotide T":0.9805424628978331,
+       "Substitution rate from nucleotide G to nucleotide T":0.3176106370274109,
+       "non-synonymous/synonymous rate ratio":0.9950884360853145
       },
      "display order":1,
-     "estimated parameters":33
+     "estimated parameters":31
     },
    "Nucleotide GTR":{
-     "AIC-c":7112.857241163456,
+     "AIC-c":7112.857389397052,
      "Equilibrium frequencies":      [
 [0.3592490842490842],
       [0.181959706959707],
       [0.240018315018315],
       [0.2187728937728937] 
       ],
-     "Log Likelihood":-3532.321189964002,
+     "Log Likelihood":-3532.3212640808,
      "Rate Distributions":{
-       "Substitution rate from nucleotide A to nucleotide C":0.5501273431826821,
+       "Substitution rate from nucleotide A to nucleotide C":0.5501142897985957,
        "Substitution rate from nucleotide A to nucleotide G":1,
-       "Substitution rate from nucleotide A to nucleotide T":0.2649815519629857,
-       "Substitution rate from nucleotide C to nucleotide G":0.4925166734464869,
-       "Substitution rate from nucleotide C to nucleotide T":1.029471660576546,
-       "Substitution rate from nucleotide G to nucleotide T":0.3049599337752456
+       "Substitution rate from nucleotide A to nucleotide T":0.2646783533311024,
+       "Substitution rate from nucleotide C to nucleotide G":0.4919622883635575,
+       "Substitution rate from nucleotide C to nucleotide T":1.029261467789544,
+       "Substitution rate from nucleotide G to nucleotide T":0.3044891545412146
       },
      "display order":0,
      "estimated parameters":24
@@ -134,6 +132,7 @@
      "0":"((((PIG:0.147969,COW:0.21343)Node5:0.08509899999999999,HORSE:0.165787,CAT:0.264806)Node4:0.058611,((RHMONKEY:0.002015,BABOON:0.003108)Node11:0.022733,(HUMAN:0.004349,CHIMP:0.000799)Node14:0.011873)Node10:0.101856)Node3:0.340802,RAT:0.050958,MOUSE:0.09795)"
     }
   },
+ "test results":0,
  "tested":{
    "0":{
      "BABOON":"test",
@@ -155,13 +154,13 @@
     }
   },
  "timers":{
-   "MSS":{
+   "MG_REV":{
      "order":null,
-     "timer":0
+     "timer":1
     },
    "Overall":{
      "order":0,
-     "timer":0
+     "timer":1
     }
   }
 }

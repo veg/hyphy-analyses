@@ -83,7 +83,8 @@ if (filter.tree != "None") {
     for (n; in; alignments.GetSequenceNames ("filter.datafilter.unique")) {
         filter.valid_names [n] = TRUE;
     }
-
+    
+    filter.existing = filter.tree [terms.trees.model_map];
 
     filter.delete_leaves = {};
     for (k, s; in; filter.tree[terms.trees.partitioned]) {
@@ -97,7 +98,18 @@ if (filter.tree != "None") {
     if (utility.Array1D (filter.delete_leaves)) {
         T - utility.Keys(filter.delete_leaves);
     }
-    utility.SetEnvVariable ("DATAFILE_TREE", Format (T,1,1));
+    
+    function relabel_and_annotate (node_name) {
+        _label = "";
+        if (Abs(filter.existing [node_name]) > 0 ) {
+            _label = "{" + filter.existing [node_name] + "}";
+        } 
+        return node_name + _label;
+    }
+    
+    filter.tree_string = tree.Annotate ("T", "relabel_and_annotate", "{}", TRUE);
+    
+    utility.SetEnvVariable ("DATAFILE_TREE", filter.tree_string);
     utility.SetEnvVariable ("IS_TREE_PRESENT_IN_DATA", TRUE);
 }
 
