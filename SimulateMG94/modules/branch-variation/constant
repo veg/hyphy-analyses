@@ -13,12 +13,6 @@ lfunction simulator.set_branch_rates (model, tree_id, branch_id, branch_info) {
                               
                         
     estimators.applyBranchLength (tree_id, branch_id, model, branch_info[^"terms.branch_length"]);    
-    /*console.log ("\n\n");
-    console.log (branch_info[^"terms.branch_length"]);
-    for (k; in; rates) {
-        console.log ("`tree_id`.`branch_id`.`k`");
-        console.log (Eval ("`tree_id`.`branch_id`.`k`"));
-    }*/
 }
 
 lfunction simulator.validate_tree (tree) {

@@ -9,61 +9,61 @@
  "branch attributes":{
    "0":{
      "BABOON":{
-       "Nucleotide GTR":0.001678689767869871,
+       "Nucleotide GTR":0.001679876261269154,
        "original name":"BABOON"
       },
      "CAT":{
-       "Nucleotide GTR":0.2660234833648666,
+       "Nucleotide GTR":0.2660312106095737,
        "original name":"CAT"
       },
      "CHIMP":{
-       "Nucleotide GTR":0.001819837918680059,
+       "Nucleotide GTR":0.001818471496528286,
        "original name":"CHIMP"
       },
      "COW":{
-       "Nucleotide GTR":0.2479016419239061,
+       "Nucleotide GTR":0.248143539642198,
        "original name":"COW"
       },
      "HORSE":{
-       "Nucleotide GTR":0.2090842764618991,
+       "Nucleotide GTR":0.2089546295462907,
        "original name":"HORSE"
       },
      "HUMAN":{
-       "Nucleotide GTR":0,
+       "Nucleotide GTR":1e-06,
        "original name":"HUMAN"
       },
      "MOUSE":{
-       "Nucleotide GTR":0.1181062889108754,
+       "Nucleotide GTR":0.1180589603238226,
        "original name":"MOUSE"
       },
      "Node10":{
-       "Nucleotide GTR":0.1062758888960853
+       "Nucleotide GTR":0.1062826876764255
       },
      "Node11":{
-       "Nucleotide GTR":0.02567013851859819
+       "Nucleotide GTR":0.02565739198451904
       },
      "Node14":{
-       "Nucleotide GTR":0.01785076947403866
+       "Nucleotide GTR":0.01785682348852619
       },
      "Node3":{
-       "Nucleotide GTR":0.2766782849165396
+       "Nucleotide GTR":0.2770341391534747
       },
      "Node4":{
-       "Nucleotide GTR":0.06615074151970557
+       "Nucleotide GTR":0.06607279692833373
       },
      "Node5":{
-       "Nucleotide GTR":0.09884569148885179
+       "Nucleotide GTR":0.09879574783099274
       },
      "PIG":{
-       "Nucleotide GTR":0.1870659600731556,
+       "Nucleotide GTR":0.1872707853438422,
        "original name":"PIG"
       },
      "RAT":{
-       "Nucleotide GTR":0.06657075189171403,
+       "Nucleotide GTR":0.06651898513411425,
        "original name":"RAT"
       },
      "RHMONKEY":{
-       "Nucleotide GTR":0.003779289843443009,
+       "Nucleotide GTR":0.003775683010867861,
        "original name":"RHMONKEY"
       }
     },
@@ -88,38 +88,72 @@
   },
  "fits":{
    "Codon model":{
-     "AIC-c":6996.836696932381,
-     "Log Likelihood":-3464.807237355079,
+     "AIC-c":6996.575339974827,
+     "Log Likelihood":-3447.94151614126,
      "Rate Distributions":{
-       "Substitution rate from nucleotide A to nucleotide C":0.5704797281743692,
+       "Mean scaler variable for synonymous rate within codon class A":1.905260865310157,
+       "Mean scaler variable for synonymous rate within codon class C":2.28047382376508,
+       "Mean scaler variable for synonymous rate within codon class D":1.501239094826865,
+       "Mean scaler variable for synonymous rate within codon class E":1.46630329884492,
+       "Mean scaler variable for synonymous rate within codon class F":1.235059585587093,
+       "Mean scaler variable for synonymous rate within codon class G":0.6999752293588287,
+       "Mean scaler variable for synonymous rate within codon class H":0,
+       "Mean scaler variable for synonymous rate within codon class I":0.4548184172074931,
+       "Mean scaler variable for synonymous rate within codon class K":1.077206672821988,
+       "Mean scaler variable for synonymous rate within codon class L":0.4672689332335731,
+       "Mean scaler variable for synonymous rate within codon class N":1.101940944884531,
+       "Mean scaler variable for synonymous rate within codon class P":0.956821533804929,
+       "Mean scaler variable for synonymous rate within codon class Q":0.05603373632227458,
+       "Mean scaler variable for synonymous rate within codon class R":0.5269215288956743,
+       "Mean scaler variable for synonymous rate within codon class S":0.9277591279426198,
+       "Mean scaler variable for synonymous rate within codon class T":0.6598326222071255,
+       "Mean scaler variable for synonymous rate within codon class V":0.7869531953961034,
+       "Mean scaler variable for synonymous rate within codon class Y":3.73471084274221,
+       "Substitution rate from nucleotide A to nucleotide C":0.5844942637033317,
        "Substitution rate from nucleotide A to nucleotide G":1,
-       "Substitution rate from nucleotide A to nucleotide T":0.2621324703361643,
-       "Substitution rate from nucleotide C to nucleotide G":0.4983695387895935,
-       "Substitution rate from nucleotide C to nucleotide T":0.9447835723652338,
-       "Substitution rate from nucleotide G to nucleotide T":0.3219488546827544,
-       "non-synonymous/synonymous rate ratio":1.017807754890881,
-       "synonymous rate between codon classes NEUTRAL and SELECTED":0.7860649326552118,
-       "synonymous rate within codon class SELECTED":1.214392868289977
+       "Substitution rate from nucleotide A to nucleotide T":0.2605418469674134,
+       "Substitution rate from nucleotide C to nucleotide G":0.4837827889667242,
+       "Substitution rate from nucleotide C to nucleotide T":0.8890714913213003,
+       "Substitution rate from nucleotide G to nucleotide T":0.331108103625085,
+       "non-synonymous/synonymous rate ratio":0.7795686796481953,
+       "synonymous rate within codon class A":1.728687059301262,
+       "synonymous rate within codon class C":2.069126417277355,
+       "synonymous rate within codon class D":1.362108802734408,
+       "synonymous rate within codon class E":1.330410750504407,
+       "synonymous rate within codon class F":1.120598004159826,
+       "synonymous rate within codon class G":0.6351036453095139,
+       "synonymous rate within codon class H":0,
+       "synonymous rate within codon class I":0.412667223934442,
+       "synonymous rate within codon class K":0.9773744212172224,
+       "synonymous rate within codon class L":0.4239638638475301,
+       "synonymous rate within codon class N":0.9998163958645071,
+       "synonymous rate within codon class P":0.8681462122406547,
+       "synonymous rate within codon class Q":0.05084069936472795,
+       "synonymous rate within codon class R":0.478088037629905,
+       "synonymous rate within codon class S":0.8417772221243556,
+       "synonymous rate within codon class T":0.598681333397666,
+       "synonymous rate within codon class V":0.7140207569085624,
+       "synonymous rate within codon class Y":3.388589154183656
       },
      "display order":1,
-     "estimated parameters":33
+     "estimated parameters":49
     },
    "Nucleotide GTR":{
-     "AIC-c":7112.857241163456,
+     "AIC-c":7112.857455735526,
      "Equilibrium frequencies":      [
 [0.3592490842490842],
       [0.181959706959707],
       [0.240018315018315],
       [0.2187728937728937] 
       ],
-     "Log Likelihood":-3532.321189964002,
+     "Log Likelihood":-3532.321297250037,
      "Rate Distributions":{
-       "Substitution rate from nucleotide A to nucleotide C":0.5501273431826821,
+       "Substitution rate from nucleotide A to nucleotide C":0.5497944655501614,
        "Substitution rate from nucleotide A to nucleotide G":1,
-       "Substitution rate from nucleotide A to nucleotide T":0.2649815519629857,
-       "Substitution rate from nucleotide C to nucleotide G":0.4925166734464869,
-       "Substitution rate from nucleotide C to nucleotide T":1.029471660576546,
-       "Substitution rate from nucleotide G to nucleotide T":0.3049599337752456
+       "Substitution rate from nucleotide A to nucleotide T":0.2646139411158535,
+       "Substitution rate from nucleotide C to nucleotide G":0.4924001355407312,
+       "Substitution rate from nucleotide C to nucleotide T":1.029386134543796,
+       "Substitution rate from nucleotide G to nucleotide T":0.3050355619772057
       },
      "display order":0,
      "estimated parameters":24
@@ -134,6 +168,7 @@
      "0":"((((PIG:0.147969,COW:0.21343)Node5:0.08509899999999999,HORSE:0.165787,CAT:0.264806)Node4:0.058611,((RHMONKEY:0.002015,BABOON:0.003108)Node11:0.022733,(HUMAN:0.004349,CHIMP:0.000799)Node14:0.011873)Node10:0.101856)Node3:0.340802,RAT:0.050958,MOUSE:0.09795)"
     }
   },
+ "test results":0,
  "tested":{
    "0":{
      "BABOON":"test",
@@ -157,11 +192,11 @@
  "timers":{
    "MSS":{
      "order":null,
-     "timer":0
+     "timer":3
     },
    "Overall":{
      "order":0,
-     "timer":0
+     "timer":3
     }
   }
 }
