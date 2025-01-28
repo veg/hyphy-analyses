@@ -48,35 +48,40 @@ if (None != info[terms.data.name_mapping]) {
 KeywordArgument                     ("tree", "The tree");
 SetDialogPrompt                     ("The tree");
 
-fscanf (PROMPT_FOR_FILE, "Raw", T);
+fscanf (PROMPT_FOR_FILE, "Raw", match.tree_string);
+match.tree  = trees.LoadAnnotatedTopology (match.tree_string);
+Topology T = match.tree[terms.trees.newick_with_lengths];
 
-ExecuteCommands ("Topology T = " + T);
+
+//ExecuteCommands ("Topology T = " + T);
 
 io.CheckAssertion("info[terms.data.sequences]==TipCount(T)", "The number of tips in the tree does not match the number of sequences in the alignment");
-
+match.existing = match.tree [terms.trees.model_map];
 
 KeywordArgument  ("regexp", "Use the following pattern to match sequences and tree labels","^(.+)$");
 match.regexp    = io.PromptUserForString ("Use the following regular expression to select a subset of leaves");
 match.sequences = {};
 
 for (original,renamed; in;name_mapping) {
+
     match.me = regexp.FindSubexpressions (original,match.regexp);
-    io.CheckAssertion("None!=match.me", "Could not match pattern for sequence name `v`");
-    io.CheckAssertion("Abs (match.me) == 2", "Could not extract subexpression match pattern for sequence name `v`");
-    io.CheckAssertion("match.sequences/match.me[1] == 0", "Duplicate match pattern for sequence `v`");
+    io.CheckAssertion("None!=match.me", "Could not match pattern for sequence name `original`");
+    io.CheckAssertion("Abs (match.me) == 2", "Could not extract subexpression match pattern for sequence name `original`");
+    io.CheckAssertion("match.sequences/match.me[1] == 0", "Duplicate match pattern for sequence `original`");
     match.sequences[match.me[1]] = renamed;
 }
-
 
 theAVL = T^0;
 _ost = "";
 _ost * 256;
+
 
 lastLevel = 0;
 treeSize  = Abs(theAVL);
 treeInfo  = theAVL[0];
 rootIndex = treeInfo["Root"];
 lastDepth = 0;
+
 
 for (nodeIndex = 1; nodeIndex < treeSize; nodeIndex += 1) {
     nodeInfo = theAVL[nodeIndex];
@@ -110,6 +115,12 @@ for (nodeIndex = 1; nodeIndex < treeSize; nodeIndex += 1) {
     }
     
     if (nodeIndex < treeSize - 1) {
+        if (Abs (match.existing[nodeInfo["Name"]]) > 0) {
+            _ost * '{';
+            _ost * match.existing[nodeInfo["Name"]];
+            _ost * '}';
+            
+        }
         _ost * ":";
         _ost * (""+nodeInfo ["Length"]);
         
@@ -118,6 +129,9 @@ for (nodeIndex = 1; nodeIndex < treeSize; nodeIndex += 1) {
 }
 
 _ost * 0;
+
+Tree T = _ost;
+
 utility.SetEnvVariable ("DATAFILE_TREE", _ost);
 utility.SetEnvVariable ("IS_TREE_PRESENT_IN_DATA", TRUE);
 

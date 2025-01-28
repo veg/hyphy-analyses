@@ -79,6 +79,12 @@ fitter.results =  estimators.FitCodonModel (fitter.filter_names, fitter.trees, f
         terms.run_options.model_type: fitter.model_type,
         terms.run_options.retain_lf_object: TRUE,
         terms.run_options.retain_model_object : TRUE
+        /*,
+        terms.run_options.optimization_settings : 
+        {
+            "OPTIMIZATION_METHOD" : "gradient-descent",
+            "MAXIMUM_OPTIMIZATION_ITERATIONS" : 500
+        }*/
     }, 
     fitter.gtr_results);
 
