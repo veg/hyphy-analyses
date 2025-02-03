@@ -108,6 +108,7 @@ labeler.kind  = io.SelectAnOption (
   {
     {"None","Only assign labels to selected nodes"}
     {"All descendants","Only label an internal node if all its descendants are labeled"}
+    {"All descendants, no MRCA","Only label an internal node if all its descendants are labeled"}
     {"Some descendants","Only label an internal node if some of its descendants are labeled"}
     {"Parsimony","Use maximum parsimony to label internal nodes"}
   },
@@ -126,17 +127,45 @@ labeler.tips  = io.SelectAnOption (
 ) == "Label";
 
 if (labeler.tips) {
-    if (labeler.kind == "All descendants") {
-      labeler.labels * ((trees.ConjunctionLabel ("T", labeler.labels))["labels"]);
+
+    labeler.internal_node_labels = {};
+    
+    if (labeler.kind == "All descendants" || labeler.kind == "All descendants, no MRCA" ) {
+    labeler.internal_node_labels  =  ((trees.ConjunctionLabel ("T", labeler.labels))["labels"]);
     }
 
     if (labeler.kind == "Some descendants") {
-      labeler.labels * ((trees.DisjunctionLabel ("T", labeler.labels))["labels"]);
+      labeler.internal_node_labels = ((trees.DisjunctionLabel ("T", labeler.labels))["labels"]);
     }
 
     if (labeler.kind == "Parsimony") {
-      labeler.labels * ((trees.ParsimonyLabel ("T", labeler.labels))["labels"]);
+       labeler.internal_node_labels = ((trees.ParsimonyLabel ("T", labeler.labels))["labels"]);
     }
+    
+    if (labeler.kind == "All descendants, no MRCA") {
+        /* 
+            here, we are going to perform a POST-order traversal of the tree, and remove labels for the internal nodes that are closest to the root,
+            i.e. nodes that are roots of subtrees
+        */
+        
+        labeler.remove = {};
+        
+        for (n,p; in; trees.ParentMap ("T")) {
+            if (p) {
+                if (labeler.internal_node_labels / n) {
+                    if (labeler.internal_node_labels[n] != labeler.internal_node_labels[p]) {
+                        labeler.remove + n;
+                    }
+                }
+            }
+        }   
+        
+        for (n; in;  labeler.remove) {
+            labeler.internal_node_labels - n;
+        }
+    }
+    labeler.labels * labeler.internal_node_labels;
+    
 
     console.log ("\nLabeled " + (utility.Array1D (labeler.labels) - label.core) + " additional internal branches\n");
 } else {
