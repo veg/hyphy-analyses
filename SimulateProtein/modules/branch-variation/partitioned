@@ -1,0 +1,30 @@
+LoadFunctionLibrary("libv3/all-terms.bf"); 
+LoadFunctionLibrary("libv3/UtilityFunctions.bf");
+LoadFunctionLibrary("libv3/models/parameters.bf");
+
+simulator.rates = {};
+
+
+
+lfunction simulator.set_branch_rates (model, tree_id, branch_id, branch_info) {
+    my_rate = +(^'simulator.rates')[branch_info[^'terms.trees.model_map']];
+    estimators.applyBranchLength (tree_id, branch_id, model, my_rate * (+branch_info[^"terms.branch_length"]));
+}
+
+lfunction simulator.validate_tree (tree) {
+    if (trees.HasBranchLengths (tree)) {   
+        classes = utility.UniqueValues (tree[^"terms.trees.model_map"]);
+        for (_value_; in; classes) {
+            if (_value_ == "") {
+                    label = "Unlabeled";
+            } else {
+                label = _value_;
+            }
+            KeywordArgument   ("rate-" + label, "The relative rate to apply to branches `label`", "1.");
+            (^"simulator.rates")[_value_] = "" + io.PromptUser ("The relative rate to apply to branches " + label, 1.0, 0, 1e3, FALSE);
+        }
+        return '';
+    }
+    
+    return 'The input tree must have input branch lengths';
+}

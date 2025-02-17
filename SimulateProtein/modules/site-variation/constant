@@ -1,0 +1,19 @@
+LoadFunctionLibrary("libv3/all-terms.bf"); 
+LoadFunctionLibrary("libv3/UtilityFunctions.bf");
+LoadFunctionLibrary("libv3/models/parameters.bf");
+
+lfunction simulator.prepare_site_distribution (model, site_count, tree, tree_info) {
+    return "Constant across sites";
+} 
+
+lfunction simulator.apply_site_distribution (model, site, tree) {
+    
+}
+
+lfunction simulator.set_site_rate (model, site_id, branch_info) {
+/**
+    no site-to-site rate variation
+*/
+    return {{1}};
+    
+}
