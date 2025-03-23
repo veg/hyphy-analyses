@@ -1,14 +1,14 @@
-### RER: relative evolutionary rate 
+### MoleRate: relative evolutionary molecular rate 
 
 This analysis implements a relative evolutionary rate test inspired by [`RERConverge`](https://academic.oup.com/bioinformatics/article/35/22/4815/5514536), also see [walkthrough](https://clark.genetics.utah.edu/wp-content/uploads/2020/11/FullWalkthroughUTD.html).
 
 A key use-case is a study of how evolutionary rates associate with phenotypes, e.g. the subterranean phenotype, is [here](hhttps://elifesciences.org/articles/25884).
 
-This analysis requires an alignment of **protein** sequences, a _reference_ tree **with given branch lengths**, and a list of branches designated at the `test set`.
+This analysis requires an alignment of **protein** or **nucleotide** sequences, a _reference_ tree **with given branch lengths**, and a list of branches designated at the `test set`.
 
 The reference tree is viewed as providing _relative_ branch lengths, e.g. estimated from a genome-wide species tree alignment. 
 
-The `RER` analysis fits the following **four** models and compares them in a variety of ways. A companion visualization module can be found at [https://observablehq.com/@spond/rer-viewer](https://observablehq.com/@spond/rer-viewer)
+The `MoleRate` analysis fits the following **four** models (one is optional) and compares them in a variety of ways. A companion visualization module can be found at [https://observablehq.com/@spond/rer-viewer](https://observablehq.com/@spond/rer-viewer)
 
 
 #### Proportional
@@ -26,6 +26,7 @@ All background branches are scaled with the same factor <tt><b>R<sub>background<
 #### Unconstrained
 
 All branch lengths are inferred independently.
+This model can be skipped with the `--full-model No` option
 
 #### Summary of models
 
@@ -48,7 +49,7 @@ These models form a nested chain:
 An example invocation for a gene (`LIM2`) that was found to be accelerated in subterranean lineages in [Partha et al](hhttps://elifesciences.org/articles/25884).
 
 ```
-hyphy RER.bf 
+hyphy molerate.bf 
 --alignment data/LIM2.fa 
 --tree data/mam120master.tre 
 --branches nanGal1 
@@ -74,7 +75,7 @@ Test branches are shown as thicker branches below (colors -- ratio to reference 
 An example invocation for a gene (`LIM2`) that was found to be decelerated in subterranean lineages in [Partha et al](hhttps://elifesciences.org/articles/25884).
 
 ```
-hyphy RER.bf 
+hyphy molerate.bf 
 --alignment data/CHST8.fa 
 --tree data/mam120master.tre 
 --branches nanGal1 
@@ -97,7 +98,7 @@ Test branches are shown as thicker branches below (colors -- ratio to reference 
 
 ### Hypothesis testing
 
-The `RER` analysis will conduct all six nested model pairs likelihood ratio tests (LRT) and report the results as Holm-Bonferroni corrected p-values.
+The `MoleRate` analysis will conduct all available nested model pairs likelihood ratio tests (LRT) and report the results as Holm-Bonferroni corrected p-values.
 
 ### Example: `LIM2`
 
@@ -134,9 +135,11 @@ The `RER` analysis will conduct all six nested model pairs likelihood ratio test
 
 #### Substitution model 
 
+(protein data only; nucleotide data are handled with the GTR model)
+
 `--model [one of LG, WAG, JTT, JC69, mtMet, mtVer, mtInv, gcpREV, HIVBm, HIVWm, GTR]`
 	
-`WAG` is the default model.	
+`WAG` is the default model for protein data.
 
 #### Site-to-site rate variation
 
@@ -150,7 +153,7 @@ The `RER` analysis will conduct all six nested model pairs likelihood ratio test
 
 #### Labeling strategy
 
-This option determines how `RER` approaches automatically internal nodes to the test set.
+This option determines how `MoleRate` approaches automatically internal nodes to the test set.
 
 1. `none` : do not label any internal branches automatically
 2. `all-descendants` : [default] label an internal node if and only if ALL of its descendants are labeled

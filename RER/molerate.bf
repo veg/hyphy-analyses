@@ -32,7 +32,6 @@ io.DisplayAnalysisBanner (fitter.analysis_description);
 
   
   
-KeywordArgument ("alignment",            "A protein multiple sequence alignment in one of the formats supported by HyPhy (single partition)");
 
 
 namespace terms.rer {
@@ -57,8 +56,20 @@ rer.json    = {
                  };
  
 selection.io.startTimer (rer.json [terms.json.timers], "Overall", 0);
- 
-rer.alignment = alignments.ReadProteinDataSet ("rer.sequences", null);
+
+KeywordArgument ("type",        "The type of data to perform screening on", "protein");
+rer.dataType = io.SelectAnOption  ({"nucleotide" : "A nucleotide (DNA/RNA) alignment",
+                                      "protein" : "A protein alignment"},
+                                      "The type of data to perform screening on");
+          
+KeywordArgument ("alignment",            "A protein multiple sequence alignment in one of the formats supported by HyPhy (single partition)");
+                            
+if (rer.dataType == "protein") {
+    rer.alignment = alignments.ReadProteinDataSet ("rer.sequences", null);
+} else {
+    rer.alignment = alignments.ReadNucleotideDataSet ("rer.sequences", null);
+}
+
 
 rer.sample_size = rer.alignment[utility.getGlobalValue("terms.data.sequences")] * rer.alignment[utility.getGlobalValue("terms.data.sites")];
 
@@ -205,11 +216,16 @@ if (None != rer.labels) {
 
 trees.store_tree_information (rer.json, {"0" : rer.tree}, rer.tree[terms.trees.model_map]);
        
-utility.Extend (models.protein.empirical_models, {"GTR" : "General time reversible model (189 estimated parameters)."});
-KeywordArgument ("model", "The substitution model to use", "WAG");
-rer.substitution_model         = io.SelectAnOption (models.protein.empirical_models, "Baseline substitution model");
-rer.model.generator        = (utility.Extend (models.protein.empirical.plusF_generators , {"GTR" : "models.protein.REV.ModelDescription"}))[rer.substitution_model];
-
+if (rer.dataType == "protein") {
+    utility.Extend (models.protein.empirical_models, {"GTR" : "General time reversible model (189 estimated parameters)."});
+    KeywordArgument ("model", "The substitution model to use", "WAG");
+    rer.substitution_model         = io.SelectAnOption (models.protein.empirical_models, "Baseline substitution model");
+    rer.model.generator        = (utility.Extend (models.protein.empirical.plusF_generators , {"GTR" : "models.protein.REV.ModelDescription"}))[rer.substitution_model];
+} else {
+    rer.substitution_model = "Nucleotide+GTR";
+    rer.model.generator = "models.DNA.GTR.ModelDescription"; 
+}
+       
 (rer.json [terms.json.analysis])[terms.rer.model] = rer.substitution_model;
 rer.json [terms.json.runtime] = utility.GetVersion (FALSE);
 
