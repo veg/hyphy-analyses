@@ -79,7 +79,7 @@ alignments.StoreInJSON (rer.json,rer.alignment,None);
 
 io.CheckAssertion("Rows (rer.alignment[utility.getGlobalValue('terms.data.partitions')]) == 1", "RERConverge only works on a single partition dataset");
 
-KeywordArgument ("output", "Write the resulting JSON to this file (default is to save to the same path as the alignment file + 'MG94.json')",  rer.alignment [terms.data.file] + ".json");
+KeywordArgument ("output", "Write the resulting JSON to this file (default is to save to the same path as the alignment file + 'MG94.json')",  rer.alignment [terms.data.file] + "molerate.json");
 
 rer.alignment [terms.json.json] = io.PromptUserForFilePath ("Save the resulting JSON file to");
 
