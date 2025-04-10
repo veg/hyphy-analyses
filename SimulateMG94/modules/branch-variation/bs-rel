@@ -25,7 +25,10 @@ lfunction simulator.validate_tree (tree) {
     
         classes = utility.UniqueValues (tree[^"terms.trees.model_map"]);
         
+        lengths_by_class = {};
+        
         for (label; in; classes) {
+            lengths_by_class[label] = {};
             if (label != "") {
                 KeywordArgument   ("omegas-" + label, "Omega value distribution, specified as a comma-separated string omega1,weight1,omega2,weight2,...,omegaN,weightN (weights will be normalized to sum to 1) for `label`");
                 
@@ -47,6 +50,15 @@ lfunction simulator.validate_tree (tree) {
  
             }
         }
+        
+        for (b,c;in;tree[^"terms.trees.model_map"]) {
+            lengths_by_class[c] + (tree[^"terms.branch_length"])[b];
+        }
+        console.log ("---");
+        for (label; in; classes) {
+            console.log ("Class '" + label + "', " + utility.Array1D (lengths_by_class[label]) + " branches, " + (+lengths_by_class[label]) + " total length");
+        }
+        console.log ("---");
         
         return '';
     }

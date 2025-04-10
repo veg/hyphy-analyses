@@ -20,9 +20,9 @@ lfunction simulator.prepare_site_distribution (model, site_count, tree, tree_inf
     site_profile = {site_count, 1};
     
     for (i = 0; i < site_count; i+=1) {
-        site_profile[i][0] = (random.gamma_fast (alpha) * 100 $ 1)/100;
+        site_profile[i][0] = (random.gamma_fast (alpha) / alpha * 100 $ 1)/100;
     }
-    
+        
     return site_profile;  
     
 } 

@@ -171,7 +171,7 @@ for (fitter.var; in; fitter.globals) {
     }
 }
 
-fitter.json [terms.json.test_results] = fitter.LRTs;
+fitter.json [terms.json.test_results] = fitter.lrt_testing;
 
 selection.io.stopTimer (fitter.json [terms.json.timers], fitter.model_name);
 
