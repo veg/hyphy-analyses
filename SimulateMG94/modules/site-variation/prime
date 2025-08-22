@@ -7,12 +7,17 @@ LoadFunctionLibrary("libv3/models/codon/MG_REV_PROPERTIES.bf");
 global simulator.site.alpha = 1;
 
 simulator.site_variables = {};
+simulator.adjustable = {};
+simulator.subs = {};
+simulator.locals = {};
+simulator.site_lambdas = {};
+
 
 lfunction simulator.prepare_site_distribution (model, site_count, tree, tree_info) {
 
     rates = (model[^"terms.parameters"])[^"terms.local"];
     class_count = utility.Array1D (model [^"terms.model.residue_properties"]);
-    re_m = "^" +  terms.propertyImportance("");
+    re_m = "^" +  terms.propertyImportance("","");
 
     simulator.site_variables = {1, 2+class_count};
     simulator.site_variables[0] = "";
@@ -37,6 +42,7 @@ lfunction simulator.prepare_site_distribution (model, site_count, tree, tree_inf
         
         if (regexp.Find (i, re_m)) {
             simulator.site_lambdas [rates[i]] = "simulator.lambda." + rates[i];
+            (^"simulator.subs")[simulator.site_lambdas [rates[i]]] = rates[i];
             bl_conversion_subs[v] = +mean_effect;
             simulator.site_variables[2 + class_counter] = simulator.site_lambdas [rates[i]];
             parameters.DeclareGlobalWithRanges (simulator.site_lambdas [rates[i]], 0, -10, 10);
@@ -44,15 +50,17 @@ lfunction simulator.prepare_site_distribution (model, site_count, tree, tree_inf
         } else {
             if (i == ^"terms.parameters.synonymous_rate") {
                 local_alpha  = v;
+                (^"simulator.adjustable")  [v] = ^"terms.parameters.synonymous_rate";
                 global_alpha = "simulator.alpha";
                 parameters.DeclareGlobalWithRanges (global_alpha, 1, 0, 10000);
-                simulator.site_variables[0] = global_alpha;
+                simulator.site_variables[0] = v;
 
             } else {
                 local_beta  = v;
                 global_beta= "simulator.beta";
+                (^"simulator.adjustable")  [v] = ^"terms.parameters.nonsynonymous_rate";
                 parameters.DeclareGlobalWithRanges (global_beta, 1, 0, 10000);
-                simulator.site_variables[1] = global_beta;
+                simulator.site_variables[1] = v;
             }
         }
     }
@@ -62,13 +70,13 @@ lfunction simulator.prepare_site_distribution (model, site_count, tree, tree_inf
    parameters.SetConstraint (local_beta, "1.*" + local_alpha, "");
 
    for (_node_; in; ^tree) {
-         lbl = (tree_info[^"terms.branch_length"])[_node_];
-         utility.ExecuteInGlobalNamespace ("FindRoot (`&lfactor`,(" +bl_str + ")-" + 3*lbl + "," + local_alpha + ",0,10000)");   
-         parameters.SetConstraint ("`tree`.`_node_`.`local_alpha`","" + lfactor + "*" + global_alpha,"");
-         parameters.SetConstraint ("`tree`.`_node_`.`local_beta`","" + lfactor + "*" + global_beta,"");
-         for (r,p; in; simulator.site_lambdas) {
-            parameters.SetConstraint ("`tree`.`_node_`.`r`",p,"");
-         }
+         //lbl = (tree_info[^"terms.branch_length"])[_node_];
+         //utility.ExecuteInGlobalNamespace ("FindRoot (`&lfactor`,(" +bl_str + ")-" + 3*lbl + "," + local_alpha + ",0,10000)");   
+         //parameters.SetConstraint ("`tree`.`_node_`.`local_alpha`","" + lfactor + "*" + global_alpha,"");
+         //parameters.SetConstraint ("`tree`.`_node_`.`local_beta`","" + lfactor + "*" + global_beta,"");
+         //for (r,p; in; simulator.site_lambdas) {
+         //   parameters.SetConstraint ("`tree`.`_node_`.`r`",p,"");
+         //}
     }
 
     parameters.RemoveConstraint (local_beta);
@@ -87,6 +95,7 @@ lfunction simulator.prepare_site_distribution (model, site_count, tree, tree_inf
           } else {
                if (Random (0,1) <= fraction_single) {
                   j = Random (0,class_count) $ 1;
+                  //j = 0;
                   site_profile[i][j+2] =  random.normal.standard () * variance_effect + mean_effect;
                } else {
                    for (j = 0; j < class_count; j+=1) {
@@ -97,6 +106,7 @@ lfunction simulator.prepare_site_distribution (model, site_count, tree, tree_inf
     }
     
     ^"simulator.site_variables" = simulator.site_variables;
+    ^"simulator.site_lambdas" = simulator.site_lambdas;
     
     return {
         "variables" : simulator.site_variables,
@@ -105,19 +115,135 @@ lfunction simulator.prepare_site_distribution (model, site_count, tree, tree_inf
 
 }
 
-lfunction simulator.apply_site_distribution (model, site, tree) {
+function simulator.apply_site_distribution (model, site, tree) {
     site = Eval (site);
+    
+    //console.log (^"simulator.adjustable");
+    
+    alpha_v = 0;
+    beta_v = 0;
+    beta = 0;
+    alpha = 0;
+    subs = {};
 
     for (i, k; in; ^"simulator.site_variables") {
-        //console.log ("" + k + "=" + site[i]);
+        if (^"simulator.adjustable" / k) {
+            if ((^"simulator.adjustable")[k] == ^"terms.parameters.nonsynonymous_rate") {
+                beta_v = k;
+                beta_set = +site[i];
+            } else {
+                alpha_v = k;
+                alpha_set = +site[i];
+            }
+            continue;
+        }
         parameters.SetValue (k, site[i]);
+        subs [(^"simulator.subs")[k]] = +site[i];
     }
     
+    
+    s = Simplify (^"simulator.bl_exp", subs);
+    
+    utility.ExecuteInGlobalContext (alpha_v + " = 0");
+    utility.ExecuteInGlobalContext (beta_v + " = 0");
+    
+    /*console.log ("===");
+    console.log (site);
+    //console.log (^"simulator.site_variables");
+    console.log (^"simulator.subs");
+    console.log (subs);
+    console.log ("===");
+    */
+
+                    
+    if (alpha_set > 0 && beta_set > 0) {
+        // maintain the ratio 
+        ratio = (beta_set/alpha_set);
+        parameters.SetConstraint (beta_v, alpha_v + "*" + ratio, "");
+        
+        for (b; in; ^tree) {
+            if (^"simulator.expected_lengths" / b) {
+                //*alpha_v = 1e-8;
+                ConvertBranchLength (bl, s, *alpha_v, alpha_set*3*(^"simulator.expected_lengths")[b]);
+                *alpha_v = bl;
+                /*console.log (*alpha_v);
+                console.log (*beta_v);
+                console.log (ratio);
+                console.log ((*beta_v)/(*alpha_v));
+                console.log ("**");
+                console.log (alpha_set*3*(^"simulator.expected_lengths")[b]);
+                console.log (Eval (s));
+                console.log ('---');*/
+                parameters.SetValue (tree + "." + b + "." + alpha_v, *alpha_v);
+                parameters.SetValue (tree + "." + b + "." + beta_v, *beta_v);   
+                      
+            }
+        }
+        
+    } else {
+        if (alpha_set > 0) {
+            // scale only on beta
+            parameters.SetConstraint (beta_v, "0", "");
+            for (b; in; ^tree) {
+                if (^"simulator.expected_lengths" / b) {
+                    ConvertBranchLength (bl, s, *alpha_v, alpha_set*3*(^"simulator.expected_lengths")[b]);
+                    parameters.SetValue (tree + "." + b + "." + alpha_v, bl);
+                    parameters.SetValue (tree + "." + b + "." + beta_v, 0);            
+                }
+            }
+        
+        } else {
+            if (beta_set > 0) {
+                parameters.SetConstraint (alpha_v, "0", "");
+                for (b; in; ^tree) {
+                    if (^"simulator.expected_lengths" / b) {
+                        ConvertBranchLength (bl, s, *beta_v, 3*(^"simulator.expected_lengths")[b]);
+     
+                        parameters.SetValue (tree + "." + b + "." + alpha_v, 0);
+                        parameters.SetValue (tree + "." + b + "." + beta_v, bl);            
+                    }
+                }            
+            } else {
+                 for (b; in; ^tree) {
+                    if (^"simulator.expected_lengths" / b) {
+                        parameters.SetValue (tree + "." + b + "." + alpha_v, 0);
+                        parameters.SetValue (tree + "." + b + "." + beta_v, 0);        
+                     }
+                }               
+            }
+        } 
+    }
+        
+    
+    
+    parameters.ClearConstraint (beta_v);
+    
+    //console.log (Eval (^"simulator.bl_exp"));
+    
+    for (_node_; in; ^tree) {
+         for (r,p; in; subs) {
+            parameters.SetValue ("`tree`.`_node_`.`r`",p);
+         }
+         GetInformation (ii, "`tree`.`_node_`\\..");
+         /*for (iii; in; ii) {
+            console.log (iii + "=" + Eval (iii));
+         }
+         console.log (subs);*/
+    }
+    
+   // console.log (^"simulator.site_lambdas");
+   //console.log (BranchLength (^tree, -1));
+   
+   //if (alpha_set > 0 && beta_set > 0) {
+   //     assert (0);
+   //}
+    
+    //assert (0);
     /*for (b; in; ^tree) {
         GetInformation (T, ^(tree + "." + b));
         console.log (Max(T,0));
-    }   
-    assert (0);*/
+    }  */
+    //assert (0);
 
  }
 

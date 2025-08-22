@@ -68,7 +68,6 @@ namespace fitter {
 }
 
 
-
 io.ReportProgressMessageMD ("fitter", fitter.model_name,  "Fitting `fitter.model_name`");
 selection.io.startTimer (fitter.json [terms.json.timers], fitter.model_name , fitter.display_order [fitter.terms.codon_model ]);
 
