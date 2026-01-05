@@ -1,6 +1,9 @@
 ## Is there evidence of selection associated with a trait/phenotype?
 
-<span style = 'color:red;font-size:1.5em'> This is a legacy analysis maintained for backward compatibility. BUSTED-PH has been integrated into the standard library of HyPhy and is accessible via `hyphy busted-ph`. </span> 
+---
+<strong>This is a legacy analysis maintained for backward compatibility. BUSTED-PH has been integrated into the standard library of HyPhy and is accessible via `hyphy busted-ph`. </strong> 
+
+---
 
 > In collaboration with the [Nathan Clark lab](https://nclarklab.org) and the [Maria Chikina lab](https://chikinalab.org)
 
