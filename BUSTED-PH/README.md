@@ -1,6 +1,8 @@
 ## Is there evidence of selection associated with a trait/phenotype?
 
-> In collaboration with the [Nathan Clark lab](https://clark.genetics.utah.edu)
+<span style = 'color:red;font-size:1.5em'> This is a legacy analysis maintained for backward compatibility. BUSTED-PH has been integrated into the standard library of HyPhy and is accessible via `hyphy busted-ph`. </span> 
+
+> In collaboration with the [Nathan Clark lab](https://nclarklab.org) and the [Maria Chikina lab](https://chikinalab.org)
 
 
 The `BUSTED-PH` analysis builds upon [BUSTED](https://academic.oup.com/mbe/article/32/5/1365/1134918) which is a method to test for evidence of epidosic diversifying selection. The analysis seeks to answer the question: 
@@ -39,7 +41,7 @@ The following decision tree is then applied to provide guidance on whether or no
 					├── No
     					|==> Selection is occuring both 
     					 	  with / without phenotype/trait
-    					 	  with similar selective regimes        		├── No
+    					 	  with similar selective regimes        		
     			|-- Test in (4) is significant at p≤0.05?
     				├── Yes
     					|==> Strong evidence of selection 

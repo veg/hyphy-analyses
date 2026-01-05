@@ -77,7 +77,7 @@ function simulator.define_model (code) {
                    
     simulation.model.omegas = models.codon.BS_REL.ExtractMixtureDistribution(simulation.model);
     parameters.SetStickBreakingDistribution (simulation.model.omegas, simulator.bs_rel.omega);
-    
+
     simulation.srv_rate_regex  = "GDD rate category [0-9]+";
     simulation.srv_weight_regex = "Mixture auxiliary weight for GDD category [0-9]+";
     simulation.srv_distribution = regexp.PartitionByRegularExpressions(utility.Keys ((simulation.model[terms.parameters])[terms.global]), 
@@ -89,8 +89,7 @@ function simulator.define_model (code) {
         'weights' : utility.UniqueValues (utility.Map (simulation.srv_distribution [simulation.srv_weight_regex ]  , "_value_", '((simulation.model[terms.parameters])[terms.global])[_value_]'))
     };
         
-    parameters.SetStickBreakingDistribution (simulation.srv_distribution, simulator.bs_rel.alpha);
-    
+    parameters.SetStickBreakingDistribution (simulation.srv_distribution, simulator.bs_rel.alpha);    
     parameters.SetCategoryVariables (simulation.model);                             
     
     return simulation.model;

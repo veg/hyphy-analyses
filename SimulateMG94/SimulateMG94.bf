@@ -269,9 +269,8 @@ for (_rate_distribution_, _site_counts_; in; simulator.sites_by_profile) {
          }
     }
 
-    for (simulator.i = 0; simulator.i < simulator.replicates; simulator.i += 1) {
-    
-        //DataSetFilter all      = CreateFilter (simulated_data, 1, siteIndex>=simulator.i*3*simulator.site_block&&siteIndex<=(simulator.i+1)*3*simulator.site_block-1);
+
+    for (simulator.i = 0; simulator.i < simulator.replicates; simulator.i += 1) {    
         DataSetFilter all      = CreateFilter (simulated_data, 1, siteIndex$3%simulator.replicates == simulator.i);
         for (simulator.j = 0; simulator.j < all.species; simulator.j+=1) {
             GetDataInfo (sim.string, all, simulator.j);

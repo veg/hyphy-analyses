@@ -5,6 +5,10 @@ LoadFunctionLibrary("libv3/models/parameters.bf");
 KeywordArgument   ("omega", "The constant dN/dS ratio to apply across the tree", "1");
 simulator.omega = "" + io.PromptUser ("Tree-wide dN/dS ratio", 0.5, 0, 1e3, FALSE);
 
+KeywordArgument   ("bl-scaler", "Multiply all branch lengths by this scaler", "1");
+simulator.bl_scaler = io.PromptUser ("Multiply all branch lengths by this scaler", 1.0, 1e-5, 1e5, FALSE);
+
+
 lfunction simulator.set_branch_rates (model, tree_id, branch_id, branch_info) {
     /** apply the same dN/dS to all branches */
     rates = (model[^"terms.parameters"])[^"terms.local"];
@@ -12,7 +16,7 @@ lfunction simulator.set_branch_rates (model, tree_id, branch_id, branch_info) {
                               "`^'simulator.omega'`*`tree_id`.`branch_id`.`rates[^'terms.parameters.synonymous_rate']`", "");
                               
                         
-    estimators.applyBranchLength (tree_id, branch_id, model, branch_info[^"terms.branch_length"]);    
+    estimators.applyBranchLength (tree_id, branch_id, model, branch_info[^"terms.branch_length"] * ^"simulator.bl_scaler");    
 }
 
 lfunction simulator.validate_tree (tree) {

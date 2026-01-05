@@ -18,14 +18,18 @@ lfunction simulator.prepare_site_distribution (model, site_count, tree, tree_inf
     class_count = 0;
     
     beta_vars = {};
+    enforce_negative_neutral = {};
     
     utility.ForEach (classes, "_class_name_", '
         simulator.site_betas  [_class_name_] = "simulator.omega.class" + ^"`&class_count`";
-        ^"`&class_count`" += 1;
         parameters.DeclareGlobalWithRanges (simulator.site_betas  [_class_name_], 1, 0, 10000);
         `&beta_vars` + simulator.site_betas  [_class_name_];
-         
+        KeywordArgument   ("allow-positive-" + _class_name_, "Allow positive selection for `_class_name_`", "Yes");            
+        (^"`&enforce_negative_neutral`") [^"`&class_count`"] = io.PromptUserForString ("Allow positive selection for `_class_name_`") == "No";
+        ^"`&class_count`" += 1;
     '); 
+    
+    enforce_nn = (Max (enforce_negative_neutral, 0))["value"] == 1;
     
     
     utility.ForEach (^tree, "_node_", '
@@ -35,7 +39,7 @@ lfunction simulator.prepare_site_distribution (model, site_count, tree, tree_inf
          parameters.SetConstraint ("`tree`."+ _node_ + ".`rates[^'terms.parameters.synonymous_rate']`",
                                     "simulator.site.alpha*`tree`."+ _node_ + ".`rates[^'terms.parameters.synonymous_rate']`__", "");
     ');
-    
+        
     
     KeywordArgument   ("gamma-shape-srv", "The shape of the gamma parameter for synonymous rates (unit mean)", "1.");            
     alpha_srv = io.PromptUser ("The shape of the gamma parameter for SRV (unit mean)", 1.0, 1e-6, 20, FALSE);
@@ -50,6 +54,9 @@ lfunction simulator.prepare_site_distribution (model, site_count, tree, tree_inf
           site_profile[i][0] = (random.gamma (alpha_srv,alpha_srv) * 100 $ 1)/100;  
           if (Random (0,1) < fraction_same) {
               shared_omega = (random.gamma_fast (alpha) * 100 $ 1)/100 ;
+              if (enforce_nn) {
+                shared_omega = Min (shared_omega, 1);
+              }
               for (j = 1; j <= class_count; j+=1) {
                 site_profile[i][j] =  shared_omega;
               }
@@ -57,6 +64,9 @@ lfunction simulator.prepare_site_distribution (model, site_count, tree, tree_inf
           } else {
               for (j = 1; j <= class_count; j+=1) {
                 site_profile[i][j] = (random.gamma_fast (alpha) * 100 $ 1)/100;  
+                if (enforce_negative_neutral [j]) {
+                    site_profile[i][j] = Min (site_profile[i][j], 1);
+                }   
               }
           }
     }
